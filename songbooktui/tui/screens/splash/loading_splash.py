@@ -1,11 +1,11 @@
 from asyncio import sleep
 
+from art import text2art
 from textual import work
 from textual.app import ComposeResult
-from textual.containers import Center, Middle
-from textual.reactive import reactive
+from textual.containers import Center
 from textual.screen import Screen
-from textual.widgets import Label, ProgressBar, LoadingIndicator
+from textual.widgets import ProgressBar, Static
 
 from backend import service
 from backend.dto import SongDTO, SongbookDTO
@@ -18,31 +18,23 @@ class LoadingSplash(Screen):
 
     songs: dict[int, SongDTO]
     songbooks: dict[str, SongbookDTO]
-    status: reactive[str] = reactive("Loading...")
 
     async def on_mount(self) -> None:
         self.fetch_data()
 
     def compose(self) -> ComposeResult:
         """Compose the loading splash screen."""
-
-        # with Center():
-        #     with Middle():
-        #         yield Label("󰎆 Songbooks")
-        #         yield ProgressBar(total=2, show_eta=False, show_percentage=False)
-        #         yield LoadingIndicator()
-        #         yield Label(self.status)
-        yield Label("󰎆 Songbooks")
-        yield ProgressBar(total=2, show_eta=False, show_percentage=False)
-        yield LoadingIndicator()
-        yield Label(self.status)
+        title = text2art("Songbooks", font="doom")
+        print(title)
+        with Center():
+            yield Static(title)
+        with Center():
+            yield ProgressBar(total=2, show_eta=False, show_percentage=False)
 
     async def update_progress(self) -> None:
         progress_bar = self.query_one(ProgressBar)
         progress_bar.advance(1)
-        await sleep(1)
         if progress_bar.progress == 2:
-            self.status = reactive("Done!")
             await sleep(1)
             self.dismiss((self.songs, self.songbooks))
 

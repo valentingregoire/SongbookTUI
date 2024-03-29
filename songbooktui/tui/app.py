@@ -33,7 +33,7 @@ class SongbookApp(App):
             self.songs = songs
             self.songbooks = songbooks
             # self.switch_mode("viewer")
-            self.push_screen(SheetViewer(songbook=songbooks.get(DEFAULT_SONGBOOK)))
+            # self.push_screen(SheetViewer(songbook=songbooks.get(DEFAULT_SONGBOOK)))
 
         self.push_screen(LoadingSplash(), set_loaded_data)
 

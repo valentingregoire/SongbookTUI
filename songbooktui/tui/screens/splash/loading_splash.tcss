@@ -1,21 +1,27 @@
 Screen {
     layout: vertical;
-    content-align: center middle;
+    align: center middle;
+    /*content-align: center middle;*/
     /*align: center middle;*/
 }
 
-Label {
-    text-align: center;
-    width: 100%;
-    text-style: italic;
-    /*text-align: center;*/
+Static {
+    width: auto;
+    /*content-align: center middle;*/
+    border: round;
 }
 
 ProgressBar {
-    content-align: center middle;
-    width: 100%;
+    /*content-align: center middle;*/
+    /*width: 100%;*/
+    width: auto;
+    border: round;
+    height: 3;
+
 }
 
 LoadingIndicator {
     height: 5;
+    width: auto;
+    border: round;
 }
