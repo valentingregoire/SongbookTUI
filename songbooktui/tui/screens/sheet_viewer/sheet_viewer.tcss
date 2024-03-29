@@ -1,0 +1,15 @@
+Screen {
+    layout: grid;
+    grid-size: 3 2;
+    grid-columns: 1fr 5fr 1fr;
+}
+
+Static {
+    height: 100%;
+    width: 100%;
+    border: round;
+}
+
+#viewer {
+    row-span: 2
+}

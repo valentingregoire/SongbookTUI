@@ -110,6 +110,20 @@ files = [
 frozenlist = ">=1.1.0"
 
 [[package]]
+name = "art"
+version = "6.1"
+description = "ASCII Art Library For Python"
+optional = false
+python-versions = ">=3.5"
+files = [
+    {file = "art-6.1-py3-none-any.whl", hash = "sha256:159819c418001467f8d79616fa0814277deac97c8a363d1eb3e7c0a31526bfc3"},
+    {file = "art-6.1.tar.gz", hash = "sha256:6ab3031e3b7710039e73497b0e750cadfe04d4c1279ce3a123500dbafb9e1b64"},
+]
+
+[package.extras]
+dev = ["bandit (>=1.5.1)", "coverage (>=4.1)", "pydocstyle (>=3.0.0)", "vulture (>=1.0)"]
+
+[[package]]
 name = "attrs"
 version = "23.2.0"
 description = "Classes Without Boilerplate"
@@ -805,4 +819,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "d1321512d6dca752585663defb96354c9cce8c49652968cdccb74eeddd91550b"
+content-hash = "0e7cd89286a45e79fd5bd4cef7e177e945db30c7fabb7c884bb9e4aeac00d807"

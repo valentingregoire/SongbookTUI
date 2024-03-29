@@ -1,10 +1,14 @@
 from textual.app import App, ComposeResult
 from textual.reactive import reactive
-from textual.widgets import Footer, Header, Label, Button
+from textual.widgets import Footer, Header
 
 from backend.dto import SongbookDTO, SongDTO
-from tui.screens.loading_splash import LoadingSplash
+from tui.screens.splash.loading_splash import LoadingSplash
 from tui.screens.main_menu import MainMenu
+from tui.screens.sheet_viewer.sheet_viewer import SheetViewer
+
+
+DEFAULT_SONGBOOK = "2024"
 
 
 class SongbookApp(App):
@@ -12,9 +16,13 @@ class SongbookApp(App):
 
     CSS_PATH = "app.tcss"
     BINDINGS = [("q", "request_quit", "Quit")]
+    # MODES = {
+    #     "splash": LoadingSplash,
+    #     "viewer": SheetViewer,
+    # }
 
-    songs: reactive[dict[int, SongDTO]]
-    songbooks: reactive[dict[str, SongbookDTO]]
+    songs: dict[int, SongDTO]
+    songbooks: dict[str, SongbookDTO]
 
     def on_mount(self) -> None:
         """Run when the app is mounted."""
@@ -24,6 +32,8 @@ class SongbookApp(App):
             songs, songbooks = data
             self.songs = songs
             self.songbooks = songbooks
+            # self.switch_mode("viewer")
+            self.push_screen(SheetViewer(songbook=songbooks.get(DEFAULT_SONGBOOK)))
 
         self.push_screen(LoadingSplash(), set_loaded_data)
 

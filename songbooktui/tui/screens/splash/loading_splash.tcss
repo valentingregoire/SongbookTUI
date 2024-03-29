@@ -1,0 +1,21 @@
+Screen {
+    layout: vertical;
+    content-align: center middle;
+    /*align: center middle;*/
+}
+
+Label {
+    text-align: center;
+    width: 100%;
+    text-style: italic;
+    /*text-align: center;*/
+}
+
+ProgressBar {
+    content-align: center middle;
+    width: 100%;
+}
+
+LoadingIndicator {
+    height: 5;
+}
