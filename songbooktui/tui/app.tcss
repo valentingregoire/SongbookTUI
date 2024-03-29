@@ -1,0 +1,12 @@
+ModalScreen {
+    layout: vertical;
+    align: center middle;
+
+    Button {
+        width: 50;
+    }
+}
+
+Screen {
+    align: center middle;
+}
