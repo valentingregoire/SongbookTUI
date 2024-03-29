@@ -1,4 +1,5 @@
 from rich.console import RenderableType
+from textual._easing import DEFAULT_EASING
 from textual.app import ComposeResult
 from textual.reactive import reactive
 from textual.screen import Screen
@@ -19,6 +20,9 @@ class SheetViewer(Screen):
         self.songbook = reactive(songbook)
         self.song = reactive(songbook.songs[0])
         super().__init__()
+
+    def on_mount(self) -> None:
+        self.styles.animate("opacity", value=1, duration=0.3, easing="out_circ")
 
     def compose(self) -> ComposeResult:
         yield Header()

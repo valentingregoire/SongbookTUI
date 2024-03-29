@@ -2,6 +2,7 @@ Screen {
     layout: grid;
     grid-size: 3 2;
     grid-columns: 1fr 5fr 1fr;
+    opacity: 0;
 }
 
 Static {

@@ -3,6 +3,7 @@ Screen {
     align: center middle;
     /*content-align: center middle;*/
     /*align: center middle;*/
+    height: 100%;
 }
 
 Static {
