@@ -1,16 +1,64 @@
 Screen {
-    layout: grid;
-    grid-size: 3 2;
-    grid-columns: 1fr 5fr 1fr;
+    layout: horizontal;
+    /*layout: grid;*/
+    /*grid-size: 3 2;*/
+    /*grid-columns: 3fr 14fr 3fr;*/
     opacity: 0;
+    layers: viewer buttons;
+}
+
+.side {
+    layer: buttons;
+    height: 50%;
+    width: 15%;
+    /*opacity: 0;*/
+}
+
+/*#placeholder {*/
+/*    layer: buttons;*/
+/*    row-span: 2;*/
+/*}*/
+
+#btn_prev_song {
+    /*offset-x: -130%;*/
+    /*offset-y: -50%;*/
+    /*offset: -130% -50%;*/
+    dock: left;
+}
+
+#btn_next_song {
+    /*offset: 100 0;*/
+    /*offset: 130% -50%;*/
+    dock: right;
+}
+
+#btn_prev_page {
+    /*offset:- 0 100%;*/
+    /*offset: -130% 50%;*/
+    dock: left;
+    offset-y: 100%;
+}
+
+#btn_next_page {
+    /*offset: 100% 100%;*/
+    /*offset: 130% 50%;*/
+    dock: right;
+    offset-y: 100%;
+}
+
+#btn_menu {
+    layer: buttons;
+    width: 100%;
+    height: 100%;
 }
 
 Static {
+    layer: viewer;
     height: 100%;
     width: 100%;
     border: round;
 }
 
-#viewer {
-    row-span: 2
-}
+/*#viewer {*/
+/*    row-span: 2*/
+/*}*/

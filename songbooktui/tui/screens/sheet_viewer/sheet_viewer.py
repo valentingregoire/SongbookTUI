@@ -3,7 +3,7 @@ from textual._easing import DEFAULT_EASING
 from textual.app import ComposeResult
 from textual.reactive import reactive
 from textual.screen import Screen
-from textual.widgets import Header, Static
+from textual.widgets import Header, Static, Button
 
 from backend.dto import SongDTO, SongbookDTO
 
@@ -25,10 +25,11 @@ class SheetViewer(Screen):
         self.styles.animate("opacity", value=1, duration=0.3, easing="out_circ")
 
     def compose(self) -> ComposeResult:
-        yield Header()
-        yield Static("PS")
         yield Static("Viewer", id="viewer")
-        yield Static("NS")
-        yield Static("PP")
-        yield Static("NP")
+        yield Button("PS", id="btn_prev_song", classes="side")
+        yield Button("Menu", id="btn_menu")
+        yield Button("NS", id="btn_next_song", classes="side")
+        yield Button("PP", id="btn_prev_page", classes="side")
+        yield Button("NP", id="btn_next_page", classes="side")
+        yield Header()
 

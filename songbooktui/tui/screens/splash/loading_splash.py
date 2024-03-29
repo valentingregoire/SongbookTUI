@@ -37,7 +37,7 @@ class LoadingSplash(Screen):
             progress_bar.styles.animate(
                 "opacity", value=0, duration=0.3, easing="out_quint"
             )
-            await sleep(1)
+            # await sleep(1)
             self.styles.animate("opacity", value=0, duration=0.3, easing="out_quint")
             self.dismiss((self.songs, self.songbooks))
 
