@@ -25,6 +25,7 @@ class LoadingSplash(Screen):
     def compose(self) -> ComposeResult:
         """Compose the loading splash screen."""
         title = text2art("Songbooks", font="doom")
+        title = text2art("Songbooks", font="larry3d")
         print(title)
         with Center():
             yield Static(title)
@@ -35,6 +36,7 @@ class LoadingSplash(Screen):
         progress_bar = self.query_one(ProgressBar)
         progress_bar.advance(1)
         if progress_bar.progress == 2:
+            progress_bar.styles.animate("opacity", value=0, duration=0.3, easing="out_quint")
             await sleep(1)
             self.styles.animate("opacity", value=0, duration=0.3, easing="out_circ")
             self.dismiss((self.songs, self.songbooks))
