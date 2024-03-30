@@ -41,11 +41,12 @@ class SongbookApp(App):
         """Compose the application."""
         yield Header()
         yield Footer()
-        yield MainMenu()
+        # yield MainMenu()
 
     def action_request_quit(self) -> None:
         """Quit the application."""
-        self.push_screen(MainMenu())
+        # self.push_screen(MainMenu())
+        self.app.exit()
 
 
 if __name__ == "__main__":

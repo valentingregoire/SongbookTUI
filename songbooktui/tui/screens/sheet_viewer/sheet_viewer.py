@@ -11,6 +11,7 @@ from backend.dto import SongDTO, SongbookDTO
 class SheetViewer(Screen):
 
     CSS_PATH = "sheet_viewer.tcss"
+    BINDINGS = [("q", "request_quit", "Quit")]
 
     songbook: reactive[SongbookDTO]
     song: reactive[SongDTO]

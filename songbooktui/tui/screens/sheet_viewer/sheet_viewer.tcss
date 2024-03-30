@@ -3,8 +3,12 @@ Screen {
     /*layout: grid;*/
     /*grid-size: 3 2;*/
     /*grid-columns: 3fr 14fr 3fr;*/
-    opacity: 0;
+    opacity: 0.1;
     layers: viewer buttons;
+}
+
+Button {
+    opacity: 0.1;
 }
 
 .side {
