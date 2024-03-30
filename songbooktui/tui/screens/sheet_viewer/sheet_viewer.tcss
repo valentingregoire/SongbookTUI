@@ -70,6 +70,6 @@ Static {
     opacity: 0.5;
 }
 
-/*#viewer {*/
-/*    row-span: 2*/
-/*}*/
+#viewer {
+    background: orange;
+}
