@@ -50,17 +50,24 @@ Button {
     offset-y: 100%;
 }
 
-#btn_menu {
-    layer: buttons;
-    width: 100%;
-    height: 100%;
-}
+/*#btn_menu {*/
+/*    layer: buttons;*/
+/*    width: 100%;*/
+/*    height: 70%;*/
+/*    border: round;*/
+/*    dock: bottom;*/
+/*    background: red;*/
+/*}*/
 
 Static {
+    /*background: yellow;*/
+    content-align: center middle;
+    dock: bottom;
     layer: viewer;
     height: 100%;
     width: 100%;
     border: round;
+    opacity: 0.5;
 }
 
 /*#viewer {*/
