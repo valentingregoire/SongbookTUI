@@ -8,7 +8,6 @@ from backend.model import Songbook, Song
 
 async def read_songs() -> tuple[Song]:
     """Read all songs from the filesystem."""
-
     tasks = []
     song_folders = os.listdir(SONGS_LOCATION)
     for song_folder in song_folders:
@@ -21,7 +20,6 @@ async def read_songs() -> tuple[Song]:
 
 async def read_song(folder: str) -> Song:
     """Read a song from the filesystem."""
-
     folder_path = f"{SONGS_LOCATION}/{folder}"
 
     # get the id
@@ -38,7 +36,9 @@ async def read_song(folder: str) -> Song:
     for page in page_files:
         page_path = f"{folder_path}/{page}"
         if os.path.isfile(page_path):
-            pages.append(page_path)
+            with open(page_path, "r") as page_file:
+                pages.append(page_file.read())
+            # pages.append(page_path)
     # all gathered data into a Song object
     song: Song = Song(id=song_id, pages=pages, **song_data)
     return song

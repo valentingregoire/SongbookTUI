@@ -61,7 +61,7 @@ Button {
 
 Static {
     /*background: yellow;*/
-    content-align: center middle;
+    content-align: center top;
     dock: bottom;
     layer: viewer;
     height: 100%;
