@@ -1,4 +1,18 @@
 from dataclasses import dataclass
+from enum import StrEnum
+
+
+class FileType(StrEnum):
+    TEXT = "txt"
+    MARKDOWN = "md"
+
+
+@dataclass
+class Page:
+    """Model class that represents a page."""
+
+    content: str
+    file_type: FileType = FileType.TEXT
 
 
 @dataclass
@@ -7,7 +21,7 @@ class Song:
 
     id: int
     title: str
-    pages: list[str]
+    pages: list[Page]
     artist: str | None = None
 
 

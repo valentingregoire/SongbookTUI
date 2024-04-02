@@ -73,3 +73,15 @@ Static {
 #viewer {
     background: orange;
 }
+
+#viewer_md {
+    content-align: center top;
+    dock: bottom;
+    layer: viewer;
+    height: 100%;
+    width: 100%;
+    /*border: round;*/
+    /*opacity: 0.5;*/
+    opacity: 1;
+
+}

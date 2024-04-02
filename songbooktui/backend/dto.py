@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from backend.model import FileType
+
 
 @dataclass
 class BaseDTO:
@@ -7,10 +9,16 @@ class BaseDTO:
 
 
 @dataclass
+class PageDTO:
+    content: str
+    file_type: FileType
+
+
+@dataclass
 class SongDTO:
     id: int
     title: str
-    pages: list[str]
+    pages: list[PageDTO]
     artist: str | None = None
 
 

@@ -2,8 +2,9 @@ import asyncio
 import json
 import os
 
-from backend.consts import SONGBOOKS_LOCATION, SONGS_LOCATION, INFO
-from backend.model import Songbook, Song
+from backend.consts import SONGBOOKS_LOCATION, SONGS_LOCATION, INFO, DEFAULT_FILE_TYPE
+from backend.dto import FileType
+from backend.model import Songbook, Song, Page
 
 
 async def read_songs() -> tuple[Song]:
@@ -36,12 +37,13 @@ async def read_song(folder: str) -> Song:
     for page in page_files:
         page_path = f"{folder_path}/{page}"
         if os.path.isfile(page_path):
+            file_type = FileType(page.split(".")[-1])
             with open(page_path, "r") as page_file:
-                pages.append(page_file.read())
+                page = Page(content=page_file.read(), file_type=file_type)
+                pages.append(page)
             # pages.append(page_path)
     # all gathered data into a Song object
-    song: Song = Song(id=song_id, pages=pages, **song_data)
-    return song
+    return Song(id=song_id, pages=pages, **song_data)
 
 
 def get_songbook_files() -> list[str]:
