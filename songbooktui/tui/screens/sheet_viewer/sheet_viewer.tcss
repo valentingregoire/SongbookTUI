@@ -1,10 +1,62 @@
 Screen {
     layout: horizontal;
+    content-align: center top;
     /*layout: grid;*/
     /*grid-size: 3 2;*/
     /*grid-columns: 3fr 14fr 3fr;*/
-    opacity: 0.1;
+    /*opacity: 0.1;*/
     layers: viewer buttons;
+}
+
+ContentSwitcher {
+    border: round $primary;
+    layer: viewer;
+    dock: bottom;
+    /*width: 1fr;*/
+    width: 1fr;
+    height: 1fr;
+    content-align: center top;
+}
+
+/*#placeholder {*/
+/*    layer: buttons;*/
+/*    row-span: 2;*/
+/*}*/
+
+
+/*#btn_menu {*/
+/*    layer: buttons;*/
+/*    width: 100%;*/
+/*    height: 70%;*/
+/*    border: round;*/
+/*    dock: bottom;*/
+/*    background: red;*/
+/*}*/
+
+Static {
+    /*background: yellow;*/
+    /*content-align: center top;*/
+    /*dock: bottom;*/
+    /*layer: viewer;*/
+    /*height: 100%;*/
+    /*width: 100%;*/
+    /*width: 1fr;*/
+    width: auto;
+    border: round;
+    /*opacity: 0.5;*/
+}
+
+#viewer {
+    /*background: orange;*/
+}
+
+#viewer_md {
+    content-align: center top;
+    /*height: 100%;*/
+    width: auto;
+    /*border: round;*/
+    /*opacity: 0.5;*/
+    /*opacity: 1;*/
 }
 
 Button {
@@ -17,11 +69,6 @@ Button {
     width: 15%;
     /*opacity: 0;*/
 }
-
-/*#placeholder {*/
-/*    layer: buttons;*/
-/*    row-span: 2;*/
-/*}*/
 
 #btn_prev_song {
     /*offset-x: -130%;*/
@@ -48,40 +95,4 @@ Button {
     /*offset: 130% 50%;*/
     dock: right;
     offset-y: 100%;
-}
-
-/*#btn_menu {*/
-/*    layer: buttons;*/
-/*    width: 100%;*/
-/*    height: 70%;*/
-/*    border: round;*/
-/*    dock: bottom;*/
-/*    background: red;*/
-/*}*/
-
-Static {
-    /*background: yellow;*/
-    content-align: center top;
-    dock: bottom;
-    layer: viewer;
-    height: 100%;
-    width: 100%;
-    border: round;
-    opacity: 0.5;
-}
-
-#viewer {
-    background: orange;
-}
-
-#viewer_md {
-    content-align: center top;
-    dock: bottom;
-    layer: viewer;
-    height: 100%;
-    width: 100%;
-    /*border: round;*/
-    /*opacity: 0.5;*/
-    opacity: 1;
-
 }

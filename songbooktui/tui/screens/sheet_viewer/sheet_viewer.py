@@ -17,12 +17,16 @@ class SheetViewer(Screen):
     current_page_index: reactive[int] = reactive(0, recompose=True)
     current_song: reactive[SongDTO] = reactive(None)
     current_page: reactive[PageDTO] = reactive(None)
+    current_viewer: reactive[str] = reactive("viewer_txt")
 
     def compute_current_song(self) -> SongDTO:
         return self.songbook.songs[self.current_song_index]
 
     def compute_current_page(self) -> str:
         return self.current_song.pages[self.current_page_index]
+
+    def compute_current_viewer(self) -> str:
+        return f"viewer_{self.current_page.file_type}"
 
     # def watch_current_page_index(self, value: int) -> None:
     #     print("watch current page index: " + str(value))
@@ -44,17 +48,17 @@ class SheetViewer(Screen):
         self.styles.animate("opacity", value=1, duration=0.3, easing="out_circ")
 
     def compose(self) -> ComposeResult:
-        # with VerticalScroll():
-        with ContentSwitcher(initial="viewer_txt"):
-            yield Static(self.current_page.content, id="viewer_txt")
-            yield Markdown(
-                self.current_page.content,
-                id="viewer_md",
-            )
+        with VerticalScroll():
+            with ContentSwitcher(initial=self.current_viewer):
+                yield Static(self.current_page.content, id="viewer_txt")
+                yield Markdown(
+                    self.current_page.content,
+                    id="viewer_md",
+                )
         yield Button(str(self.current_song_index), id="btn_prev_song", classes="side")
         # yield Button("Menu", id="btn_menu")
         yield Button(str(self.current_song_index), id="btn_next_song", classes="side")
-        yield Button("PP", id="btn_prev_page", classes="side")
+        yield Button(self.current_page.file_type, id="btn_prev_page", classes="side")
         yield Button("NP", id="btn_next_page", classes="side")
         yield Header()
 
@@ -74,9 +78,9 @@ class SheetViewer(Screen):
             self.current_page_index -= 1
         elif event.button.id == "btn_next_page":
             self.current_page_index += 1
-        self.query_one(ContentSwitcher).current = (
-            f"viewer_{self.current_page.file_type}"
-        )
+        # self.query_one(ContentSwitcher).current = (
+        #     f"viewer_{self.current_page.file_type}"
+        # )
 
     def _prev_page(self) -> None:
         self.current_page_index -= 1
