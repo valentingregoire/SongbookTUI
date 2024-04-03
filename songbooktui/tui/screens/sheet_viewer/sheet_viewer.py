@@ -2,8 +2,6 @@ from textual.app import ComposeResult
 from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import (
-    Header,
-    Button,
     Markdown,
     ContentSwitcher,
     Static,
@@ -11,6 +9,9 @@ from textual.widgets import (
 )
 
 from backend.dto import SongDTO, SongbookDTO, PageDTO
+from tui.widgets.action_button import ActionButton
+from tui.widgets.containers import LeftFloat, RightFloat, TopBar
+from tui.widgets.top_bar import PageInfo
 
 
 class SheetViewer(Screen):
@@ -70,19 +71,38 @@ class SheetViewer(Screen):
         # yield Button(self.current_page.file_type, id="btn_prev_page", classes="side")
         # yield Button("NP", id="btn_next_page", classes="side")
 
-        yield Static("[@click=screen.prev_song]  [/]", id="link_prev_song", classes="link")
-        yield Static("[@click=screen.next_song]  [/]", id="link_next_song", classes="link")
-        yield Static("[@click=screen.prev_page]  [/]", id="link_prev_page", classes="link")
-        yield Static("[@click=screen.next_page]  [/]", id="link_next_page", classes="link")
-        yield Header()
+        yield Static(
+            "[@click=screen.prev_song]  [/]", id="link_prev_song", classes="link"
+        )
+        yield Static(
+            "[@click=screen.next_song]  [/]", id="link_next_song", classes="link"
+        )
+        yield Static(
+            "[@click=screen.prev_page]  [/]", id="link_prev_page", classes="link"
+        )
+        yield Static(
+            "[@click=screen.next_page]  [/]", id="link_next_page", classes="link"
+        )
+        with TopBar():
+            with LeftFloat():
+                yield ActionButton("  ", "screen.prev_song", id="btn_prev_song")
+            with RightFloat():
+                yield PageInfo(
+                    self.current_page_index + 1, len(self.current_song.pages)
+                )
+                yield ActionButton("  ", "screen.next_song", id="btn_next_song")
 
     def action_prev_song(self) -> None:
         self.current_page_index = 0
-        self.current_song_index = (self.current_song_index + len(self.songbook.songs) - 1) % len(self.songbook.songs)
+        self.current_song_index = (
+            self.current_song_index + len(self.songbook.songs) - 1
+        ) % len(self.songbook.songs)
 
     def action_next_song(self) -> None:
         self.current_page_index = 0
-        self.current_song_index = (self.current_song_index + 1) % len(self.songbook.songs)
+        self.current_song_index = (self.current_song_index + 1) % len(
+            self.songbook.songs
+        )
 
     def action_prev_page(self) -> None:
         if self.current_page_index > 0:
