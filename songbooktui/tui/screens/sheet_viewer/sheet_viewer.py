@@ -1,8 +1,14 @@
 from textual.app import ComposeResult
-from textual.containers import VerticalScroll
 from textual.reactive import reactive
 from textual.screen import Screen
-from textual.widgets import Header, Button, Markdown, ContentSwitcher, Static
+from textual.widgets import (
+    Header,
+    Button,
+    Markdown,
+    ContentSwitcher,
+    Static,
+    Label,
+)
 
 from backend.dto import SongDTO, SongbookDTO, PageDTO
 
@@ -10,7 +16,10 @@ from backend.dto import SongDTO, SongbookDTO, PageDTO
 class SheetViewer(Screen):
 
     CSS_PATH = "sheet_viewer.tcss"
-    BINDINGS = [("q", "request_quit", "Quit")]
+    BINDINGS = [
+        ("q", "request_quit", "Quit"),
+        ("n", "next_song", "Next Song"),
+    ]
 
     songbook: SongbookDTO
     current_song_index: reactive[int] = reactive(0, recompose=True)
@@ -43,55 +52,49 @@ class SheetViewer(Screen):
         super().__init__()
 
     def on_mount(self) -> None:
-        self.title = "blabls"
-        self.sub_title = "sup bro"
         self.styles.animate("opacity", value=1, duration=0.3, easing="out_circ")
 
     def compose(self) -> ComposeResult:
-        with VerticalScroll():
-            with ContentSwitcher(initial=self.current_viewer):
-                yield Static(self.current_page.content, id="viewer_txt")
-                yield Markdown(
-                    self.current_page.content,
-                    id="viewer_md",
-                )
-        yield Button(str(self.current_song_index), id="btn_prev_song", classes="side")
+        # with VerticalScroll():
+        with ContentSwitcher(initial=self.current_viewer):
+            # yield Static(self.current_page.content, id="viewer_txt")
+            yield Label(self.current_page.content, id="viewer_txt")
+            yield Markdown(
+                self.current_page.content,
+                id="viewer_md",
+            )
+        # yield Label("some text", id="lbl_rnd")
         # yield Button("Menu", id="btn_menu")
-        yield Button(str(self.current_song_index), id="btn_next_song", classes="side")
-        yield Button(self.current_page.file_type, id="btn_prev_page", classes="side")
-        yield Button("NP", id="btn_next_page", classes="side")
+        # yield Button(str(self.current_song_index), id="btn_prev_song", classes="side")
+        # yield Button(str(self.current_song_index), id="btn_next_song", classes="side")
+        # yield Button(self.current_page.file_type, id="btn_prev_page", classes="side")
+        # yield Button("NP", id="btn_next_page", classes="side")
+
+        yield Static("[@click=screen.prev_song]  [/]", id="link_prev_song", classes="link")
+        yield Static("[@click=screen.next_song]  [/]", id="link_next_song", classes="link")
+        yield Static("[@click=screen.prev_page]  [/]", id="link_prev_page", classes="link")
+        yield Static("[@click=screen.next_page]  [/]", id="link_next_page", classes="link")
         yield Header()
 
-    def on_button_pressed(self, event: Button.Pressed) -> None:
-        """Handle button presses."""
-        # self.query_one(Static).content = event.button.id
-        #  = f"{self.current_song_index - self.current_page_index/len(self.current_song.pages)}"
-        # header = self.query_one(Header)
-        # header.query_one(HeaderTitle).text = reactive("button pressed")
-        # self.title = "button pressed"
-        # self.sub_title = "sup2"
-        if event.button.id == "btn_prev_song":
-            self.current_song_index -= 1
-        elif event.button.id == "btn_next_song":
-            self.current_song_index += 1
-        elif event.button.id == "btn_prev_page":
-            self.current_page_index -= 1
-        elif event.button.id == "btn_next_page":
-            self.current_page_index += 1
-        # self.query_one(ContentSwitcher).current = (
-        #     f"viewer_{self.current_page.file_type}"
-        # )
+    def action_prev_song(self) -> None:
+        self.current_page_index = 0
+        self.current_song_index = (self.current_song_index + len(self.songbook.songs) - 1) % len(self.songbook.songs)
 
-    def _prev_page(self) -> None:
+    def action_next_song(self) -> None:
+        self.current_page_index = 0
+        self.current_song_index = (self.current_song_index + 1) % len(self.songbook.songs)
+
+    def action_prev_page(self) -> None:
+        if self.current_page_index > 0:
+            self.current_page_index -= 1
+        else:
+            self.action_prev_song()
+            self.current_page_index = len(self.current_song.pages) - 1
+
         self.current_page_index -= 1
 
-    def _next_page(self) -> None:
-        self.current_page_index += 1
-
-    def _prev_song(self) -> None:
-        self.current_page_index = 0
-        self.current_song_index -= 1
-
-    def _next_song(self) -> None:
-        self.current_page_index = 0
-        self.current_song_index += 1
+    def action_next_page(self) -> None:
+        if self.current_page_index < len(self.current_song.pages) - 1:
+            self.current_page_index += 1
+        else:
+            self.action_next_song()
