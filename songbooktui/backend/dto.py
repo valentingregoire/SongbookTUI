@@ -23,7 +23,7 @@ class SongDTO:
 
     @property
     def full_title(self) -> str:
-        return f"{self.title} - {self.artist}" if self.artist else self.title
+        return f"{self.artist} - {self.title}" if self.artist else self.title
 
 
 @dataclass

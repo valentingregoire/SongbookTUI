@@ -10,6 +10,10 @@ class PageInfo(Widget):
         width: auto;
         text-style: bold;
     }
+    
+    # ActionButton {
+    #     content-align: center bottom;
+    # }
     """
     page_number: reactive[int] = reactive(1)
     total_pages: reactive[int] = reactive(1)
@@ -22,4 +26,4 @@ class PageInfo(Widget):
         self.total_pages = total_pages
 
     def render(self) -> str:
-        return f"󰈙 {self.page_number}/{self.total_pages}"
+        return f"#{self.page_number}/{self.total_pages}"

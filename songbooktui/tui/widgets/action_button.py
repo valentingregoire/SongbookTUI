@@ -7,9 +7,10 @@ from textual.widget import Widget
 class ActionButton(Widget):
     DEFAULT_CSS = """
     ActionButton {
-        content-align: center middle;
+        content-align: center top;
         width: auto;
         padding: 0 1;
+        height: 1;
     }
     
     ActionButton:hover {

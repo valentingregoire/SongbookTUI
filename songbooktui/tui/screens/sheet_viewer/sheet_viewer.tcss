@@ -13,6 +13,11 @@ ContentSwitcher {
     /*overflow-y: scroll;*/
 }
 
+#bott {
+    dock: bottom;
+    background: blue;
+}
+
 #viewer_txt {
     width: auto;
     /*border: round red;*/

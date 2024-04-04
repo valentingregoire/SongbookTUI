@@ -71,7 +71,7 @@ class SheetViewer(Screen):
             with LeftFloat():
                 yield ActionButton("  ", "screen.prev_song", id="btn_prev_song")
             with CenterFloat():
-                yield Static(self.current_song.title, id="lbl_song_title")
+                yield Static(self.current_song.full_title, id="lbl_song_title")
             with RightFloat():
                 yield InlineVerticalProgressBar(self.current_song_index + 1, len(self.songbook.songs))
                 yield SongInfo(self.current_song_index + 1, len(self.songbook.songs))
