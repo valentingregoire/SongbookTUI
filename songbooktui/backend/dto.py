@@ -21,6 +21,10 @@ class SongDTO:
     pages: list[PageDTO]
     artist: str | None = None
 
+    @property
+    def full_title(self) -> str:
+        return f"{self.title} - {self.artist}" if self.artist else self.title
+
 
 @dataclass
 class SongbookDTO(BaseDTO):

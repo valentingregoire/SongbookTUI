@@ -12,12 +12,24 @@ class TopBar(Horizontal):
     """
 
 
+class BottomBar(Horizontal):
+    DEFAULT_CSS = """
+    TopBar {
+        layout: horizontal;
+        height: 1;
+        dock: bottom;
+        opacity: 0.5;
+        background: red;
+    }
+    """
+
+
 class LeftFloat(Horizontal):
     DEFAULT_CSS = """
     LeftFloat {
         align: left middle;
         content-align: left middle;
-        background: red;
+        # background: red;
         # width: 30%;
     }
     """
@@ -29,7 +41,7 @@ class CenterFloat(Horizontal):
         align: center middle;
         content-align: center middle;
         text-align: center;
-        background: green;
+        # background: green;
     }
     """
 
@@ -39,7 +51,7 @@ class RightFloat(Horizontal):
     RightFloat {
         align: right middle;
         content-align: right middle;
-        background: blue;
+        # background: blue;
         # width: 50%;
     }
     """

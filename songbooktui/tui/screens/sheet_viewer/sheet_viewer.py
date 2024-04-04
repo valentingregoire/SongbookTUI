@@ -10,9 +10,10 @@ from textual.widgets import (
 
 from backend.dto import SongDTO, SongbookDTO, PageDTO
 from tui.widgets.action_button import ActionButton
-from tui.widgets.containers import LeftFloat, RightFloat, TopBar, CenterFloat
+from tui.widgets.bottom_bar import PageInfo
+from tui.widgets.containers import LeftFloat, RightFloat, TopBar, CenterFloat, BottomBar
 from tui.widgets.progress_bar import InlineVerticalProgressBar
-from tui.widgets.top_bar import PageInfo, SongInfo
+from tui.widgets.top_bar import SongInfo
 
 
 class SheetViewer(Screen):
@@ -73,11 +74,18 @@ class SheetViewer(Screen):
                 yield Static(self.current_song.title, id="lbl_song_title")
             with RightFloat():
                 yield InlineVerticalProgressBar(self.current_song_index + 1, len(self.songbook.songs))
-                yield PageInfo(
-                    self.current_page_index + 1, len(self.current_song.pages)
-                )
                 yield SongInfo(self.current_song_index + 1, len(self.songbook.songs))
                 yield ActionButton("  ", "screen.next_song", id="btn_next_song")
+        with BottomBar():
+            with LeftFloat():
+                yield ActionButton("  ", "screen.prev_page", id="btn_prev_page")
+            with CenterFloat():
+                next_song_index = (self.current_song_index + 1) % len(self.songbook.songs)
+                yield Static(self.songbook.songs[next_song_index].full_title, id="lbl_page_title")
+            with RightFloat():
+                yield InlineVerticalProgressBar(self.current_page_index + 1, len(self.current_song.pages))
+                yield PageInfo(self.current_page_index + 1, len(self.current_song.pages))
+                yield ActionButton("  ", "screen.next_page", id="btn_next_page")
 
     def action_prev_song(self) -> None:
         self.current_page_index = 0
