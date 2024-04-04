@@ -73,18 +73,28 @@ class SheetViewer(Screen):
             with CenterFloat():
                 yield Static(self.current_song.full_title, id="lbl_song_title")
             with RightFloat():
-                yield InlineVerticalProgressBar(self.current_song_index + 1, len(self.songbook.songs))
+                yield InlineVerticalProgressBar(
+                    self.current_song_index + 1, len(self.songbook.songs)
+                )
                 yield SongInfo(self.current_song_index + 1, len(self.songbook.songs))
                 yield ActionButton("  ", "screen.next_song", id="btn_next_song")
         with BottomBar():
             with LeftFloat():
                 yield ActionButton("  ", "screen.prev_page", id="btn_prev_page")
             with CenterFloat():
-                next_song_index = (self.current_song_index + 1) % len(self.songbook.songs)
-                yield Static(self.songbook.songs[next_song_index].full_title, id="lbl_page_title")
+                next_song_index = (self.current_song_index + 1) % len(
+                    self.songbook.songs
+                )
+                yield Static(
+                    self.songbook.songs[next_song_index].full_title, id="lbl_page_title"
+                )
             with RightFloat():
-                yield InlineVerticalProgressBar(self.current_page_index + 1, len(self.current_song.pages))
-                yield PageInfo(self.current_page_index + 1, len(self.current_song.pages))
+                yield InlineVerticalProgressBar(
+                    self.current_page_index + 1, len(self.current_song.pages)
+                )
+                yield PageInfo(
+                    self.current_page_index + 1, len(self.current_song.pages)
+                )
                 yield ActionButton("  ", "screen.next_page", id="btn_next_page")
 
     def action_prev_song(self) -> None:
@@ -105,8 +115,6 @@ class SheetViewer(Screen):
         else:
             self.action_prev_song()
             self.current_page_index = len(self.current_song.pages) - 1
-
-        self.current_page_index -= 1
 
     def action_next_page(self) -> None:
         if self.current_page_index < len(self.current_song.pages) - 1:

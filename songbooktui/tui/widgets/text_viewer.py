@@ -13,4 +13,3 @@ class TextViewer(Widget):
 
     def render(self) -> str:
         return self.content
-

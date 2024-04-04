@@ -15,7 +15,7 @@ class SongInfo(Widget):
     total_songs: reactive[int] = reactive(1)
 
     def __init__(
-            self, song_number: int = 1, total_songs: int = 1, id: str | None = None
+        self, song_number: int = 1, total_songs: int = 1, id: str | None = None
     ) -> None:
         super().__init__(id=id)
         self.song_number = song_number

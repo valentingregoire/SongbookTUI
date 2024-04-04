@@ -2,7 +2,6 @@ from textual.app import App, ComposeResult
 from textual.widgets import Footer, Header
 
 from backend.dto import SongbookDTO, SongDTO
-from tui.screens.main_menu import MainMenu
 from tui.screens.sheet_viewer.sheet_viewer import SheetViewer
 from tui.screens.splash.loading_splash import LoadingSplash
 

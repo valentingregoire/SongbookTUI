@@ -22,7 +22,9 @@ class InlineVerticalProgressBar(Widget):
     progress: reactive[float] = reactive(0)
     total: reactive[float] = reactive(1)
 
-    def __init__(self, progress: float = 0, total: float = 1, id: str | None = None) -> None:
+    def __init__(
+        self, progress: float = 0, total: float = 1, id: str | None = None
+    ) -> None:
         super().__init__(id=id)
         self.progress = progress
         self.total = total
@@ -32,19 +34,19 @@ class InlineVerticalProgressBar(Widget):
         progress_str = " "
         if progress == 1:
             progress_str = self._8_8
-        elif progress >= 7/8:
+        elif progress >= 7 / 8:
             progress_str = self._7_8
-        elif progress >= 6/8:
+        elif progress >= 6 / 8:
             progress_str = self._6_8
-        elif progress >= 5/8:
+        elif progress >= 5 / 8:
             progress_str = self._5_8
-        elif progress >= 4/8:
+        elif progress >= 4 / 8:
             progress_str = self._4_8
-        elif progress >= 3/8:
+        elif progress >= 3 / 8:
             progress_str = self._3_8
-        elif progress >= 2/8:
+        elif progress >= 2 / 8:
             progress_str = self._2_8
-        elif progress >= 1/8:
+        elif progress >= 1 / 8:
             progress_str = self._1_8
         return progress_str * 2
 

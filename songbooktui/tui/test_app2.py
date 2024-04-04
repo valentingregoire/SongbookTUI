@@ -1,4 +1,4 @@
-from textual.app import App, ComposeResult, RenderResult
+from textual.app import App, ComposeResult
 from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import Static, ContentSwitcher, Label, Markdown, Header, Footer
@@ -33,7 +33,11 @@ class ViewerScreen(Screen):
             )
 
         # yield Static("[@click=next_song]ns[/]", id="link_next_song", classes="link")
-        yield Static("Go to [@click=next_song]Next Song[/] please!", id="link_next_song", classes="link")
+        yield Static(
+            "Go to [@click=next_song]Next Song[/] please!",
+            id="link_next_song",
+            classes="link",
+        )
         yield Header()
         yield Footer()
 

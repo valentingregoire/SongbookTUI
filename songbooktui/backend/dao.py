@@ -2,7 +2,7 @@ import asyncio
 import json
 import os
 
-from backend.consts import SONGBOOKS_LOCATION, SONGS_LOCATION, INFO, DEFAULT_FILE_TYPE
+from backend.consts import SONGBOOKS_LOCATION, SONGS_LOCATION, INFO
 from backend.dto import FileType
 from backend.model import Songbook, Song, Page
 
@@ -33,7 +33,9 @@ async def read_song(folder: str) -> Song:
     # get the pages
     pages = []
     files = os.listdir(folder_path)
-    page_files = sorted([f for f in files if not f.startswith(".")], key=lambda n: int(n.split(".")[0]))
+    page_files = sorted(
+        [f for f in files if not f.startswith(".")], key=lambda n: int(n.split(".")[0])
+    )
     for page in page_files:
         page_path = f"{folder_path}/{page}"
         if os.path.isfile(page_path):

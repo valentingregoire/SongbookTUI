@@ -1,5 +1,3 @@
-from asyncio import sleep
-
 from art import text2art
 from textual import work
 from textual.app import ComposeResult

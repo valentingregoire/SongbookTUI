@@ -19,7 +19,7 @@ class PageInfo(Widget):
     total_pages: reactive[int] = reactive(1)
 
     def __init__(
-            self, page_number: int = 1, total_pages: int = 1, id: str | None = None
+        self, page_number: int = 1, total_pages: int = 1, id: str | None = None
     ) -> None:
         super().__init__(id=id)
         self.page_number = page_number
