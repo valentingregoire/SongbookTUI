@@ -1,0 +1,11 @@
+Vertical {
+    /*border: round $primary;*/
+    width: 50%;
+    height: auto;
+    padding: 0 1;
+}
+
+RightFloat {
+    content-align: right middle;
+    align: right middle;
+}

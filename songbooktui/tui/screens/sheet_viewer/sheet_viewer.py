@@ -9,6 +9,7 @@ from textual.widgets import (
 )
 
 from backend.dto import SongDTO, SongbookDTO, PageDTO
+from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
 from tui.widgets.action_button import ActionButton
 from tui.widgets.bottom_bar import PageInfo
 from tui.widgets.containers import LeftFloat, RightFloat, TopBar, CenterFloat, BottomBar
@@ -89,6 +90,9 @@ class SheetViewer(Screen):
                     self.songbook.songs[next_song_index].full_title, id="lbl_page_title"
                 )
             with RightFloat():
+                yield Static(
+                    "[@click=screen.show_songbook_overview]   [/]", id="btn_overview"
+                )
                 yield InlineVerticalProgressBar(
                     self.current_page_index + 1, len(self.current_song.pages)
                 )
@@ -96,6 +100,11 @@ class SheetViewer(Screen):
                     self.current_page_index + 1, len(self.current_song.pages)
                 )
                 yield ActionButton("  ", "screen.next_page", id="btn_next_page")
+
+    def action_show_songbook_overview(self) -> None:
+        self.app.push_screen(
+            SongbookOverviewModal(self.songbook, self.current_song_index)
+        )
 
     def action_prev_song(self) -> None:
         self.current_page_index = 0

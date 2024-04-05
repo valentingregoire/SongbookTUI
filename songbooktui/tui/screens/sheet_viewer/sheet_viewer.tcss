@@ -13,11 +13,6 @@ ContentSwitcher {
     /*overflow-y: scroll;*/
 }
 
-#bott {
-    dock: bottom;
-    background: blue;
-}
-
 #viewer_txt {
     width: auto;
     /*border: round red;*/
@@ -71,4 +66,9 @@ ContentSwitcher {
     content-align: right bottom;
     dock: bottom;
     offset-x: 10;
+}
+
+#btn_overview {
+    margin: 0 1;
+    link_style: none;
 }
