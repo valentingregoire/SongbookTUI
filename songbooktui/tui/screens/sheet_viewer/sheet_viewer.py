@@ -21,8 +21,8 @@ class SheetViewer(Screen):
 
     CSS_PATH = "sheet_viewer.tcss"
     BINDINGS = [
+        ("o", "show_songbook_overview", "  Overview"),
         ("q", "request_quit", "Quit"),
-        ("n", "next_song", "Next Song"),
     ]
 
     songbook: SongbookDTO

@@ -1,5 +1,6 @@
 from textual.app import ComposeResult
 from textual.containers import Grid, Horizontal
+from textual.reactive import reactive
 from textual.screen import ModalScreen
 from textual.widgets import Static
 
@@ -44,17 +45,58 @@ class SongbookOverviewModal(ModalScreen):
             for index, song in enumerate(self.songbook.songs):
                 yield Static(str(index + 1), classes="cell")
                 yield Static(song.title, classes="cell")
-                yield Static(song.artist, classes="cell")
+                yield Static(song.artist or "", classes="cell")
                 with Horizontal(classes="actions-container"):
                     # yield Static(f"[@click=up({index})]  [/]", classes="actions-cell")
                     # yield Static(f"[@click=down({index})]  [/]", classes="actions-cell")
                     # yield Static(f"[@click=up({index})]  [/]", classes="actions-cell")
                     yield ActionButton(
-                        "", action=f"up({index})", classes="actions-cell"
+                        "", action=f"screen.up({index})", classes="actions-cell"
                     )
                     yield ActionButton(
-                        "", action=f"down({index})", classes="actions-cell"
+                        "", action=f"screen.down({index})", classes="actions-cell"
                     )
                     yield ActionButton(
-                        "", action=f"remove({index})", classes="actions-cell"
+                        " ", action=f"screen.add({index})", classes="actions-cell"
                     )
+                    yield ActionButton(
+                        "", action=f"screen.remove({index})", classes="actions-cell"
+                    )
+
+    def action_up(self, index: int):
+        print("action_up")
+        if index == 0:
+            return
+        song = self.songbook.songs.pop(index)
+        self.songbook.songs.insert(index - 1, song)
+        # self.recompose()
+        self.recompose()
+        print([s.title for s in self.songbook.songs])
+
+    def action_down(self, index: int):
+        print("action_down")
+        if index == len(self.songbook.songs) - 1:
+            return
+        song = self.songbook.songs.pop(index)
+        self.songbook.songs.insert(index + 1, song)
+        # self.recompose()
+        self.recompose()
+        print([s.title for s in self.songbook.songs])
+
+    def action_add(self, index: int):
+        song = self.songbook.songs[index]
+        self.app.push_screen(
+            SongbookOverviewModal(self.songbook, self.current_song_index)
+        )
+
+    def action_remove(self, index: int):
+        self.songbook.songs.pop(index)
+        if index == self.current_song_index:
+            self.current_song_index = 0
+        elif index < self.current_song_index:
+            self.current_song_index -= 1
+        if len(self.songbook.songs) == 0:
+            self.app.pop_screen()
+        else:
+            self.recompose()
+        print([s.title for s in self.songbook.songs])
