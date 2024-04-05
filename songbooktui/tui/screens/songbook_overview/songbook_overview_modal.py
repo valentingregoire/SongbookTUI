@@ -1,6 +1,5 @@
 from textual.app import ComposeResult
 from textual.containers import Grid, Horizontal
-from textual.reactive import reactive
 from textual.screen import ModalScreen
 from textual.widgets import Static
 
@@ -71,6 +70,8 @@ class SongbookOverviewModal(ModalScreen):
         self.songbook.songs.insert(index - 1, song)
         # self.recompose()
         self.recompose()
+        self.app.pop_screen()
+        self.app.push_screen(SongbookOverviewModal(self.songbook, self.current_song_index))
         print([s.title for s in self.songbook.songs])
 
     def action_down(self, index: int):
@@ -80,7 +81,8 @@ class SongbookOverviewModal(ModalScreen):
         song = self.songbook.songs.pop(index)
         self.songbook.songs.insert(index + 1, song)
         # self.recompose()
-        self.recompose()
+        self.app.pop_screen()
+        self.app.push_screen(SongbookOverviewModal(self.songbook, self.current_song_index))
         print([s.title for s in self.songbook.songs])
 
     def action_add(self, index: int):
@@ -98,5 +100,8 @@ class SongbookOverviewModal(ModalScreen):
         if len(self.songbook.songs) == 0:
             self.app.pop_screen()
         else:
-            self.recompose()
+            # self.recompose()
+            # self.app.recompose()
+            self.app.pop_screen()
+            self.app.push_screen(SongbookOverviewModal(self.songbook, self.current_song_index))
         print([s.title for s in self.songbook.songs])
