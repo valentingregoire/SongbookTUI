@@ -8,8 +8,9 @@ from backend.model import Songbook
 class SongbookOverviewTable(VerticalScroll):
     DEFAULT_CSS = """
     SonbookOverviewTable {
-        width: 50%;
-        height: 50%;
+        layout: grid 4 2;
+        # width: 50%;
+        # height: 50%;
     }
     
     DataTable {
@@ -34,5 +35,5 @@ class SongbookOverviewTable(VerticalScroll):
         table.focus()
         table.add_columns("#", "Title", "Artist", "Actions")
         table.cursor_type = "row"
-        for index, song in enumerate(self.songbook.songs):
-            table.add_row(str(index + 1), current_song.title, current_song.artist, "A", key=index)
+        # for index, song in enumerate(self.songbook.songs):
+        #     table.add_row(str(index + 1), current_song.title, current_song.artist, "A", key=index)

@@ -1,11 +1,65 @@
-Vertical {
-    /*border: round $primary;*/
-    width: 50%;
-    height: auto;
+SongbookOverviewModal {
+    /*layout: grid;*/
+    /*grid-size: 4;*/
+    /*grid-rows: 1;*/
+    /*background: $background;*/
+    /*width: auto;*/
+    /*height: auto;*/
+}
+
+SongbookOverviewModal > Static {
+    height: 1;
+}
+
+/*Vertical {*/
+/*    layout: grid;*/
+/*    grid-size: 4;*/
+/*    !*border: round $primary;*!*/
+/*    !*width: 50%;*!*/
+/*    height: auto;*/
+/*    padding: 0 1;*/
+/*}*/
+
+#table {
+    grid-size: 4;
+    grid-columns: auto 1fr 1fr auto;
     padding: 0 1;
+    height: auto;
+    width: 80%;
+    /*width: 50%;*/
+}
+
+.actions-container {
+    height: 1;
 }
 
 RightFloat {
     content-align: right middle;
     align: right middle;
+}
+
+.header-cell {
+    background: $primary;
+    width: 1fr;
+    /*width: auto;*/
+    padding: 0 1;
+}
+
+.id-cell {
+    width: 1fr;
+}
+
+.cell {
+    background: $background;
+    /*width: 5fr;*/
+    width: 1fr;
+    /*width: auto;*/
+    padding: 0 1;
+}
+
+.actions-cell {
+    align: right middle;
+    content-align: right middle;
+    text-align: right;
+    width: auto;
 }

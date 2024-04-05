@@ -41,18 +41,8 @@ class SheetViewer(Screen):
     def compute_current_viewer(self) -> str:
         return f"viewer_{self.current_page.file_type}"
 
-    # def watch_current_page_index(self, value: int) -> None:
-    #     print("watch current page index: " + str(value))
-    # self.query_one("#viewer").content = f"{self.current_song_index} - {self.current_page_index}/{len(self.current_song.pages)}"
-    # self.query_one("#viewer").content = f"{self.current_song_index} - {self.current_page_index}"
-
-    # def watch_current_song(self, song: SongDTO) -> None:
-    #     self.query_one(ContentSwitcher).current = f"viewer_{song.file_type.name.lower()}"
-
     def __init__(self, songbook: SongbookDTO) -> None:
         self.songbook = songbook
-        # self.current_song_index = 0
-        # self.current_page_index = 0
         super().__init__()
 
     def on_mount(self) -> None:
@@ -61,7 +51,6 @@ class SheetViewer(Screen):
     def compose(self) -> ComposeResult:
         # with VerticalScroll():
         with ContentSwitcher(initial=self.current_viewer):
-            # yield Static(self.current_page.content, id="viewer_txt")
             yield Label(self.current_page.content, id="viewer_txt")
             yield Markdown(
                 self.current_page.content,
@@ -91,7 +80,8 @@ class SheetViewer(Screen):
                 )
             with RightFloat():
                 yield Static(
-                    "[@click=screen.show_songbook_overview]   [/]", id="btn_overview"
+                    "[@click=screen.show_songbook_overview]   Overview [/]",
+                    id="btn_overview",
                 )
                 yield InlineVerticalProgressBar(
                     self.current_page_index + 1, len(self.current_song.pages)

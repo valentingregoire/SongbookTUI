@@ -26,9 +26,10 @@ class ActionButton(Widget):
         text: str,
         action: str,
         id: str | None = None,
+        classes: str | None = None,
         *args,
     ) -> None:
-        super().__init__(id=id, *args)
+        super().__init__(id=id, classes=classes, *args)
         self.text = text
         self.action = action
 
