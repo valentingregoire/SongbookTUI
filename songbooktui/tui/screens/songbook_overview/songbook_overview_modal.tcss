@@ -26,6 +26,7 @@ SongbookOverviewModal > Static {
     padding: 0 1;
     height: auto;
     width: 80%;
+    /*border: round $primary;*/
     /*width: 50%;*/
 }
 
