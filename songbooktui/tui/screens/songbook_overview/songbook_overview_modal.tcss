@@ -35,8 +35,6 @@ SongbookOverviewModal > Static {
     padding: 0 1;
     height: auto;
     width: 80%;
-    /*border: round $primary;*/
-    /*width: 50%;*/
 }
 
 #actions-bar {
@@ -58,7 +56,7 @@ RightFloat {
 }
 
 .header-cell {
-    background: $primary;
+    background: $accent;
     width: 1fr;
     /*width: auto;*/
     padding: 0 1;

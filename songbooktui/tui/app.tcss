@@ -13,7 +13,7 @@ Screen {
 
 #title-bar {
     dock: top;
-    background: $primary-background;
+    background: $primary;
 }
 
 .spacer {
