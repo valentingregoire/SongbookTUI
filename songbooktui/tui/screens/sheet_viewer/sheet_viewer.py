@@ -25,6 +25,7 @@ class SheetViewer(Screen):
         ("q", "request_quit", "Quit"),
     ]
 
+    songs: dict[int, SongDTO]
     songbook: SongbookDTO
     current_song_index: reactive[int] = reactive(0, recompose=True)
     current_page_index: reactive[int] = reactive(0, recompose=True)
@@ -41,7 +42,8 @@ class SheetViewer(Screen):
     def compute_current_viewer(self) -> str:
         return f"viewer_{self.current_page.file_type}"
 
-    def __init__(self, songbook: SongbookDTO) -> None:
+    def __init__(self, songs: dict[int, SongDTO], songbook: SongbookDTO) -> None:
+        self.songs = songs
         self.songbook = songbook
         super().__init__()
 
@@ -93,7 +95,7 @@ class SheetViewer(Screen):
 
     def action_show_songbook_overview(self) -> None:
         self.app.push_screen(
-            SongbookOverviewModal(self.songbook, self.current_song_index)
+            SongbookOverviewModal(self.songs, self.songbook, self.current_song_index)
         )
 
     def action_prev_song(self) -> None:

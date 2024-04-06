@@ -10,3 +10,12 @@ ModalScreen {
 Screen {
     align: center middle;
 }
+
+#title-bar {
+    dock: top;
+    background: $primary-background;
+}
+
+.spacer {
+    height: 1;
+}
