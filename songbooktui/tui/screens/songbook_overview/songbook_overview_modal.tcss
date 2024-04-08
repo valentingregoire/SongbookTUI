@@ -1,7 +1,15 @@
 SongbookOverviewModal {
     align: center middle;
-    content-align: center middle;
-    layout: vertical;
+
+    Container {
+        width: auto;
+        /*width: auto;*/
+        height: auto;
+        align: center middle;
+        content-align: center middle;
+        /*border: round $primary;*/
+        /*background: magenta;*/
+    }
 }
 
 #data-table {
@@ -19,13 +27,9 @@ SongbookOverviewModal {
 #container-actions {
     width: 14;
     height: auto;
+    /*border-right: round $primary;*/
 }
 
 .btn-action {
     width: 1fr;
-}
-
-SongbookOverviewModal > RightFloat {
-    width: auto;
-    /*background: blue;*/
 }

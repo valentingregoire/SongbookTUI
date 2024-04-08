@@ -43,6 +43,7 @@ ActionButton:hover {
 }
 
 .title-bar {
+    width: 1fr;
     dock: top;
     background: $primary;
 }
@@ -53,8 +54,8 @@ ActionButton:hover {
 
 .actions-row {
     layout: horizontal;
-    align: center middle;
-    content-align: center middle;
+    align: right middle;
+    content-align: right middle;
     height: 1;
     width: auto;
 }

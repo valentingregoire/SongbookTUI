@@ -7,7 +7,7 @@ class Spacer(Widget):
     DEFAULT_CSS = """
     Spacer {
         width: auto;
-        background: red;
+        # background: red;
     }
     """
 
@@ -33,7 +33,7 @@ class TopBar(Horizontal):
         width: auto;
         dock: top;
         # opacity: 1;
-        background: red;
+        # background: red;
     }
     """
 
