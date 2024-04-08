@@ -1,82 +1,31 @@
 SongbookOverviewModal {
-    /*layout: grid;*/
-    /*grid-size: 4;*/
-    /*grid-rows: 1;*/
-    /*background: $background;*/
-    /*width: auto;*/
-    /*height: auto;*/
-    /*width: 80%;*/
-    /*height: 10;*/
     align: center middle;
     content-align: center middle;
+    layout: vertical;
 }
 
-SongbookOverviewModal > Static {
-    height: 1;
-}
-
-/*Vertical {*/
-/*    layout: grid;*/
-/*    grid-size: 4;*/
-/*    !*border: round $primary;*!*/
-/*    !*width: 50%;*!*/
-/*    height: auto;*/
-/*    padding: 0 1;*/
-/*}*/
-
-.actions-container {
-    height: 1;
-    /*padding: 0 1;*/
-}
-
-#table {
-    grid-size: 4;
-    grid-columns: auto 1fr 1fr auto;
-    padding: 0 1;
-    height: auto;
-    width: 80%;
-}
-
-#actions-bar {
-    /*padding: 0 1;*/
-    /*background: red;*/
-    /*column-span: 4;*/
-    /*width: 100%;*/
-    /*dock: top;*/
-    offset-y: 1;
-}
-
-.spacer {
-    column-span: 4;
-}
-
-RightFloat {
-    content-align: right middle;
-    align: right middle;
-}
-
-.header-cell {
-    background: $accent;
-    width: 1fr;
-    /*width: auto;*/
-    padding: 0 1;
-}
-
-.id-cell {
-    width: 1fr;
-}
-
-.cell {
-    background: $background;
-    /*width: 5fr;*/
-    width: 1fr;
-    /*width: auto;*/
-    padding: 0 1;
-}
-
-.actions-cell {
-    align: right middle;
-    content-align: right middle;
-    text-align: right;
+#data-table {
     width: auto;
+    height: auto;
+    /*padding: 0 1;*/
+    /*border: round blue;*/
+}
+
+#container {
+    width: auto;
+    height: auto;
+}
+
+#container-actions {
+    width: 14;
+    height: auto;
+}
+
+.btn-action {
+    width: 1fr;
+}
+
+SongbookOverviewModal > RightFloat {
+    width: auto;
+    /*background: blue;*/
 }

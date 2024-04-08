@@ -1,4 +1,27 @@
+from textual.app import RenderResult
 from textual.containers import Horizontal
+from textual.widget import Widget
+
+
+class Spacer(Widget):
+    DEFAULT_CSS = """
+    Spacer {
+        width: auto;
+        background: red;
+    }
+    """
+
+    height: int
+
+    def __init__(self, height: int = 1) -> None:
+        super().__init__()
+        self.height = height
+
+    def on_mount(self) -> None:
+        self.styles.height = self.height
+
+    def render(self) -> RenderResult:
+        return "";
 
 
 class TopBar(Horizontal):
@@ -7,8 +30,10 @@ class TopBar(Horizontal):
         # border: round magenta;
         align: center top;
         height: 1;
+        width: auto;
         dock: top;
         # opacity: 1;
+        background: red;
     }
     """
 
@@ -29,12 +54,12 @@ class BottomBar(Horizontal):
 class HorizontalFloat(Horizontal):
     DEFAULT_CSS = """
     HorizontalFloat {
-        # layout: horizontal;
+        height: 1;
+        width: auto;
         align: center middle;
         content-align: center middle;
         text-align: center;
-        # background: yellow;
-        # width: auto;
+        background: red 0%;
     }
     """
     # pass

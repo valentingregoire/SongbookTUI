@@ -2,20 +2,79 @@ ModalScreen {
     layout: vertical;
     align: center middle;
 
-    Button {
-        width: 50;
-    }
+    link-style: none;
 }
 
 Screen {
     align: center middle;
 }
 
-#title-bar {
+
+# ALIGN
+
+.center-middle {
+    align: center middle;
+    content-align: center middle;
+}
+
+.left-middle {
+    align: left middle;
+    content-align: left middle;
+}
+
+.right-middle {
+    align: right middle;
+    content-align: right middle;
+}
+
+
+# WIDGETS
+
+ActionButton {
+    background: $background;
+    /*color: $background;*/
+    /*padding: 0 1;*/
+    /*margin: 0 1;*/
+    /*link-style: none;*/
+}
+
+ActionButton:hover {
+    background: $background-lighten-3;
+}
+
+.title-bar {
     dock: top;
     background: $primary;
 }
 
 .spacer {
     height: 1;
+}
+
+.actions-row {
+    layout: horizontal;
+    align: center middle;
+    content-align: center middle;
+    height: 1;
+    width: auto;
+}
+
+.btn-link {
+    height: 1;
+    width: auto;
+    padding: 0 1;
+    /*margin: 0 1;*/
+    link-style: none;
+}
+
+
+# VARIANTS
+
+.success {
+    background: $success;
+    color: $background;
+}
+
+.success:hover {
+    background: $success-lighten-3;
 }
