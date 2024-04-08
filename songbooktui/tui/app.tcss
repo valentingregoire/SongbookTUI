@@ -79,3 +79,12 @@ ActionButton:hover {
 .success:hover {
     background: $success-lighten-3;
 }
+
+.error {
+    background: $error;
+    color: $background;
+}
+
+.error:hover {
+    background: $error-lighten-3;
+}

@@ -5,10 +5,15 @@ from textual.widgets.selection_list import Selection
 
 from backend.dto import SongbookDTO, SongDTO
 from tui.widgets.action_button import ActionButton
-from tui.widgets.containers import TopBar, RightFloat
+from tui.widgets.containers import TopBar, RightFloat, Spacer
 
 
 class SongOverviewModal(ModalScreen):
+    DEFAULT_CSS = """
+    SongOverviewModal {
+        layout: vertical;
+    }
+    """
     BINDINGS = [
         ("q", "pop_screen", "Quit"),
     ]
@@ -41,4 +46,11 @@ class SongOverviewModal(ModalScreen):
                 )
                 for i, s in self.songs.items()
             ]
+        )
+        yield Spacer()
+        yield ActionButton(
+            " Cancel", action="pop_screen", id="btn_cancel", classes="btn-link error"
+        )
+        yield ActionButton(
+            " OK", action="pop_screen", id="btn_ok", classes="btn-link success"
         )

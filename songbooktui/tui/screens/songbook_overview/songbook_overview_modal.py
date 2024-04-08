@@ -40,7 +40,7 @@ class SongbookOverviewModal(ModalScreen):
             with Horizontal(id="container"):
                 yield DataTable(id="data-table", classes="right-middle")
                 with Vertical(id="container-actions", classes="left-middle"):
-                    yield Static("Actions", classes="title-bar")
+                    yield Static("[b]Actions", classes="title-bar")
                     yield ActionButton(
                         " Move Up",
                         action=f"screen.up({self.current_song_index})",
@@ -61,7 +61,6 @@ class SongbookOverviewModal(ModalScreen):
                         action=f"screen.remove({self.current_song_index})",
                         classes="btn-action left-middle",
                     )
-                    yield ActionButton(f"c{self.current_song_index}", action="screen.clear_table", classes="btn-action left-middle")
                     # yield ActionButton(
                     #     " Close", action="screen.pop_screen", classes="actions-cell"
                     # )
@@ -72,7 +71,6 @@ class SongbookOverviewModal(ModalScreen):
 
     async def on_mount(self) -> None:
         table = self.query_one(DataTable)
-        # table.add_columns("Title", "Artist", "Actions")
         table.add_columns("Title", "Artist")
         table.cursor_type = "row"
         await self.populate_table(table)
@@ -81,7 +79,6 @@ class SongbookOverviewModal(ModalScreen):
         if not table:
             table = self.query_one(DataTable)
         table.clear()
-        # table.rows.clear()
         for index, song in enumerate(self.songbook.songs):
             table.add_row(
                 song.title,
@@ -92,9 +89,8 @@ class SongbookOverviewModal(ModalScreen):
             )
         table.cursor_coordinate = Coordinate(row=self.current_song_index, column=0)
 
-    def on_button_pressed(self, event: Button.Pressed):
-        if event.button.id == "btn_ok":
-            self.app.pop_screen()
+    def action_ok(self) -> None:
+        self.dismiss((self.songbook, self.current_song_index))
 
     def action_clear_table(self) -> None:
         table = self.query_one(DataTable)
@@ -103,47 +99,21 @@ class SongbookOverviewModal(ModalScreen):
     def on_data_table_row_selected(self, selected_row: DataTable.RowSelected) -> None:
         self.current_song_index = selected_row.cursor_row
 
-    # goes with compose_ori
-    # def action_set_current_song_index(self, index: int) -> None:
-    #     self.current_song_index = index
-
-    async def action_up(self, index: int):
-        print("action_up")
-        if index == 0:
+    async def action_up(self):
+        if self.current_song_index == 0:
             return
+        song = self.songbook.songs.pop(self.current_song_index)
         self.current_song_index -= 1
-        song = self.songbook.songs.pop(index)
         self.songbook.songs.insert(self.current_song_index, song)
-        # self.recompose()
-        # recompose doesn't work, hacky close and reopen
-        # self.app.pop_screen()
-        # self.app.push_screen(
-        #     SongbookOverviewModal(
-        #         songs=self.songs,
-        #         songbook=self.songbook,
-        #         current_song_index=self.current_song_index,
-        #     )
-        # )
         await self.populate_table()
 
-    async def action_down(self, index: int):
-        print("action_down")
-        if index == len(self.songbook.songs) - 1:
+    async def action_down(self):
+        if self.current_song_index == len(self.songbook.songs) - 1:
             return
+        song = self.songbook.songs.pop(self.current_song_index)
         self.current_song_index += 1
-        song = self.songbook.songs.pop(index)
         self.songbook.songs.insert(self.current_song_index, song)
-        # self.recompose()
-        # self.app.pop_screen()
-        # self.app.push_screen(
-        #     SongbookOverviewModal(
-        #         songs=self.songs,
-        #         songbook=self.songbook,
-        #         current_song_index=self.current_song_index,
-        #     )
-        # )
         await self.populate_table()
-        # print([s.title for s in self.songbook.songs])
 
     def action_add(self) -> None:
         self.app.push_screen(
@@ -173,4 +143,3 @@ class SongbookOverviewModal(ModalScreen):
                     current_song_index=self.current_song_index,
                 )
             )
-        print([s.title for s in self.songbook.songs])

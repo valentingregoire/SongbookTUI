@@ -94,8 +94,15 @@ class SheetViewer(Screen):
                 yield ActionButton("  ", "screen.next_page", id="btn_next_page")
 
     def action_show_songbook_overview(self) -> None:
+        def fallback(data: tuple[SongbookDTO, int]) -> None:
+            songbook, current_song_index = data
+            self.songbook = songbook
+            self.current_song_index = current_song_index
+            self.current_page_index = 0
+
         self.app.push_screen(
-            SongbookOverviewModal(self.songs, self.songbook, self.current_song_index)
+            SongbookOverviewModal(self.songs, self.songbook, self.current_song_index),
+            fallback,
         )
 
     def action_prev_song(self) -> None:
