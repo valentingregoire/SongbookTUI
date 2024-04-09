@@ -6,8 +6,9 @@ from textual.widgets import DataTable, Button, Static
 
 from backend.dto import SongbookDTO, SongDTO
 from tui.screens.song_overview.song_overview_modal import SongOverviewModal
+from tui.utils import check, cancel
 from tui.widgets.action_button import ActionButton
-from tui.widgets.containers import Spacer
+from tui.widgets.containers import Spacer, HorizontalFloat, RightFloat, TopBar
 
 
 class SongbookOverviewModal(ModalScreen):
@@ -36,6 +37,7 @@ class SongbookOverviewModal(ModalScreen):
         self.current_song_index = current_song_index
 
     def compose(self) -> ComposeResult:
+        yield Static("[b]Songbook Overview", id="title")
         with Container():
             with Horizontal(id="container"):
                 yield DataTable(id="data-table", classes="right-middle")
@@ -65,9 +67,14 @@ class SongbookOverviewModal(ModalScreen):
                     #     " Close", action="screen.pop_screen", classes="actions-cell"
                     # )
             yield Spacer()
-            yield ActionButton(
-                " OK", action="pop_screen", id="btn_ok", classes="btn-link success"
-            )
+            with HorizontalFloat():
+                with RightFloat():
+                    yield ActionButton(
+                        cancel(), action="pop_screen", id="btn_cancel", classes="btn-link error"
+                    )
+                    yield ActionButton(
+                        check(), action="screen.ok", id="btn_ok", classes="btn-link success"
+                    )
 
     async def on_mount(self) -> None:
         table = self.query_one(DataTable)

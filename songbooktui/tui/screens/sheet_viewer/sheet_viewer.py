@@ -10,6 +10,7 @@ from textual.widgets import (
 
 from backend.dto import SongDTO, SongbookDTO, PageDTO
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
+from tui.utils import check
 from tui.widgets.action_button import ActionButton
 from tui.widgets.bottom_bar import PageInfo
 from tui.widgets.containers import LeftFloat, RightFloat, TopBar, CenterFloat, BottomBar
@@ -99,6 +100,7 @@ class SheetViewer(Screen):
             self.songbook = songbook
             self.current_song_index = current_song_index
             self.current_page_index = 0
+            self.notify(check("Data updated."))
 
         self.app.push_screen(
             SongbookOverviewModal(self.songs, self.songbook, self.current_song_index),

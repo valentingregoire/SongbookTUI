@@ -10,6 +10,7 @@ class ActionButton(Widget):
         content-align: center top;
         width: auto;
         padding: 0 1;
+        margin: 0 1;
         height: 1;
     }
     
