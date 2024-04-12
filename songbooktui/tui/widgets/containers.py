@@ -21,8 +21,19 @@ class Spacer(Widget):
         self.styles.height = self.height
 
     def render(self) -> RenderResult:
-        return "";
+        return ""
 
+
+class ActionsBar(Horizontal):
+    DEFAULT_CSS = """
+    ActionsBar {
+        align: right middle;
+        content-align: right middle;
+        height: 1;
+        width: 100%;
+        margin-top: 1;
+    }
+    """
 
 class TopBar(Horizontal):
     DEFAULT_CSS = """

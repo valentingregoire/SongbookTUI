@@ -1,0 +1,12 @@
+SongOverviewModal {
+    layout: vertical;
+    width: auto;
+    height: auto;
+    align: center middle;
+    content-align: center middle;
+}
+
+#selection-list {
+    width: 1fr;
+    height: auto;
+}

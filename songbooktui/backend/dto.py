@@ -25,6 +25,12 @@ class SongDTO:
     def full_title(self) -> str:
         return f"{self.artist} - {self.title}" if self.artist else self.title
 
+    def __hash__(self) -> int:
+        return self.id
+
+    def __eq__(self, other) -> bool:
+        return self.id == other.id
+
 
 @dataclass
 class SongbookDTO(BaseDTO):
@@ -36,3 +42,7 @@ class SongbookDTO(BaseDTO):
     """
 
     songs: list[SongDTO]
+
+    @property
+    def size(self) -> int:
+        return len(self.songs)

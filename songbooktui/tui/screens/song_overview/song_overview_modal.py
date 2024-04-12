@@ -1,22 +1,18 @@
 from textual.app import ComposeResult
+from textual.containers import Vertical, Horizontal, Container
 from textual.screen import ModalScreen
 from textual.widgets import SelectionList
 from textual.widgets.selection_list import Selection
 
 from backend.dto import SongbookDTO, SongDTO
+from tui.utils import cancel, ok, DEFAULT_BINDINGS
 from tui.widgets.action_button import ActionButton
-from tui.widgets.containers import TopBar, RightFloat, Spacer
+from tui.widgets.containers import TopBar, RightFloat, Spacer, HorizontalFloat, ActionsBar
 
 
 class SongOverviewModal(ModalScreen):
-    DEFAULT_CSS = """
-    SongOverviewModal {
-        layout: vertical;
-    }
-    """
-    BINDINGS = [
-        ("q", "pop_screen", "Quit"),
-    ]
+    CSS_PATH = "song_overview_modal.tcss"
+    BINDINGS = DEFAULT_BINDINGS
 
     songs: dict[int, SongDTO]
     songbook: SongbookDTO | None
@@ -34,23 +30,31 @@ class SongOverviewModal(ModalScreen):
         super().__init__()
 
     def compose(self) -> ComposeResult:
-        with TopBar():
-            with RightFloat():
-                yield ActionButton("", id="btn_close", action="pop_screen")
-        yield SelectionList[int](
+        yield SelectionList[SongDTO](
             *[
+                # Selection(
+                #     s.full_title,
+                #     i,
+                #     s in self.songbook.songs if self.songbook else False,
+                # )
+                # for i, s in self.songs.items()
                 Selection(
-                    s.full_title,
-                    i,
-                    s in self.songbook.songs if self.songbook else False,
+                    song.full_title,
+                    song,
+                    song in self.songbook.songs if self.songbook else False,
                 )
-                for i, s in self.songs.items()
-            ]
+                for song in self.songs.values()
+            ],
+            id="selection-list",
         )
-        yield Spacer()
-        yield ActionButton(
-            " Cancel", action="pop_screen", id="btn_cancel", classes="btn-link error"
-        )
-        yield ActionButton(
-            " OK", action="pop_screen", id="btn_ok", classes="btn-link success"
-        )
+        with ActionsBar():
+            yield ActionButton(
+                cancel(), action="pop_screen", classes="btn-link error"
+            )
+            yield ActionButton(
+                ok(), action="screen.ok", classes="btn-link success"
+            )
+
+    def action_ok(self) -> None:
+        selection = self.query_one(SelectionList[int])
+        self.dismiss(selection.selected)

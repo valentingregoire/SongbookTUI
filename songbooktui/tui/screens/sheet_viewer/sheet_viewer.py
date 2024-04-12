@@ -10,7 +10,7 @@ from textual.widgets import (
 
 from backend.dto import SongDTO, SongbookDTO, PageDTO
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
-from tui.utils import check
+from tui.utils import ok
 from tui.widgets.action_button import ActionButton
 from tui.widgets.bottom_bar import PageInfo
 from tui.widgets.containers import LeftFloat, RightFloat, TopBar, CenterFloat, BottomBar
@@ -67,17 +67,15 @@ class SheetViewer(Screen):
                 yield Static(self.current_song.full_title, id="lbl_song_title")
             with RightFloat():
                 yield InlineVerticalProgressBar(
-                    self.current_song_index + 1, len(self.songbook.songs)
+                    self.current_song_index + 1, self.songbook.size
                 )
-                yield SongInfo(self.current_song_index + 1, len(self.songbook.songs))
+                yield SongInfo(self.current_song_index + 1, self.songbook.size)
                 yield ActionButton("  ", "screen.next_song", id="btn_next_song")
         with BottomBar():
             with LeftFloat():
                 yield ActionButton("  ", "screen.prev_page", id="btn_prev_page")
             with CenterFloat():
-                next_song_index = (self.current_song_index + 1) % len(
-                    self.songbook.songs
-                )
+                next_song_index = (self.current_song_index + 1) % self.songbook.size
                 yield Static(
                     self.songbook.songs[next_song_index].full_title, id="lbl_page_title"
                 )
@@ -100,7 +98,7 @@ class SheetViewer(Screen):
             self.songbook = songbook
             self.current_song_index = current_song_index
             self.current_page_index = 0
-            self.notify(check("Data updated."))
+            self.notify(ok(" Songbook updated."))
 
         self.app.push_screen(
             SongbookOverviewModal(self.songs, self.songbook, self.current_song_index),
@@ -110,14 +108,12 @@ class SheetViewer(Screen):
     def action_prev_song(self) -> None:
         self.current_page_index = 0
         self.current_song_index = (
-            self.current_song_index + len(self.songbook.songs) - 1
-        ) % len(self.songbook.songs)
+            self.current_song_index + self.songbook.size - 1
+        ) % self.songbook.size
 
     def action_next_song(self) -> None:
         self.current_page_index = 0
-        self.current_song_index = (self.current_song_index + 1) % len(
-            self.songbook.songs
-        )
+        self.current_song_index = (self.current_song_index + 1) % self.songbook.size
 
     def action_prev_page(self) -> None:
         if self.current_page_index > 0:

@@ -10,11 +10,45 @@ Screen {
 }
 
 
+.bg-red {
+    background: red;
+}
+
+
+# DIMENSIONS
+
+.width-1fr {
+    width: 1fr;
+}
+
+.width-auto {
+    width: auto;
+}
+
+.width-full {
+    width: 100%;
+}
+
+.height-1fr {
+    height: 1fr;
+}
+
+.height-auto {
+    height: auto;
+}
+
+.height-full {
+    height: 100%;
+}
+
+
 # ALIGN
 
 .center-middle {
     align: center middle;
     content-align: center middle;
+    width: auto;
+    height: auto;
 }
 
 .left-middle {
@@ -39,7 +73,8 @@ ActionButton {
 }
 
 ActionButton:hover {
-    background: $background-lighten-3;
+    /*background: $background-lighten-3;*/
+    background: $primary;
 }
 
 .title-bar {
@@ -52,14 +87,6 @@ ActionButton:hover {
     height: 1;
 }
 
-.actions-row {
-    layout: horizontal;
-    align: right middle;
-    content-align: right middle;
-    height: 1;
-    width: auto;
-}
-
 .btn-link {
     height: 1;
     width: auto;
@@ -70,6 +97,10 @@ ActionButton:hover {
 
 
 # VARIANTS
+
+.primary {
+    background: $primary
+}
 
 .success {
     background: $success;

@@ -2,8 +2,12 @@ _CHECKMARK = " "
 # _CROSSMARK = " "
 _CROSSMARK = " "
 
+DEFAULT_BINDINGS = [
+    ("c", "pop_screen", "Cancel"),
+    ("o", "ok", "Ok"),
+]
 
-def check(text: str = "OK") -> str:
+def ok(text: str = "OK") -> str:
     return f"{_CHECKMARK}{text}"
 
 
