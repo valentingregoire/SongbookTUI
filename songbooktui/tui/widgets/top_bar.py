@@ -6,7 +6,7 @@ class SongInfo(Widget):
     DEFAULT_CSS = """
     SongInfo {
         content-align: right middle;
-        margin: 0 1;
+        # margin: 0 1;
         width: auto;
         text-style: bold;
     }

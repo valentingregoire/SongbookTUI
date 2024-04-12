@@ -16,6 +16,7 @@ class InlineVerticalProgressBar(Widget):
     InlineVerticalProgressBar {
         content-align: center middle;
         width: auto;
+        margin: 0 1;
     }
     """
 

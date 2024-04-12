@@ -7,7 +7,6 @@ class Spacer(Widget):
     DEFAULT_CSS = """
     Spacer {
         width: auto;
-        # background: red;
     }
     """
 
@@ -38,13 +37,10 @@ class ActionsBar(Horizontal):
 class TopBar(Horizontal):
     DEFAULT_CSS = """
     TopBar {
-        # border: round magenta;
         align: center top;
         height: 1;
-        width: auto;
+        width: 100%;
         dock: top;
-        # opacity: 1;
-        # background: red;
     }
     """
 
@@ -52,12 +48,11 @@ class TopBar(Horizontal):
 class BottomBar(Horizontal):
     DEFAULT_CSS = """
     BottomBar {
-        # border: round yellow;
+        align: center bottom;
         content-align: center bottom;
         height: 1;
-        dock: bottom;
-        # opacity: 0.5;
-        # background: red;
+        width: 100%;
+        dock: left;  # FIXME: why doesn't this work with dock: bottom??
     }
     """
 
@@ -82,19 +77,23 @@ class LeftFloat(HorizontalFloat):
         align: left middle;
         content-align: left middle;
         # background: red;
-        width: 30%;
+        width: auto;
+        # width: 30%;
+        height: 1;
+        # width: 1fr;
     }
     """
 
 
 class CenterFloat(HorizontalFloat):
     DEFAULT_CSS = """
-    MiddleFloat {
+    CenterFloat {
         align: center middle;
         content-align: center middle;
         text-align: center;
         # background: green;
-        # width: auto;
+        width: auto;
+        height: 1;
     }
     """
 
@@ -105,6 +104,8 @@ class RightFloat(HorizontalFloat):
         align: right middle;
         content-align: right middle;
         # background: blue;
-        width: 30%;
+        width: 1fr;
+        # width: auto;
+        height: 1;
     }
     """

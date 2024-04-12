@@ -38,7 +38,7 @@ class SongbookOverviewModal(ModalScreen):
     def compose(self) -> ComposeResult:
         # yield Static("[b]Songbook Overview", id="title")
         with Vertical(classes="center-middle"):
-            with CenterFloat(classes="width-full primary"):
+            with CenterFloat(classes="w-full primary"):
                 yield Static(f"[b]{self.songbook.name}")
             with Horizontal(id="container"):
                 yield DataTable(id="data-table", classes="right-middle")
