@@ -53,9 +53,10 @@ class SheetViewer(Screen):
         self.styles.animate("opacity", value=1, duration=0.3, easing="out_circ")
 
     def compose(self) -> ComposeResult:
-        with VerticalScroll(classes="h-full w-full top-center", id="viewer-container"):
+        with Vertical(classes="h-full w-full top-center", id="viewer-container"):
             with ContentSwitcher(initial=self.current_viewer):
-                yield Static(self.current_page.content, id="viewer_txt")
+                with VerticalScroll(id="viewer_txt"):
+                    yield Static(self.current_page.content)
                 yield Markdown(
                     self.current_page.content,
                     id="viewer_md",
@@ -64,31 +65,29 @@ class SheetViewer(Screen):
             with LeftFloat():
                 yield ActionButton("  ", "screen.prev_song", classes="p-r-1 m-0")
                 yield Static(self.current_song.full_title, classes="text-bold")
-            # with CenterFloat():
             with RightFloat():
                 yield InlineVerticalProgressBar(
                     self.current_song_index + 1, self.songbook.size
                 )
                 yield SongInfo(self.current_song_index + 1, self.songbook.size)
                 yield ActionButton("  ", "screen.next_song", classes="p-l-1 m-0")
-        # with BottomBar():
-        #     with LeftFloat():
-        #         yield ActionButton("  ", "screen.prev_page", classes="p-r-1 m-0")
-        #         next_song_index = (self.current_song_index + 1) % self.songbook.size
-        #         yield Static(self.songbook.songs[next_song_index].full_title, classes="text-bold")
-        #     # with CenterFloat():
-        #     with RightFloat():
-        #         yield ActionButton(
-        #             "  Overview",
-        #             "screen.show_songbook_overview",
-        #         )
-        #         yield InlineVerticalProgressBar(
-        #             self.current_page_index + 1, len(self.current_song.pages)
-        #         )
-        #         yield PageInfo(
-        #             self.current_page_index + 1, len(self.current_song.pages),
-        #         )
-        #         yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
+        with BottomBar():
+            with LeftFloat():
+                yield ActionButton("  ", "screen.prev_page", classes="p-r-1 m-0")
+                next_song_index = (self.current_song_index + 1) % self.songbook.size
+                yield Static(self.songbook.songs[next_song_index].full_title, classes="text-bold")
+            with RightFloat():
+                yield ActionButton(
+                    "  Overview",
+                    "screen.show_songbook_overview",
+                )
+                yield InlineVerticalProgressBar(
+                    self.current_page_index + 1, len(self.current_song.pages)
+                )
+                yield PageInfo(
+                    self.current_page_index + 1, len(self.current_song.pages),
+                )
+                yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
 
     def action_show_songbook_overview(self) -> None:
         def fallback(data: tuple[SongbookDTO, int]) -> None:
