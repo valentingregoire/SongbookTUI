@@ -1,13 +1,16 @@
 Screen {
     layout: vertical;
     layers: viewer bottom-bar top-bar;
+    overflow-y: hidden;
 }
 
 #viewer-container {
     layer: viewer;
     width: auto;
     height: auto;
-    margin-bottom: 2;
+    overflow-y: auto;
+    padding-bottom: 1;
+    # margin-bottom: 1;
 }
 
 ContentSwitcher {
@@ -18,14 +21,16 @@ ContentSwitcher {
 }
 
 #viewer_txt {
-    width: auto;
+    align: center top;
+    width: 100%;
     height: 1fr;
+    # overflow-y: auto;
 }
 
 #viewer_md {
     width: auto;
     height: 1fr;
-    overflow-y: auto;
+    # overflow-y: auto;
     padding: 0;
     margin: 0;
 }

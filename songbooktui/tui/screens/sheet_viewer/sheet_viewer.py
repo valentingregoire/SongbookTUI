@@ -1,3 +1,4 @@
+from numba import jit
 from textual.app import ComposeResult
 from textual.containers import Vertical, VerticalScroll
 from textual.reactive import reactive
@@ -52,15 +53,17 @@ class SheetViewer(Screen):
     def on_mount(self) -> None:
         self.styles.animate("opacity", value=1, duration=0.3, easing="out_circ")
 
+    # @jit
     def compose(self) -> ComposeResult:
         with Vertical(classes="h-full w-full top-center", id="viewer-container"):
             with ContentSwitcher(initial=self.current_viewer):
                 with VerticalScroll(id="viewer_txt"):
-                    yield Static(self.current_page.content)
-                yield Markdown(
-                    self.current_page.content,
-                    id="viewer_md",
-                )
+                    yield Static(self.current_page.content, classes="w-auto")
+                with VerticalScroll(id="viewer_md"):
+                    yield Markdown(
+                        self.current_page.content,
+                        # id="viewer_md",
+                    )
         with TopBar():
             with LeftFloat():
                 yield ActionButton("  ", "screen.prev_song", classes="p-r-1 m-0")
