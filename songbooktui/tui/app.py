@@ -42,6 +42,9 @@ class SongbookApp(App):
         yield Footer()
         # yield MainMenu()
 
+    def action_ok(self) -> None:
+        self.dismiss()
+
     def action_request_quit(self) -> None:
         """Quit the application."""
         # self.push_screen(MainMenu())

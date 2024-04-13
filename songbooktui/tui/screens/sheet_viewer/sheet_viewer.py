@@ -92,12 +92,18 @@ class SheetViewer(Screen):
                 yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
 
     def action_show_songbook_overview(self) -> None:
-        def fallback(data: tuple[SongbookDTO, int]) -> None:
-            songbook, current_song_index = data
-            self.songbook = songbook
-            self.current_song_index = current_song_index
+        def fallback(data: tuple[int, SongbookDTO] | int) -> None:
+            self.log(data)
+            if isinstance(data, tuple):
+                current_song_index, songbook = data
+                self.current_song_index = current_song_index
+                self.songbook = songbook
+                self.notify(ok(f" Songbook {self.songbook.name} updated."))
+            else:
+                # only current song index got returned
+                self.current_song_index = data
+                
             self.current_page_index = 0
-            self.notify(ok(" Songbook updated."))
 
         self.app.push_screen(
             SongbookOverviewModal(self.songs, self.songbook, self.current_song_index),

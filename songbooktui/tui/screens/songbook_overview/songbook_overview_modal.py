@@ -64,7 +64,8 @@ class SongbookOverviewModal(ModalScreen):
                         classes="btn-action left-middle",
                     )
                     yield ActionButton(
-                        " Close", action="screen.pop_screen", classes="actions-cell"
+                        # " Close", action="screen.pop_screen"
+                        " Go", action="screen.ok(False)"
                     )
             # yield Spacer()
             # with HorizontalFloat():
@@ -95,8 +96,11 @@ class SongbookOverviewModal(ModalScreen):
             )
         table.cursor_coordinate = Coordinate(row=self.current_song_index, column=0)
 
-    def action_ok(self) -> None:
-        self.dismiss((self.songbook, self.current_song_index))
+    def action_ok(self, propagate: bool = True) -> None:
+        if propagate:
+            self.dismiss((self.current_song_index, self.songbook))
+        else:
+            self.dismiss(self.current_song_index)
 
     def action_clear_table(self) -> None:
         table = self.query_one(DataTable)
