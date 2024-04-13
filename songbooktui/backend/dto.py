@@ -1,5 +1,7 @@
 from dataclasses import dataclass
 
+from backend.model import FileType
+
 
 @dataclass
 class BaseDTO:
@@ -7,11 +9,27 @@ class BaseDTO:
 
 
 @dataclass
+class PageDTO:
+    content: str
+    file_type: FileType
+
+
+@dataclass
 class SongDTO:
     id: int
     title: str
-    pages: list[str]
+    pages: list[PageDTO]
     artist: str | None = None
+
+    @property
+    def full_title(self) -> str:
+        return f"{self.artist} - {self.title}" if self.artist else self.title
+
+    def __hash__(self) -> int:
+        return self.id
+
+    def __eq__(self, other) -> bool:
+        return self.id == other.id
 
 
 @dataclass
@@ -24,3 +42,7 @@ class SongbookDTO(BaseDTO):
     """
 
     songs: list[SongDTO]
+
+    @property
+    def size(self) -> int:
+        return len(self.songs)

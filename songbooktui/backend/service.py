@@ -1,5 +1,5 @@
 from backend import dao
-from backend.dto import SongbookDTO, SongDTO
+from backend.dto import SongbookDTO, SongDTO, PageDTO
 from backend.model import Song
 
 
@@ -37,6 +37,9 @@ def song_to_dto(song: Song) -> SongDTO:
     return SongDTO(
         id=song.id,
         title=song.title,
-        pages=song.pages,
+        pages=[
+            PageDTO(content=page.content, file_type=page.file_type)
+            for page in song.pages
+        ],
         artist=song.artist,
     )

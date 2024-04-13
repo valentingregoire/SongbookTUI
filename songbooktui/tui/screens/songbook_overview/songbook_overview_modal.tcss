@@ -1,0 +1,35 @@
+SongbookOverviewModal {
+    align: center middle;
+
+    Container {
+        width: auto;
+        /*width: auto;*/
+        height: auto;
+        align: center middle;
+        content-align: center middle;
+        /*border: round $primary;*/
+        /*background: magenta;*/
+    }
+}
+
+#data-table {
+    width: auto;
+    height: auto;
+    /*padding: 0 1;*/
+    /*border: round blue;*/
+}
+
+#container {
+    width: auto;
+    height: auto;
+}
+
+#container-actions {
+    width: 14;
+    height: auto;
+    /*border-right: round $primary;*/
+}
+
+.btn-action {
+    width: 1fr;
+}

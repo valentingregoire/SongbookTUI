@@ -10,10 +10,16 @@ python = "^3.12"
 textual = "^0.54.0"
 textual-dev = "^1.5.1"
 mypy = "^1.9.0"
+art = "^6.1"
+numba = "^0.59.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
 
+[tool.pyright]
+include = ["songbooktui"]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+

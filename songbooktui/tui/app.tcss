@@ -2,11 +2,168 @@ ModalScreen {
     layout: vertical;
     align: center middle;
 
-    Button {
-        width: 50;
-    }
+    link-style: none;
 }
 
 Screen {
     align: center middle;
+}
+
+
+.bg-red {
+    background: red 50%;
+}
+
+.bg-transparent {
+    background: red 0%;
+}
+
+
+# DIMENSIONS
+
+.w-1fr {
+    width: 1fr;
+}
+
+.w-auto {
+    width: auto;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.h-1fr {
+    height: 1fr;
+}
+
+.h-auto {
+    height: auto;
+}
+
+.h-full {
+    height: 100%;
+}
+
+
+# ALIGN
+
+.center-middle {
+    align: center middle;
+    content-align: center middle;
+    width: auto;
+    height: auto;
+}
+
+.left-middle {
+    align: left middle;
+    content-align: left middle;
+}
+
+.right-middle {
+    align: right middle;
+    content-align: right middle;
+}
+
+
+# MARGINS & PADDINGS
+
+.m-0 {
+    margin: 0;
+}
+
+.m-h-1 {
+    margin: 0 1;
+}
+
+.m-l-1 {
+    margin: 0;
+    margin-left: 1;
+}
+
+.m-r-1 {
+    margin: 0;
+    margin-right: 1;
+}
+
+.p-h-1 {
+    padding: 0 1;
+}
+
+.p-l-1 {
+    padding: 0;
+    padding-left: 1;
+}
+
+.p-r-1 {
+    padding: 0;
+    padding-right: 1;
+}
+
+
+# TEXT
+
+.text-bold {
+    text-style: bold;
+}
+
+
+# WIDGETS
+
+ActionButton {
+    background: $background 0%;
+    # padding: 0;
+    # margin: 0;
+    /*color: $background;*/
+    /*padding: 0 1;*/
+    /*margin: 0 1;*/
+    /*link-style: none;*/
+}
+
+ActionButton:hover {
+    /*background: $background-lighten-3;*/
+    background: $primary;
+}
+
+.title-bar {
+    width: 1fr;
+    dock: top;
+    background: $primary;
+}
+
+.spacer {
+    height: 1;
+}
+
+.btn-link {
+    height: 1;
+    width: auto;
+    padding: 0 1;
+    /*margin: 0 1;*/
+    link-style: none;
+}
+
+
+# VARIANTS
+
+.primary {
+    background: $primary
+}
+
+.success {
+    background: $success;
+    color: $background;
+}
+
+.success:hover {
+    background: $success-lighten-3;
+}
+
+.error {
+    background: $error;
+    color: $background;
+}
+
+.error:hover {
+    background: $error-lighten-3;
 }

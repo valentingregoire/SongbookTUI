@@ -1,0 +1,2 @@
+class SongbookException(Exception):
+    pass

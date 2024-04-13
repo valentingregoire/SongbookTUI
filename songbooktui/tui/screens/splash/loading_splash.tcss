@@ -1,0 +1,13 @@
+Screen {
+    layout: vertical;
+    align: center middle;
+    height: 100%;
+}
+
+Static {
+    width: auto;
+}
+
+ProgressBar {
+    width: auto;
+}

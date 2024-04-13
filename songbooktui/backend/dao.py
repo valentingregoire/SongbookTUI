@@ -3,12 +3,12 @@ import json
 import os
 
 from backend.consts import SONGBOOKS_LOCATION, SONGS_LOCATION, INFO
-from backend.model import Songbook, Song
+from backend.dto import FileType
+from backend.model import Songbook, Song, Page
 
 
 async def read_songs() -> tuple[Song]:
     """Read all songs from the filesystem."""
-
     tasks = []
     song_folders = os.listdir(SONGS_LOCATION)
     for song_folder in song_folders:
@@ -21,7 +21,6 @@ async def read_songs() -> tuple[Song]:
 
 async def read_song(folder: str) -> Song:
     """Read a song from the filesystem."""
-
     folder_path = f"{SONGS_LOCATION}/{folder}"
 
     # get the id
@@ -34,14 +33,19 @@ async def read_song(folder: str) -> Song:
     # get the pages
     pages = []
     files = os.listdir(folder_path)
-    page_files = sorted([f for f in files if not f.startswith(".")], key=lambda n: int(n.split(".")[0]))
+    page_files = sorted(
+        [f for f in files if not f.startswith(".")], key=lambda n: int(n.split(".")[0])
+    )
     for page in page_files:
         page_path = f"{folder_path}/{page}"
         if os.path.isfile(page_path):
-            pages.append(page_path)
+            file_type = FileType(page.split(".")[-1])
+            with open(page_path, "r") as page_file:
+                page = Page(content=page_file.read(), file_type=file_type)
+                pages.append(page)
+            # pages.append(page_path)
     # all gathered data into a Song object
-    song: Song = Song(id=song_id, pages=pages, **song_data)
-    return song
+    return Song(id=song_id, pages=pages, **song_data)
 
 
 def get_songbook_files() -> list[str]:

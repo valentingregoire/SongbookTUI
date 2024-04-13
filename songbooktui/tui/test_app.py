@@ -1,17 +1,21 @@
 from textual.app import App, ComposeResult
-from textual.widgets import Footer, Header
+from textual.widgets import Footer, Header, Markdown
 
 from backend.dto import SongbookDTO, SongDTO
-from tui.screens.sheet_viewer.sheet_viewer import SheetViewer
 from tui.screens.splash.loading_splash import LoadingSplash
 
 DEFAULT_SONGBOOK = "2024"
 
 
-class SongbookApp(App):
+class SongbookTestApp(App):
     """The main application class for the Songbook TUI."""
 
-    CSS_PATH = "app.tcss"
+    CSS = """
+    Markdown {
+        width: 100%;
+        height: 100%;
+    }
+    """
     BINDINGS = [("q", "request_quit", "Quit")]
     # MODES = {
     #     "splash": LoadingSplash,
@@ -32,7 +36,10 @@ class SongbookApp(App):
             self.songs = songs
             self.songbooks = songbooks
             # self.switch_mode("viewer")
-            self.push_screen(SheetViewer(songs=self.songs, songbook=songbooks.get(DEFAULT_SONGBOOK)))
+
+            self.query_one(Markdown).update(
+                self.songbooks[DEFAULT_SONGBOOK].songs[0].pages[1]
+            )
 
         self.push_screen(LoadingSplash(), set_loaded_data)
 
@@ -40,10 +47,8 @@ class SongbookApp(App):
         """Compose the application."""
         yield Header()
         yield Footer()
+        yield Markdown("Loading...", id="viewer_md")
         # yield MainMenu()
-
-    def action_ok(self) -> None:
-        self.dismiss()
 
     def action_request_quit(self) -> None:
         """Quit the application."""
@@ -52,5 +57,5 @@ class SongbookApp(App):
 
 
 if __name__ == "__main__":
-    app = SongbookApp()
+    app = SongbookTestApp()
     app.run()
