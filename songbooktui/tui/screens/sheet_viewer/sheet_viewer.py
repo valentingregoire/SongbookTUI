@@ -62,7 +62,6 @@ class SheetViewer(Screen):
                 with VerticalScroll(id="viewer_md"):
                     yield Markdown(
                         self.current_page.content,
-                        # id="viewer_md",
                     )
         with TopBar():
             with LeftFloat():
