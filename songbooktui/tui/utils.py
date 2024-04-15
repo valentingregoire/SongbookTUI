@@ -1,6 +1,7 @@
-_CHECKMARK = " "
+CHECKMARK = " "
 # _CROSSMARK = " "
-_CROSSMARK = " "
+CROSSMARK = " "
+PENSIL = " "
 
 DEFAULT_BINDINGS = [
     ("c", "pop_screen", "Cancel"),
@@ -8,8 +9,8 @@ DEFAULT_BINDINGS = [
 ]
 
 def ok(text: str = "OK") -> str:
-    return f"{_CHECKMARK}{text}"
+    return f"{CHECKMARK}{text}"
 
 
 def cancel(text: str = "Cancel") -> str:
-    return f"{_CROSSMARK}{text}"
+    return f"{CROSSMARK}{text}"

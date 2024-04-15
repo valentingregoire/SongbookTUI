@@ -1,27 +1,27 @@
-from numba import jit
+from rich.console import JustifyMethod
+from rich.style import Style
+from backend.dto import PageDTO, SongbookDTO, SongDTO
 from textual.app import ComposeResult
 from textual.containers import Vertical, VerticalScroll
 from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import (
-    Markdown,
     ContentSwitcher,
+    # Markdown,
     Static,
-    Label,
 )
-
-from backend.dto import SongDTO, SongbookDTO, PageDTO
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
 from tui.utils import ok
 from tui.widgets.action_button import ActionButton
 from tui.widgets.bottom_bar import PageInfo
-from tui.widgets.containers import LeftFloat, RightFloat, TopBar, CenterFloat, BottomBar
+from tui.widgets.containers import BottomBar, LeftFloat, RightFloat, TopBar
 from tui.widgets.progress_bar import InlineVerticalProgressBar
 from tui.widgets.top_bar import SongInfo
 
+from rich.markdown import Markdown
+
 
 class SheetViewer(Screen):
-
     CSS_PATH = "sheet_viewer.tcss"
     BINDINGS = [
         ("o", "show_songbook_overview", "  Overview"),
@@ -60,9 +60,16 @@ class SheetViewer(Screen):
                 with VerticalScroll(id="viewer_txt"):
                     yield Static(self.current_page.content, classes="w-auto")
                 with VerticalScroll(id="viewer_md"):
-                    yield Markdown(
-                        self.current_page.content,
-                    )
+                    # yield Markdown(
+                    #     self.current_page.content,
+                    # )
+                    h1 = Style(bgcolor="red")
+                    # md = Markdown(markup=self.current_page.content, style={
+                    #     "h1": h1,
+                    # })
+                    md = Markdown(markup=self.current_page.content)
+                    # yield Static(md)
+                    yield Static(md)
         with TopBar():
             with LeftFloat():
                 yield ActionButton("  ", "screen.prev_song", classes="p-r-1 m-0")
@@ -77,7 +84,9 @@ class SheetViewer(Screen):
             with LeftFloat():
                 yield ActionButton("  ", "screen.prev_page", classes="p-r-1 m-0")
                 next_song_index = (self.current_song_index + 1) % self.songbook.size
-                yield Static(self.songbook.songs[next_song_index].full_title, classes="text-bold")
+                yield Static(
+                    self.songbook.songs[next_song_index].full_title, classes="text-bold"
+                )
             with RightFloat():
                 yield ActionButton(
                     "  Overview",
@@ -87,7 +96,8 @@ class SheetViewer(Screen):
                     self.current_page_index + 1, len(self.current_song.pages)
                 )
                 yield PageInfo(
-                    self.current_page_index + 1, len(self.current_song.pages),
+                    self.current_page_index + 1,
+                    len(self.current_song.pages),
                 )
                 yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
 
@@ -102,7 +112,7 @@ class SheetViewer(Screen):
             else:
                 # only current song index got returned
                 self.current_song_index = data
-                
+
             self.current_page_index = 0
 
         self.app.push_screen(
