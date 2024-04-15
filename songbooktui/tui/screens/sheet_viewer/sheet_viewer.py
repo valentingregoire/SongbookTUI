@@ -91,6 +91,7 @@ class SheetViewer(Screen):
                 yield ActionButton(
                     "  Overview",
                     "screen.show_songbook_overview",
+                    classes="center-middle"
                 )
                 yield InlineVerticalProgressBar(
                     self.current_page_index + 1, len(self.current_song.pages)

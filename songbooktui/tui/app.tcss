@@ -150,6 +150,10 @@ ActionButton:hover {
 
 # VARIANTS
 
+.disabled {
+    opacity: 0.5;
+}
+
 .primary {
     background: $primary;
 }

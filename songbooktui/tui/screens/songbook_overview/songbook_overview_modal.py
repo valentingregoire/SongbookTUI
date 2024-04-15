@@ -47,8 +47,7 @@ class SongbookOverviewModal(ModalScreen):
                 yield DataTable(id="data-table", classes="right-middle")
                 with Vertical(
                     id="container-actions",
-                    classes="left-middle",
-                    # disabled=not self.edit_mode,
+                    classes="left-middle disabled",
                 ).data_bind(disabled=SongbookOverviewModal.read_only_mode):
                     yield Static("[b]Actions", classes="title-bar")
                     yield ActionButton(
@@ -104,6 +103,12 @@ class SongbookOverviewModal(ModalScreen):
 
     def action_edit(self) -> None:
         self.read_only_mode = not self.read_only_mode
+        container_actions = self.query_one("#container-actions", Vertical)
+        if self.read_only_mode:
+            container_actions.add_class("disabled")
+        else:
+            container_actions.remove_class("disabled")
+            
 
     def action_ok(self, propagate: bool = True) -> None:
         if propagate:
@@ -117,6 +122,8 @@ class SongbookOverviewModal(ModalScreen):
 
     def on_data_table_row_selected(self, selected_row: DataTable.RowSelected) -> None:
         self.current_song_index = selected_row.cursor_row
+        if self.read_only_mode:
+            self.action_ok(False)
 
     async def action_up(self):
         song = self.songbook.songs.pop(self.current_song_index)
