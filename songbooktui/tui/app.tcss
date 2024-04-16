@@ -183,3 +183,7 @@ ActionButton:hover {
 .error:hover {
     background: $error-lighten-3;
 }
+
+.hidden {
+    display: none;
+}

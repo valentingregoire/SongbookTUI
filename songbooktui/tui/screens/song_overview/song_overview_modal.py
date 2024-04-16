@@ -1,5 +1,4 @@
 from textual.app import ComposeResult
-from textual.containers import Vertical, Horizontal, Container
 from textual.screen import ModalScreen
 from textual.widgets import SelectionList
 from textual.widgets.selection_list import Selection
@@ -7,7 +6,7 @@ from textual.widgets.selection_list import Selection
 from backend.dto import SongbookDTO, SongDTO
 from tui.utils import cancel, ok, DEFAULT_BINDINGS
 from tui.widgets.action_button import ActionButton
-from tui.widgets.containers import TopBar, RightFloat, Spacer, HorizontalFloat, ActionsBar
+from tui.widgets.containers import ActionsBar
 
 
 class SongOverviewModal(ModalScreen):

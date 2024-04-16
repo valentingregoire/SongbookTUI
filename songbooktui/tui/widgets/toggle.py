@@ -1,5 +1,6 @@
 from textual.app import RenderResult
 from textual.events import Click
+from textual.reactive import reactive
 from textual.widget import Widget
 
 
@@ -12,20 +13,20 @@ class Toggle(Widget):
         }
 
         Toggle:hover {
-            color: $primary-lighten-3;
+            color: $primary-lighten-1;
         }
 
         Toggle.on {
-            color: $success;
+            color: $primary-lighten-3;
         }
 
         Toggle.on:hover {
-            color: $success-lighten-3;
+            color: $primary-lighten-3;
         }
     """
 
     action: str
-    value: bool = False
+    value: reactive[bool] = reactive(False, recompose=True)
 
     def __init__(
         self,

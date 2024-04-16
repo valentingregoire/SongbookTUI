@@ -1,11 +1,10 @@
-from textual.reactive import reactive
 from backend.dto import SongbookDTO, SongDTO
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.coordinate import Coordinate
+from textual.reactive import reactive
 from textual.screen import ModalScreen
-from textual.widgets import Button, DataTable, Input, Static, Switch
-from tui import utils
+from textual.widgets import DataTable, Static
 from tui.screens.song_overview.song_overview_modal import SongOverviewModal
 from tui.utils import DEFAULT_BINDINGS
 from tui.widgets.action_button import ActionButton
@@ -16,14 +15,13 @@ from tui.widgets.widget_factory import WidgetFactory
 
 class SongbookOverviewModal(ModalScreen):
     CSS_PATH = "songbook_overview_modal.tcss"
-    BINDINGS = DEFAULT_BINDINGS + [
-        ("a", "add", "Add/Remove"),
-    ]
+    BINDINGS = DEFAULT_BINDINGS + [("a", "add", "Add/Remove"), ("e", "edit", "Edit")]
 
     songs: dict[int, SongDTO]
     songbook: SongbookDTO
     current_song_index: int
     read_only_mode: reactive[bool] = reactive(True)
+    edit_mode: reactive[bool] = reactive(False)
 
     def __init__(
         self,
@@ -65,18 +63,10 @@ class SongbookOverviewModal(ModalScreen):
                     yield ActionButton(
                         " Delete", action=f"screen.remove({self.current_song_index})"
                     )
-                    # yield ActionButton(" Go", action="screen.ok(False)")
-            # btn_edit = ActionButton("[b] Edit", "screen.edit", classes="primary")
-
-            # switch_container = Horizontal()
-            # label = Static("[b] Edit")
-            # switch = Switch(action="screen.edit", id="switch_edit", classes="h-1 m-0 p-0")
-            # switch_container.compose_add_child(label)
-            # switch_container.compose_add_child(switch)
 
             toggle_container = Horizontal(classes="w-auto")
             toggle_label = Static("[b] Edit")
-            toggle = Toggle("screen.edit")
+            toggle = Toggle("screen.edit").data_bind(value=self.edit_mode)
             toggle_container.compose_add_child(toggle_label)
             toggle_container.compose_add_child(toggle)
             yield WidgetFactory.actions_bar_ok_cancel([toggle_container])
@@ -95,11 +85,13 @@ class SongbookOverviewModal(ModalScreen):
             table.add_row(
                 song.title,
                 song.artist or "",
-                # f"[@click=up({index})]  [/] [@click=down({index})]  [/] [@click=add({index})]  [/] [@click=remove({index})]  [/]",
                 label=f"{index + 1}",
                 key=str(index),
             )
         table.cursor_coordinate = Coordinate(row=self.current_song_index, column=0)
+
+    def compute_edit_mode(self) -> bool:
+        return not self.read_only_mode
 
     def action_edit(self) -> None:
         self.read_only_mode = not self.read_only_mode
@@ -108,7 +100,6 @@ class SongbookOverviewModal(ModalScreen):
             container_actions.add_class("disabled")
         else:
             container_actions.remove_class("disabled")
-            
 
     def action_ok(self, propagate: bool = True) -> None:
         if propagate:
@@ -144,8 +135,6 @@ class SongbookOverviewModal(ModalScreen):
     def action_add(self) -> None:
         def fallback(data: list[SongDTO]) -> None:
             self.songbook.songs = data
-            # self.recompose()
-            # self.app.recompose()
 
         self.app.push_screen(
             SongOverviewModal(
@@ -165,8 +154,6 @@ class SongbookOverviewModal(ModalScreen):
         if self.songbook.size == 0:
             self.app.pop_screen()
         else:
-            # self.recompose()
-            # self.app.recompose()
             self.app.pop_screen()
             self.app.push_screen(
                 SongbookOverviewModal(

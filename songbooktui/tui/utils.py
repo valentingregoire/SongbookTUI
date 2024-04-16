@@ -1,11 +1,17 @@
+from art import text2art
+
+
 CHECKMARK = " "
 # _CROSSMARK = " "
 CROSSMARK = " "
 PENSIL = " "
 
+TITLE = text2art("Songbooks", font="doom")
+
 DEFAULT_BINDINGS = [
-    ("c", "pop_screen", "Cancel"),
     ("o", "ok", "Ok"),
+    ("c", "pop_screen", "Cancel"),
+    ("q", "exit", "Quit"),
 ]
 
 def ok(text: str = "OK") -> str:

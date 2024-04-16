@@ -34,6 +34,7 @@ class ActionsBar(Horizontal):
     }
     """
 
+
 class TopBar(Horizontal):
     DEFAULT_CSS = """
     TopBar {
