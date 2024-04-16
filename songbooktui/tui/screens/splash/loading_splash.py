@@ -6,6 +6,7 @@ from textual.widgets import ProgressBar, Static
 
 from backend import service
 from backend.dto import SongDTO, SongbookDTO
+from backend.model import Settings
 from tui import utils
 
 
@@ -16,6 +17,7 @@ class LoadingSplash(Screen):
 
     songs: dict[int, SongDTO]
     songbooks: dict[str, SongbookDTO]
+    settings: Settings
 
     async def on_mount(self) -> None:
         self.fetch_data()
@@ -25,31 +27,41 @@ class LoadingSplash(Screen):
         with Center():
             yield Static(utils.TITLE)
         with Center():
-            yield ProgressBar(total=2, show_eta=False, show_percentage=False)
+            yield ProgressBar(total=3, show_eta=False, show_percentage=False)
 
     async def update_progress(self) -> None:
         progress_bar = self.query_one(ProgressBar)
         progress_bar.advance(1)
-        if progress_bar.progress == 2:
+        if progress_bar.progress == 3:
             progress_bar.styles.animate(
-                "opacity", value=0, duration=0.3, easing="out_quint"
+                "opacity", value=0, duration=1.3, easing="out_quint"
             )
             # await sleep(1)
             self.styles.animate("opacity", value=0, duration=0.3, easing="out_quint")
-            self.dismiss((self.songs, self.songbooks))
+            self.dismiss((self.songs, self.songbooks, self.settings))
 
     @work
     async def fetch_data(self) -> None:
         """Get the songs."""
 
-        songs = await service.get_songs()
-        self.songs = songs
-        await self.update_progress()
-        await self.get_songbooks(songs)
+        await self.get_songs()
+        await self.get_songbooks()
+        await self.get_settings()
+
+    async def get_songs(self) -> None:
+        """Get the songs."""
+
+        self.songs = await service.get_songs()
         await self.update_progress()
 
-    async def get_songbooks(self, songs: dict[int, SongDTO]) -> None:
+    async def get_songbooks(self) -> None:
         """Get the songbooks."""
 
-        self.songbooks = await service.get_songbooks(songs)
+        self.songbooks = await service.get_songbooks(self.songs)
+        await self.update_progress()
+
+    async def get_settings(self) -> None:
+        """Get the settings."""
+
+        self.settings = await service.get_settings()
         await self.update_progress()
