@@ -18,6 +18,7 @@ class ActionButton(Widget):
         background: $foreground 10%;
     }
     """
+    DEFAULT_CLASSES = "btn-action left-middle"
 
     text: reactive[str] = reactive("󱓻 ")
     action: str

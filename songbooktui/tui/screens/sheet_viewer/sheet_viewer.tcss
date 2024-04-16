@@ -1,7 +1,16 @@
 Screen {
     layout: vertical;
-    layers: viewer bottom-bar top-bar;
+    layers: viewer bottom-bar top-bar menu;
     overflow-y: hidden;
+}
+
+SheetViewer > MainMenu {
+    dock: left;
+    width: 18;
+    height: 100%;
+    layer: menu;
+    margin: 1 0;
+    padding: 0 1;
 }
 
 #viewer-container {

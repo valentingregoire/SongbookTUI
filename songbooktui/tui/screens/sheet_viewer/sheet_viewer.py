@@ -1,40 +1,42 @@
-from numba import jit
+from backend.dto import PageDTO, SongbookDTO, SongDTO
+from rich.markdown import Markdown
 from textual.app import ComposeResult
 from textual.containers import Vertical, VerticalScroll
 from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import (
-    Markdown,
     ContentSwitcher,
+    # Markdown,
     Static,
-    Label,
 )
-
-from backend.dto import SongDTO, SongbookDTO, PageDTO
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
 from tui.utils import ok
 from tui.widgets.action_button import ActionButton
 from tui.widgets.bottom_bar import PageInfo
-from tui.widgets.containers import LeftFloat, RightFloat, TopBar, CenterFloat, BottomBar
+from tui.widgets.containers import BottomBar, LeftFloat, RightFloat, TopBar
+from tui.widgets.main_menu import MainMenu
 from tui.widgets.progress_bar import InlineVerticalProgressBar
 from tui.widgets.top_bar import SongInfo
 
 
 class SheetViewer(Screen):
-
     CSS_PATH = "sheet_viewer.tcss"
     BINDINGS = [
         ("o", "show_songbook_overview", "  Overview"),
+        ("m", "toggle_menu", "󰍜 Menu"),
         ("q", "request_quit", "Quit"),
     ]
 
     songs: dict[int, SongDTO]
     songbook: SongbookDTO
     current_song_index: reactive[int] = reactive(0, recompose=True)
+    # current_song_index: reactive[int] = reactive(0)
     current_page_index: reactive[int] = reactive(0, recompose=True)
+    # current_page_index: reactive[int] = reactive(0)
     current_song: reactive[SongDTO] = reactive(None)
     current_page: reactive[PageDTO] = reactive(None)
     current_viewer: reactive[str] = reactive("viewer_txt")
+    menu_shown: bool = False
 
     def compute_current_song(self) -> SongDTO:
         return self.songbook.songs[self.current_song_index]
@@ -60,11 +62,11 @@ class SheetViewer(Screen):
                 with VerticalScroll(id="viewer_txt"):
                     yield Static(self.current_page.content, classes="w-auto")
                 with VerticalScroll(id="viewer_md"):
-                    yield Markdown(
-                        self.current_page.content,
-                    )
+                    md = Markdown(markup=self.current_page.content)
+                    yield Static(md)
         with TopBar():
             with LeftFloat():
+                yield ActionButton("󰍜 ", "screen.toggle_menu")
                 yield ActionButton("  ", "screen.prev_song", classes="p-r-1 m-0")
                 yield Static(self.current_song.full_title, classes="text-bold")
             with RightFloat():
@@ -77,19 +79,36 @@ class SheetViewer(Screen):
             with LeftFloat():
                 yield ActionButton("  ", "screen.prev_page", classes="p-r-1 m-0")
                 next_song_index = (self.current_song_index + 1) % self.songbook.size
-                yield Static(self.songbook.songs[next_song_index].full_title, classes="text-bold")
+                yield Static(
+                    self.songbook.songs[next_song_index].full_title, classes="text-bold"
+                )
             with RightFloat():
                 yield ActionButton(
                     "  Overview",
                     "screen.show_songbook_overview",
+                    classes="center-middle"
                 )
                 yield InlineVerticalProgressBar(
                     self.current_page_index + 1, len(self.current_song.pages)
                 )
                 yield PageInfo(
-                    self.current_page_index + 1, len(self.current_song.pages),
+                    self.current_page_index + 1,
+                    len(self.current_song.pages),
                 )
                 yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
+        yield MainMenu(id="menu", classes="hidden").data_bind(disabled=SheetViewer.menu_shown)
+
+    def action_toggle_menu(self) -> None:
+        self.menu_shown = not self.menu_shown
+        menu = self.query_one(MainMenu)
+        if self.menu_shown:
+            menu.remove_class("hidden")
+        else:
+            menu.add_class("hidden")
+
+        # self.recompose()
+            
+        # self.compose_add_child(menu)
 
     def action_show_songbook_overview(self) -> None:
         def fallback(data: tuple[int, SongbookDTO] | int) -> None:
@@ -102,7 +121,7 @@ class SheetViewer(Screen):
             else:
                 # only current song index got returned
                 self.current_song_index = data
-                
+
             self.current_page_index = 0
 
         self.app.push_screen(

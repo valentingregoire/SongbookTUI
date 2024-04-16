@@ -12,11 +12,9 @@ class SongbookApp(App):
     """The main application class for the Songbook TUI."""
 
     CSS_PATH = "app.tcss"
-    BINDINGS = [("q", "request_quit", "Quit")]
-    # MODES = {
-    #     "splash": LoadingSplash,
-    #     "viewer": SheetViewer,
-    # }
+    BINDINGS = [
+        ("q", "exit", "Quit")
+    ]
 
     songs: dict[int, SongDTO]
     songbooks: dict[str, SongbookDTO]
@@ -31,25 +29,16 @@ class SongbookApp(App):
             songs, songbooks = data
             self.songs = songs
             self.songbooks = songbooks
-            # self.switch_mode("viewer")
             self.push_screen(SheetViewer(songs=self.songs, songbook=songbooks.get(DEFAULT_SONGBOOK)))
 
         self.push_screen(LoadingSplash(), set_loaded_data)
 
-    def compose(self) -> ComposeResult:
-        """Compose the application."""
-        yield Header()
-        yield Footer()
-        # yield MainMenu()
-
+    #Application wide actions!
     def action_ok(self) -> None:
         self.dismiss()
 
-    def action_request_quit(self) -> None:
-        """Quit the application."""
-        # self.push_screen(MainMenu())
+    def action_exit(self) -> None:
         self.app.exit()
-
 
 if __name__ == "__main__":
     app = SongbookApp()

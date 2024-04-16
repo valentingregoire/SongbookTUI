@@ -33,6 +33,10 @@ Screen {
     width: 100%;
 }
 
+.h-1 {
+    height: 1;
+}
+
 .h-1fr {
     height: 1fr;
 }
@@ -146,13 +150,25 @@ ActionButton:hover {
 
 # VARIANTS
 
+.disabled {
+    opacity: 0.5;
+}
+
 .primary {
-    background: $primary
+    background: $primary;
+}
+
+.primary:hover {
+    background: $primary-lighten-3;
 }
 
 .success {
     background: $success;
     color: $background;
+}
+
+.success-text {
+    color: $success;
 }
 
 .success:hover {
@@ -166,4 +182,8 @@ ActionButton:hover {
 
 .error:hover {
     background: $error-lighten-3;
+}
+
+.hidden {
+    display: none;
 }
