@@ -47,12 +47,8 @@ class SongOverviewModal(ModalScreen):
             id="selection-list",
         )
         with ActionsBar():
-            yield ActionButton(
-                cancel(), action="pop_screen", classes="btn-link error"
-            )
-            yield ActionButton(
-                ok(), action="screen.ok", classes="btn-link success"
-            )
+            yield ActionButton(cancel(), action="pop_screen", classes="btn-link error")
+            yield ActionButton(ok(), action="screen.ok", classes="btn-link success")
 
     def action_ok(self) -> None:
         selection = self.query_one(SelectionList[int])

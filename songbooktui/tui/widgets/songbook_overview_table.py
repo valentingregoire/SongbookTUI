@@ -21,7 +21,9 @@ class SongbookOverviewTable(VerticalScroll):
     songbook: Songbook
     current_song_index: int
 
-    def __init__(self, songbook: Songbook, current_song_index: int = 0, id: str | None = None) -> None:
+    def __init__(
+        self, songbook: Songbook, current_song_index: int = 0, id: str | None = None
+    ) -> None:
         super().__init__(id=id)
         self.songbook = songbook
         self.current_song_index = current_song_index

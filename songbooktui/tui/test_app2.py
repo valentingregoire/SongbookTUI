@@ -1,13 +1,9 @@
+from rich.table import Table
 from textual.app import App, ComposeResult
 from textual.containers import Vertical
 from textual.reactive import reactive
-from textual.screen import Screen
-from textual.widgets import Button, Input, Static, ContentSwitcher, Label, Markdown, Header, Footer
+from textual.widgets import Button, Input, Static
 
-from rich.table import Table
-
-from textual.app import App, ComposeResult
-from textual.widgets import Static
 
 class DisableApp(App):
     edit_mode: reactive[bool] = reactive(False)
@@ -16,10 +12,11 @@ class DisableApp(App):
         yield Button("Edit", id="btn_edit")
         with Vertical(id="container").data_bind(disabled=DisableApp.edit_mode):
             yield Input(placeholder="Name")
-    
+
     def on_button_pressed(self, event: Button.Pressed) -> None:
         self.edit_mode = not self.edit_mode
         self.log(self.edit_mode)
+
 
 class FizzBuzz(Static):
     def on_mount(self) -> None:
@@ -111,4 +108,3 @@ if __name__ == "__main__":
 # if __name__ == "__main__":
 #     app = ViewerApp()
 #     app.run()
-

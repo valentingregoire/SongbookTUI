@@ -1,4 +1,3 @@
-from backend.dto import PageDTO, SongbookDTO, SongDTO
 from rich.markdown import Markdown
 from textual.app import ComposeResult
 from textual.containers import Vertical, VerticalScroll
@@ -6,11 +5,12 @@ from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import (
     ContentSwitcher,
-    # Markdown,
     Static,
 )
 
+from backend.dto import PageDTO, SongbookDTO, SongDTO
 from backend.model import Settings
+from tui.screens.settings.settings import SettingsScreen
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
 from tui.utils import ok
 from tui.widgets.action_button import ActionButton
@@ -26,6 +26,7 @@ class SheetViewer(Screen):
     BINDINGS = [
         ("o", "show_songbook_overview", "  Overview"),
         ("m", "toggle_menu", "󰍜 Menu"),
+        ("s", "settings", "Settings"),
         ("q", "request_quit", "Quit"),
     ]
 
@@ -118,9 +119,15 @@ class SheetViewer(Screen):
 
         # self.compose_add_child(menu)
 
+    def action_settings(self) -> None:
+        def fallback(data: Settings) -> None:
+            self.settings = data
+            self.notify(ok(" Settings updated."))
+
+        self.app.push_screen(SettingsScreen(self.settings), fallback)
+
     def action_show_songbook_overview(self) -> None:
         def fallback(data: tuple[int, SongbookDTO] | int) -> None:
-            self.log(data)
             if isinstance(data, tuple):
                 current_song_index, songbook = data
                 self.current_song_index = current_song_index

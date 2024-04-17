@@ -1,6 +1,5 @@
 from art import text2art
 
-
 CHECKMARK = " "
 # _CROSSMARK = " "
 CROSSMARK = " "
@@ -13,6 +12,7 @@ DEFAULT_BINDINGS = [
     ("c", "pop_screen", "Cancel"),
     ("q", "exit", "Quit"),
 ]
+
 
 def ok(text: str = "OK") -> str:
     return f"{CHECKMARK}{text}"

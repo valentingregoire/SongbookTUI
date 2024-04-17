@@ -29,7 +29,7 @@ class SongbookTestApp(App):
         """Run when the app is mounted."""
 
         def set_loaded_data(
-            data: tuple[dict[int, SongDTO], dict[str, SongbookDTO]]
+            data: tuple[dict[int, SongDTO], dict[str, SongbookDTO]],
         ) -> None:
             """Fallback function to set the loaded data."""
             songs, songbooks = data
