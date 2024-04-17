@@ -2,9 +2,9 @@ import asyncio
 import json
 import os
 
-from backend.consts import SONGBOOKS_LOCATION, SONGS_LOCATION, INFO
+from backend.consts import SONGBOOKS_LOCATION, SONGS_LOCATION, INFO, SETTINGS_LOCATION
 from backend.dto import FileType
-from backend.model import Songbook, Song, Page
+from backend.model import Songbook, Song, Page, Settings
 
 
 async def read_songs() -> tuple[Song]:
@@ -74,12 +74,31 @@ async def read_songbooks() -> tuple[Songbook]:
 
 async def read_songbook(file: str) -> Songbook:
     """Read a songbook from the filesystem."""
-
     with open(file, "r") as json_file:
         songbook_data = json.loads(json_file.read())
         songbook_data["name"] = file.split("/")[-1][:-5]
         songbook: Songbook = Songbook(**songbook_data)
         return songbook
+
+
+async def read_settings() -> Settings:
+    """Read the settings from the filesystem."""
+    with open(SETTINGS_LOCATION, "r") as settings_file:
+        settings_dict = json.loads(settings_file.read())
+    settings = Settings(**settings_dict)
+    return settings
+
+
+async def write_settings(settings: dict[str:str]) -> None:
+    """Write the settings to the filesystem.
+
+    Args:
+        settings (dict[str: str]): the settings to write
+
+    Returns: None
+    """
+    with open(SETTINGS_LOCATION, "w") as settings_file:
+        settings_file.write(json.dumps(settings, indent=4))
 
 
 # songs = asyncio.run(read_songs())

@@ -7,6 +7,11 @@ class FileType(StrEnum):
     MARKDOWN = "md"
 
 
+class SettingsType(StrEnum):
+    DEFAULT = "default"
+    USER = "user"
+
+
 @dataclass
 class Page:
     """Model class that represents a page."""
@@ -35,3 +40,8 @@ class Songbook:
 
     name: str
     songs: list[int]
+
+
+@dataclass
+class Settings:
+    default_songbook: str | None = None

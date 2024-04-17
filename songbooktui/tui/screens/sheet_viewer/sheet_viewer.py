@@ -1,4 +1,3 @@
-from backend.dto import PageDTO, SongbookDTO, SongDTO
 from rich.markdown import Markdown
 from textual.app import ComposeResult
 from textual.containers import Vertical, VerticalScroll
@@ -6,9 +5,12 @@ from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import (
     ContentSwitcher,
-    # Markdown,
     Static,
 )
+
+from backend.dto import PageDTO, SongbookDTO, SongDTO
+from backend.model import Settings
+from tui.screens.settings.settings import SettingsScreen
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
 from tui.utils import ok
 from tui.widgets.action_button import ActionButton
@@ -24,11 +26,14 @@ class SheetViewer(Screen):
     BINDINGS = [
         ("o", "show_songbook_overview", "  Overview"),
         ("m", "toggle_menu", "󰍜 Menu"),
+        ("s", "settings", "Settings"),
         ("q", "request_quit", "Quit"),
     ]
 
     songs: dict[int, SongDTO]
     songbook: SongbookDTO
+    settings: Settings
+
     current_song_index: reactive[int] = reactive(0, recompose=True)
     # current_song_index: reactive[int] = reactive(0)
     current_page_index: reactive[int] = reactive(0, recompose=True)
@@ -47,15 +52,17 @@ class SheetViewer(Screen):
     def compute_current_viewer(self) -> str:
         return f"viewer_{self.current_page.file_type}"
 
-    def __init__(self, songs: dict[int, SongDTO], songbook: SongbookDTO) -> None:
+    def __init__(
+        self, songs: dict[int, SongDTO], songbook: SongbookDTO, settings: Settings
+    ) -> None:
         self.songs = songs
         self.songbook = songbook
+        self.settings = settings
         super().__init__()
 
     def on_mount(self) -> None:
-        self.styles.animate("opacity", value=1, duration=0.3, easing="out_circ")
+        self.styles.animate("opacity", value=1, duration=1.3, easing="out_circ")
 
-    # @jit
     def compose(self) -> ComposeResult:
         with Vertical(classes="h-full w-full top-center", id="viewer-container"):
             with ContentSwitcher(initial=self.current_viewer):
@@ -86,7 +93,7 @@ class SheetViewer(Screen):
                 yield ActionButton(
                     "  Overview",
                     "screen.show_songbook_overview",
-                    classes="center-middle"
+                    classes="center-middle",
                 )
                 yield InlineVerticalProgressBar(
                     self.current_page_index + 1, len(self.current_song.pages)
@@ -96,7 +103,9 @@ class SheetViewer(Screen):
                     len(self.current_song.pages),
                 )
                 yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
-        yield MainMenu(id="menu", classes="hidden").data_bind(disabled=SheetViewer.menu_shown)
+        yield MainMenu(settings=self.settings, id="menu", classes="hidden").data_bind(
+            disabled=SheetViewer.menu_shown
+        )
 
     def action_toggle_menu(self) -> None:
         self.menu_shown = not self.menu_shown
@@ -107,12 +116,18 @@ class SheetViewer(Screen):
             menu.add_class("hidden")
 
         # self.recompose()
-            
+
         # self.compose_add_child(menu)
+
+    def action_settings(self) -> None:
+        def fallback(data: Settings) -> None:
+            self.settings = data
+            self.notify(ok(" Settings updated."))
+
+        self.app.push_screen(SettingsScreen(self.settings), fallback)
 
     def action_show_songbook_overview(self) -> None:
         def fallback(data: tuple[int, SongbookDTO] | int) -> None:
-            self.log(data)
             if isinstance(data, tuple):
                 current_song_index, songbook = data
                 self.current_song_index = current_song_index

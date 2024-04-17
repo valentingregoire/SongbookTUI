@@ -50,6 +50,6 @@ class Toggle(Widget):
 
     async def on_click(self, event: Click):
         event.stop()
-        self.value = not self.value 
+        self.value = not self.value
         self.refresh()
         await self.run_action(self.action)

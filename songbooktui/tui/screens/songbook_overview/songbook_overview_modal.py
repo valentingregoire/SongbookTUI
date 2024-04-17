@@ -1,10 +1,11 @@
-from backend.dto import SongbookDTO, SongDTO
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.coordinate import Coordinate
 from textual.reactive import reactive
 from textual.screen import ModalScreen
 from textual.widgets import DataTable, Static
+
+from backend.dto import SongbookDTO, SongDTO
 from tui.screens.song_overview.song_overview_modal import SongOverviewModal
 from tui.utils import DEFAULT_BINDINGS
 from tui.widgets.action_button import ActionButton
