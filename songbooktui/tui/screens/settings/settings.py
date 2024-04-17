@@ -4,6 +4,7 @@ from textual.app import ComposeResult
 from textual.screen import Screen
 from textual.widgets import Pretty, Input, Collapsible, Checkbox
 
+from backend import service
 from backend.model import Settings
 from tui.widgets.form import Form
 from tui.widgets.widget_factory import WidgetFactory
@@ -48,6 +49,7 @@ class SettingsScreen(Screen):
             setattr(self.settings, event.name, event.value)
             self.query_one(Pretty).update(asdict(self.settings))
 
-    def on_form_submit(self, event: Form.Submit) -> None:
+    async def on_form_submit(self, event: Form.Submit) -> None:
         self.settings = Settings(**event.data)
+        await service.set_settings(self.settings)
         self.dismiss(self.settings)
