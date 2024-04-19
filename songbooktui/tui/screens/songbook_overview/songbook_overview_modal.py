@@ -3,8 +3,9 @@ from textual.containers import Horizontal, Vertical
 from textual.coordinate import Coordinate
 from textual.reactive import reactive
 from textual.screen import ModalScreen
-from textual.widgets import DataTable, Static
+from textual.widgets import DataTable, Static, Input
 
+from backend import service
 from backend.dto import SongbookDTO, SongDTO
 from tui.screens.song_overview.song_overview_modal import SongOverviewModal
 from tui.utils import DEFAULT_BINDINGS
@@ -42,6 +43,12 @@ class SongbookOverviewModal(ModalScreen):
         with Vertical(classes="center-middle"):
             with CenterFloat(classes="w-full primary"):
                 yield Static(f"[b]{self.songbook.name}")
+            new_name_input = Input(placeholder="Name", value=self.songbook.name)
+            new_name_input.border_title = "Name"
+            # yield new_name_input.data_bind(value=self.new_name)
+            yield new_name_input.data_bind(
+                disabled=SongbookOverviewModal.read_only_mode
+            )
             with Horizontal(id="container"):
                 yield DataTable(id="data-table", classes="right-middle")
                 with Vertical(
@@ -102,8 +109,13 @@ class SongbookOverviewModal(ModalScreen):
         else:
             container_actions.remove_class("disabled")
 
-    def action_ok(self, propagate: bool = True) -> None:
-        if propagate:
+    async def action_ok(self, save: bool = True) -> None:
+        if save:
+            old_name = self.songbook.name
+            self.songbook.name = self.query_one(Input).value
+            print("old_name", old_name)
+            print("new_name", self.songbook.name)
+            await service.save_songbook(self.songbook, old_name)
             self.dismiss((self.current_song_index, self.songbook))
         else:
             self.dismiss(self.current_song_index)

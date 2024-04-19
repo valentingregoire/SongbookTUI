@@ -51,5 +51,5 @@ class SettingsScreen(Screen):
 
     async def on_form_submit(self, event: Form.Submit) -> None:
         self.settings = Settings(**event.data)
-        await service.set_settings(self.settings)
+        await service.save_settings(self.settings)
         self.dismiss(self.settings)

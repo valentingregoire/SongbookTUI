@@ -2,7 +2,7 @@ from dataclasses import asdict
 
 from backend import dao
 from backend.dto import SongbookDTO, SongDTO, PageDTO
-from backend.model import Song, Settings
+from backend.model import Song, Settings, Songbook
 
 
 async def get_songs() -> dict[int, SongDTO]:
@@ -23,13 +23,20 @@ async def get_songbooks(songs: dict[int, SongDTO]) -> dict[str, SongbookDTO]:
     songbooks_data = await dao.read_songbooks()
     songbooks = {}
     for sd in songbooks_data:
-        songs = [song for sid, song in songs.items() if sid in sd.songs]
+        songs = [songs[sid] for sid in sd.songs]
+        # songs = [song for sid, song in songs.items() if sid in sd.songs]
         songbook = SongbookDTO(name=sd.name, songs=songs)
         songbooks[sd.name] = songbook
     return songbooks
 
 
-async def set_settings(settings: Settings) -> None:
+async def save_songbook(songbook: SongbookDTO, old_name: str) -> None:
+    if songbook.name != old_name:
+        await dao.remove_songbook(old_name)
+    await dao.write_songbook(songbook_dto_to_songbook(songbook))
+
+
+async def save_settings(settings: Settings) -> None:
     """Set the settings in the filesystem."""
     default_settings_dict = asdict(Settings())
     user_settings_dict = asdict(settings)
@@ -60,4 +67,12 @@ def song_to_dto(song: Song) -> SongDTO:
             for page in song.pages
         ],
         artist=song.artist,
+    )
+
+
+def songbook_dto_to_songbook(songbook: SongbookDTO) -> Songbook:
+    """Convert a SongbookDTO object to a Songbook object."""
+    return Songbook(
+        name=songbook.name,
+        songs=[song.id for song in songbook.songs],
     )
