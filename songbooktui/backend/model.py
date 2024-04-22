@@ -38,6 +38,7 @@ class Songbook:
     The songs are the actual song objects. They are loaded after the song_ids are read from the JSON file.
     """
 
+    id: int
     name: str
     songs: list[int]
 

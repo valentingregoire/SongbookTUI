@@ -25,14 +25,12 @@ async def get_songbooks(songs: dict[int, SongDTO]) -> dict[str, SongbookDTO]:
     for sd in songbooks_data:
         songs = [songs[sid] for sid in sd.songs]
         # songs = [song for sid, song in songs.items() if sid in sd.songs]
-        songbook = SongbookDTO(name=sd.name, songs=songs)
+        songbook = SongbookDTO(id=sd.id, name=sd.name, songs=songs)
         songbooks[sd.name] = songbook
     return songbooks
 
 
-async def save_songbook(songbook: SongbookDTO, old_name: str) -> None:
-    if songbook.name != old_name:
-        await dao.remove_songbook(old_name)
+async def save_songbook(songbook: SongbookDTO) -> None:
     await dao.write_songbook(songbook_dto_to_songbook(songbook))
 
 
@@ -73,6 +71,7 @@ def song_to_dto(song: Song) -> SongDTO:
 def songbook_dto_to_songbook(songbook: SongbookDTO) -> Songbook:
     """Convert a SongbookDTO object to a Songbook object."""
     return Songbook(
+        id=songbook.id,
         name=songbook.name,
         songs=[song.id for song in songbook.songs],
     )

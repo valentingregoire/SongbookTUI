@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+from dataclasses import asdict
 
 from backend.consts import SONGBOOKS_LOCATION, SONGS_LOCATION, INFO, SETTINGS_LOCATION
 from backend.dto import FileType
@@ -75,21 +76,20 @@ async def read_songbooks() -> tuple[Songbook]:
 async def read_songbook(file: str) -> Songbook:
     """Read a songbook from the filesystem."""
     with open(file, "r") as json_file:
-        songs = json.loads(json_file.read())
-        songbook: Songbook = Songbook(name=file.split("/")[-1][:-5], songs=songs)
+        songbook_data = json.loads(json_file.read())
+        songbook: Songbook = Songbook(
+            id=songbook_data["id"],
+            name=songbook_data["name"],
+            songs=songbook_data["songs"],
+        )
         return songbook
 
 
 async def write_songbook(songbook: Songbook) -> None:
     """Write a songbook to the filesystem."""
-    with open(f"{SONGBOOKS_LOCATION}/{songbook.name}.json", "w") as json_file:
-        data = json.dumps(songbook.songs, indent=4)
-        json_file.write(data)
-
-
-async def remove_songbook(songbook_name: str) -> None:
-    """Remove a songbook from the filesystem."""
-    os.remove(f"{SONGBOOKS_LOCATION}/{songbook_name}.json")
+    with open(f"{SONGBOOKS_LOCATION}/{songbook.id}.json", "w") as json_file:
+        data = asdict(songbook)
+        json_file.write(json.dumps(data, indent=4))
 
 
 async def read_settings() -> Settings:

@@ -115,7 +115,7 @@ class SongbookOverviewModal(ModalScreen):
             self.songbook.name = self.query_one(Input).value
             print("old_name", old_name)
             print("new_name", self.songbook.name)
-            await service.save_songbook(self.songbook, old_name)
+            await service.save_songbook(self.songbook)
             self.dismiss((self.current_song_index, self.songbook))
         else:
             self.dismiss(self.current_song_index)
