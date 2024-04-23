@@ -75,7 +75,7 @@ class SheetViewer(Screen):
                     yield Static(md)
         with TopBar():
             with LeftFloat():
-                yield ActionButton("󰍜 ", "screen.toggle_menu")
+                yield ActionButton("󰍜 ", "screen.toggle_menu", classes="w-auto")
                 yield ActionButton("  ", "screen.prev_song", classes="p-r-1 m-0")
                 yield Static(self.current_song.full_title, classes="text-bold")
             with RightFloat():
