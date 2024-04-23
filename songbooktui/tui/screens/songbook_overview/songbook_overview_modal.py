@@ -151,7 +151,7 @@ class SongbookOverviewModal(ModalScreen):
 
     async def action_add(self) -> None:
         async def fallback(data: list[SongDTO]) -> None:
-            dataclasses.replace(self.songbook, songs=data)
+            self.songbook = dataclasses.replace(self.songbook, songs=data)
             # self.songbook.songs = data
             await self.populate_table()
 
