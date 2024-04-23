@@ -1,3 +1,5 @@
+import dataclasses
+
 from rich.markdown import Markdown
 from textual.app import ComposeResult
 from textual.containers import Vertical, VerticalScroll
@@ -131,7 +133,7 @@ class SheetViewer(Screen):
             if isinstance(data, tuple):
                 current_song_index, songbook = data
                 self.current_song_index = current_song_index
-                self.songbook = songbook
+                self.songbook = dataclasses.replace(songbook)
                 self.notify(ok(f" Songbook {self.songbook.name} updated."))
             else:
                 # only current song index got returned

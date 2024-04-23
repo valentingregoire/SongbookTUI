@@ -27,7 +27,7 @@ class SongDTO:
         return self.id == other.id
 
 
-@dataclass
+@dataclass(frozen=True)
 class SongbookDTO:
     """Model class that represents a songbook.
 

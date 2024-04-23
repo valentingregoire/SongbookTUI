@@ -45,4 +45,4 @@ class Songbook:
 
 @dataclass
 class Settings:
-    default_songbook: str | None = None
+    default_songbook: int | None = None

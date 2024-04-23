@@ -18,15 +18,14 @@ def _get_songbook_names() -> list[str]:
     return [file_name.split("/")[-1][:-5] for file_name in file_names]
 
 
-async def get_songbooks(songs: dict[int, SongDTO]) -> dict[str, SongbookDTO]:
+async def get_songbooks(songs: dict[int, SongDTO]) -> dict[int, SongbookDTO]:
     """Get all songbooks from the filesystem."""
     songbooks_data = await dao.read_songbooks()
     songbooks = {}
     for sd in songbooks_data:
         songs = [songs[sid] for sid in sd.songs]
-        # songs = [song for sid, song in songs.items() if sid in sd.songs]
         songbook = SongbookDTO(id=sd.id, name=sd.name, songs=songs)
-        songbooks[sd.name] = songbook
+        songbooks[sd.id] = songbook
     return songbooks
 
 

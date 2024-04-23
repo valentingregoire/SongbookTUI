@@ -16,7 +16,7 @@ class LoadingSplash(Screen):
     CSS_PATH = "loading_splash.tcss"
 
     songs: dict[int, SongDTO]
-    songbooks: dict[str, SongbookDTO]
+    songbooks: dict[int, SongbookDTO]
     settings: Settings
 
     async def on_mount(self) -> None:

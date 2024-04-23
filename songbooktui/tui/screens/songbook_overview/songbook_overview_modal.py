@@ -1,3 +1,5 @@
+import dataclasses
+
 from textual.app import ComposeResult
 from textual.containers import Horizontal, Vertical
 from textual.coordinate import Coordinate
@@ -24,6 +26,7 @@ class SongbookOverviewModal(ModalScreen):
     current_song_index: int
     read_only_mode: reactive[bool] = reactive(True)
     edit_mode: reactive[bool] = reactive(False)
+    zebra_stripes: reactive[bool] = reactive(True)
 
     def __init__(
         self,
@@ -36,7 +39,7 @@ class SongbookOverviewModal(ModalScreen):
     ) -> None:
         super().__init__(name, p_id, classes)
         self.songs = songs
-        self.songbook = songbook
+        self.songbook = dataclasses.replace(songbook, songs=songbook.songs.copy())
         self.current_song_index = current_song_index
 
     def compose(self) -> ComposeResult:
@@ -45,12 +48,13 @@ class SongbookOverviewModal(ModalScreen):
                 yield Static(f"[b]{self.songbook.name}")
             new_name_input = Input(placeholder="Name", value=self.songbook.name)
             new_name_input.border_title = "Name"
-            # yield new_name_input.data_bind(value=self.new_name)
             yield new_name_input.data_bind(
                 disabled=SongbookOverviewModal.read_only_mode
             )
             with Horizontal(id="container"):
-                yield DataTable(id="data-table", classes="right-middle")
+                yield DataTable(id="data-table", classes="right-middle").data_bind(
+                    zebra_stripes=SongbookOverviewModal.zebra_stripes
+                )
                 with Vertical(
                     id="container-actions",
                     classes="left-middle disabled",
@@ -89,6 +93,7 @@ class SongbookOverviewModal(ModalScreen):
         if not table:
             table = self.query_one(DataTable)
         table.clear()
+        # table.rows.clear()
         for index, song in enumerate(self.songbook.songs):
             table.add_row(
                 song.title,
@@ -111,10 +116,9 @@ class SongbookOverviewModal(ModalScreen):
 
     async def action_ok(self, save: bool = True) -> None:
         if save:
-            old_name = self.songbook.name
-            self.songbook.name = self.query_one(Input).value
-            print("old_name", old_name)
-            print("new_name", self.songbook.name)
+            self.songbook = dataclasses.replace(
+                self.songbook, name=self.query_one(Input).value
+            )
             await service.save_songbook(self.songbook)
             self.dismiss((self.current_song_index, self.songbook))
         else:
@@ -145,11 +149,13 @@ class SongbookOverviewModal(ModalScreen):
         self.songbook.songs.insert(self.current_song_index, song)
         await self.populate_table()
 
-    def action_add(self) -> None:
-        def fallback(data: list[SongDTO]) -> None:
-            self.songbook.songs = data
+    async def action_add(self) -> None:
+        async def fallback(data: list[SongDTO]) -> None:
+            dataclasses.replace(self.songbook, songs=data)
+            # self.songbook.songs = data
+            await self.populate_table()
 
-        self.app.push_screen(
+        await self.app.push_screen(
             SongOverviewModal(
                 songs=self.songs,
                 songbook=self.songbook,
@@ -158,20 +164,10 @@ class SongbookOverviewModal(ModalScreen):
             fallback,
         )
 
-    def action_remove(self, index: int):
+    async def action_remove(self, index: int):
         self.songbook.songs.pop(index)
         if index == self.current_song_index:
             self.current_song_index = 0
         elif index < self.current_song_index:
             self.current_song_index -= 1
-        if self.songbook.size == 0:
-            self.app.pop_screen()
-        else:
-            self.app.pop_screen()
-            self.app.push_screen(
-                SongbookOverviewModal(
-                    songs=self.songs,
-                    songbook=self.songbook,
-                    current_song_index=self.current_song_index,
-                )
-            )
+        await self.populate_table()
