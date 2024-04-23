@@ -37,9 +37,7 @@ class SheetViewer(Screen):
     settings: Settings
 
     current_song_index: reactive[int] = reactive(0, recompose=True)
-    # current_song_index: reactive[int] = reactive(0)
     current_page_index: reactive[int] = reactive(0, recompose=True)
-    # current_page_index: reactive[int] = reactive(0)
     current_song: reactive[SongDTO] = reactive(None)
     current_page: reactive[PageDTO] = reactive(None)
     current_viewer: reactive[str] = reactive("viewer_txt")
@@ -55,10 +53,15 @@ class SheetViewer(Screen):
         return f"viewer_{self.current_page.file_type}"
 
     def __init__(
-        self, songs: dict[int, SongDTO], songbook: SongbookDTO, settings: Settings
+        self,
+        songs: dict[int, SongDTO],
+        songbook: SongbookDTO,
+        songbooks: dict[int, SongbookDTO],
+        settings: Settings,
     ) -> None:
         self.songs = songs
         self.songbook = songbook
+        self.songbooks = songbooks
         self.settings = settings
         super().__init__()
 
@@ -105,9 +108,12 @@ class SheetViewer(Screen):
                     len(self.current_song.pages),
                 )
                 yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
-        yield MainMenu(settings=self.settings, id="menu", classes="hidden").data_bind(
-            disabled=SheetViewer.menu_shown
-        )
+        yield MainMenu(
+            songbooks=self.songbooks,
+            settings=self.settings,
+            id="menu",
+            classes="hidden",
+        ).data_bind(disabled=SheetViewer.menu_shown)
 
     def action_toggle_menu(self) -> None:
         self.menu_shown = not self.menu_shown
@@ -117,16 +123,12 @@ class SheetViewer(Screen):
         else:
             menu.add_class("hidden")
 
-        # self.recompose()
-
-        # self.compose_add_child(menu)
-
     def action_settings(self) -> None:
         def fallback(data: Settings) -> None:
             self.settings = data
-            self.notify(ok(" Settings updated."))
+            self.notify(ok(" Settings saved."))
 
-        self.app.push_screen(SettingsScreen(self.settings), fallback)
+        self.app.push_screen(SettingsScreen(self.settings, self.songbooks), fallback)
 
     def action_show_songbook_overview(self) -> None:
         def fallback(data: tuple[int, SongbookDTO] | int) -> None:
@@ -134,7 +136,7 @@ class SheetViewer(Screen):
                 current_song_index, songbook = data
                 self.current_song_index = current_song_index
                 self.songbook = dataclasses.replace(songbook)
-                self.notify(ok(f" Songbook {self.songbook.name} updated."))
+                self.notify(ok(f" Songbook {self.songbook.name} saved."))
             else:
                 # only current song index got returned
                 self.current_song_index = data

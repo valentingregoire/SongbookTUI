@@ -43,3 +43,6 @@ class SongbookDTO:
     @property
     def size(self) -> int:
         return len(self.songs)
+
+    def __hash__(self) -> int:
+        return self.id

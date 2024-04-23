@@ -1,10 +1,9 @@
-from textual.app import App, ComposeResult
+from textual.app import App
 
 from backend.dto import SongbookDTO, SongDTO
 from backend.model import Settings
 from tui.screens.sheet_viewer.sheet_viewer import SheetViewer
 from tui.screens.splash.loading_splash import LoadingSplash
-from tui.widgets.main_menu import MainMenu
 
 DEFAULT_SONGBOOK = "2024"
 
@@ -19,11 +18,11 @@ class SongbookApp(App):
     songbooks: dict[str, SongbookDTO]
     settings: Settings = Settings()
 
-    def compose(self) -> ComposeResult:
-        """Compose the main application."""
-        yield MainMenu(settings=self.settings, id="menu", classes="hidden").data_bind(
-            disabled=SheetViewer.menu_shown
-        )
+    # def compose(self) -> ComposeResult:
+    #     """Compose the main application."""
+    #     # yield MainMenu(settings=self.settings, id="menu", classes="hidden").data_bind(
+    #     #     disabled=SheetViewer.menu_shown
+    #     # )
 
     def on_mount(self) -> None:
         """Run when the app is mounted."""
@@ -40,6 +39,7 @@ class SongbookApp(App):
                 SheetViewer(
                     songs=self.songs,
                     songbook=songbooks.get(settings.default_songbook),
+                    songbooks=songbooks,
                     settings=settings,
                 )
             )

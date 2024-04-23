@@ -2,9 +2,10 @@ from dataclasses import asdict
 
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.widgets import Pretty, Input, Collapsible, Checkbox
+from textual.widgets import Pretty, Collapsible, Select, Static
 
 from backend import service
+from backend.dto import SongbookDTO
 from backend.model import Settings
 from tui.widgets.form import Form
 from tui.widgets.widget_factory import WidgetFactory
@@ -15,22 +16,26 @@ class SettingsScreen(Screen):
 
     settings: Settings
     settings_original: Settings
+    songbooks: dict[int, SongbookDTO]
 
-    def __init__(self, settings: Settings) -> None:
+    def __init__(self, settings: Settings, songbooks: dict[int, SongbookDTO]) -> None:
         self.settings = Settings(**asdict(settings))
         self.settings_original = Settings(**asdict(settings))
+        self.songbooks = songbooks
         super().__init__()
 
     def compose(self) -> ComposeResult:
         with Form(asdict(self.settings)):
-            default_songbook_input = Input(
-                placeholder="Default songbook",
+            yield Static("Default songbook")
+            default_songbook_options = [(s.name, s.id) for s in self.songbooks.values()]
+            default_songbook_select: Select[int] = Select(
+                options=default_songbook_options,
                 name="default_songbook",
-                value=self.settings.default_songbook,
+                allow_blank=False,
+                value=self.songbooks.get(self.settings.default_songbook).id,
             )
-            default_songbook_input.border_title = "Default songbook"
-            yield default_songbook_input
-            yield Checkbox("Some check as I said", name="some_check")
+            default_songbook_select.border_title = "Default songbook"
+            yield default_songbook_select
             yield WidgetFactory.actions_bar_form()
 
         with Collapsible(title="settings.json", collapsed=False):
