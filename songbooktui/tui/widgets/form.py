@@ -1,6 +1,6 @@
 from textual.containers import Container
 from textual.message import Message
-from textual.widgets import RadioSet, Checkbox, Input
+from textual.widgets import RadioSet, Checkbox, Input, Select
 
 
 class Form(Container):
@@ -44,6 +44,9 @@ class Form(Container):
 
     def on_input_changed(self, event: Input.Changed) -> None:
         self.handle_events(event.input.name, event.input.value, event)
+
+    def on_select_changed(self, event: Select.Changed) -> None:
+        self.handle_events(event.select.name, event.select.value, event)
 
     def on_form_pre_submit(self, event: PreSubmit) -> None:
         self.post_message(self.Submit(self.data))

@@ -1,5 +1,6 @@
 from textual.widget import Widget
 
+from tui import utils
 from tui.utils import cancel, ok
 from tui.widgets.action_button import ActionButton
 from tui.widgets.containers import ActionsBar
@@ -29,21 +30,29 @@ class WidgetFactory:
         )
 
     @staticmethod
+    def btn_edit() -> ActionButton:
+        return ActionButton(
+            f"[b]{utils.PENSIL} Edit",
+            action="screen.edit",
+            classes="btn-link primary",
+        )
+
+    @staticmethod
     def actions_bar_ok_cancel(widgets: list[Widget] = []) -> ActionsBar:
-        actions_bar = WidgetFactory._get_actions_bar(widgets)
+        actions_bar = WidgetFactory.actions_bar(widgets)
         actions_bar.compose_add_child(WidgetFactory.btn_cancel())
         actions_bar.compose_add_child(WidgetFactory.btn_ok())
         return actions_bar
 
     @staticmethod
     def actions_bar_form(widgets: list[Widget] = []) -> ActionsBar:
-        actions_bar = WidgetFactory._get_actions_bar(widgets)
+        actions_bar = WidgetFactory.actions_bar(widgets)
         actions_bar.compose_add_child(WidgetFactory.btn_cancel())
         actions_bar.compose_add_child(WidgetFactory.btn_submit())
         return actions_bar
 
     @staticmethod
-    def _get_actions_bar(widgets: list[Widget] = []) -> ActionsBar:
+    def actions_bar(widgets: list[Widget] = []) -> ActionsBar:
         actions_bar = ActionsBar()
         for widget in widgets:
             actions_bar.compose_add_child(widget)

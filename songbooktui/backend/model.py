@@ -28,6 +28,9 @@ class Song:
     title: str
     pages: list[Page]
     artist: str | None = None
+    key: str | None = None
+    bpm: int | None = None
+    duration: int | None = None
 
 
 @dataclass
@@ -38,10 +41,11 @@ class Songbook:
     The songs are the actual song objects. They are loaded after the song_ids are read from the JSON file.
     """
 
+    id: int
     name: str
     songs: list[int]
 
 
 @dataclass
 class Settings:
-    default_songbook: str | None = None
+    default_songbook: int | None = None

@@ -4,11 +4,6 @@ from backend.model import FileType
 
 
 @dataclass
-class BaseDTO:
-    name: str
-
-
-@dataclass
 class PageDTO:
     content: str
     file_type: FileType
@@ -20,6 +15,9 @@ class SongDTO:
     title: str
     pages: list[PageDTO]
     artist: str | None = None
+    key: str | None = None
+    bpm: int | None = None
+    duration: int | None = None
 
     @property
     def full_title(self) -> str:
@@ -32,8 +30,8 @@ class SongDTO:
         return self.id == other.id
 
 
-@dataclass
-class SongbookDTO(BaseDTO):
+@dataclass(frozen=True)
+class SongbookDTO:
     """Model class that represents a songbook.
 
     The name should always be unique, it is used as an identifier.
@@ -41,8 +39,13 @@ class SongbookDTO(BaseDTO):
     The songs are the actual song objects. They are loaded after the song_ids are read from the JSON file.
     """
 
+    id: int
+    name: str
     songs: list[SongDTO]
 
     @property
     def size(self) -> int:
         return len(self.songs)
+
+    def __hash__(self) -> int:
+        return self.id
