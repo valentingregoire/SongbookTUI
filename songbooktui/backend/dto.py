@@ -15,6 +15,9 @@ class SongDTO:
     title: str
     pages: list[PageDTO]
     artist: str | None = None
+    key: str | None = None
+    bpm: int | None = None
+    duration: int | None = None
 
     @property
     def full_title(self) -> str:

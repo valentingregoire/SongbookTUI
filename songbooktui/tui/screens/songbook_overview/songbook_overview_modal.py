@@ -12,7 +12,6 @@ from backend.dto import SongbookDTO, SongDTO
 from tui.screens.song_overview.song_overview_modal import SongOverviewModal
 from tui.utils import DEFAULT_BINDINGS
 from tui.widgets.action_button import ActionButton
-from tui.widgets.containers import CenterFloat
 from tui.widgets.toggle import Toggle
 from tui.widgets.widget_factory import WidgetFactory
 
@@ -32,7 +31,8 @@ class SongbookOverviewModal(ModalScreen):
         self,
         songs: dict[int, SongDTO],
         songbook: SongbookDTO,
-        current_song_index: int,
+        current_song_index: int = 0,
+        read_only_mode: bool = True,
         name: str | None = None,
         p_id: str | None = None,
         classes: str | None = None,
@@ -41,20 +41,22 @@ class SongbookOverviewModal(ModalScreen):
         self.songs = songs
         self.songbook = dataclasses.replace(songbook, songs=songbook.songs.copy())
         self.current_song_index = current_song_index
+        self.read_only_mode = read_only_mode
 
     def compose(self) -> ComposeResult:
         with Vertical(classes="center-middle"):
-            with CenterFloat(classes="w-full primary"):
-                yield Static(f"[b]{self.songbook.name}")
+            # with CenterFloat(classes="w-full primary"):
+            #     yield Static(f"[b]{self.songbook.name}")
             new_name_input = Input(placeholder="Name", value=self.songbook.name)
             new_name_input.border_title = "Name"
             yield new_name_input.data_bind(
                 disabled=SongbookOverviewModal.read_only_mode
             )
             with Horizontal(id="container"):
-                yield DataTable(id="data-table", classes="right-middle").data_bind(
-                    zebra_stripes=SongbookOverviewModal.zebra_stripes
-                )
+                table = DataTable(id="data-table", classes="right-middle")
+                table.add_columns("Title", "Artist")
+                table.cursor_type = "row"
+                yield table
                 with Vertical(
                     id="container-actions",
                     classes="left-middle disabled",
@@ -84,10 +86,7 @@ class SongbookOverviewModal(ModalScreen):
             yield WidgetFactory.actions_bar_ok_cancel([toggle_container])
 
     async def on_mount(self) -> None:
-        table = self.query_one(DataTable)
-        table.add_columns("Title", "Artist")
-        table.cursor_type = "row"
-        await self.populate_table(table)
+        await self.populate_table()
 
     async def populate_table(self, table: DataTable = None) -> None:
         if not table:
@@ -123,10 +122,6 @@ class SongbookOverviewModal(ModalScreen):
             self.dismiss((self.current_song_index, self.songbook))
         else:
             self.dismiss(self.current_song_index)
-
-    def action_clear_table(self) -> None:
-        table = self.query_one(DataTable)
-        table.rows.clear()
 
     def on_data_table_row_selected(self, selected_row: DataTable.RowSelected) -> None:
         self.current_song_index = selected_row.cursor_row

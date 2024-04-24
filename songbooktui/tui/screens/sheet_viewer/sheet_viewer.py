@@ -109,6 +109,7 @@ class SheetViewer(Screen):
                 )
                 yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
         yield MainMenu(
+            songs=self.songs,
             songbooks=self.songbooks,
             settings=self.settings,
             id="menu",

@@ -23,8 +23,8 @@ async def get_songbooks(songs: dict[int, SongDTO]) -> dict[int, SongbookDTO]:
     songbooks_data = await dao.read_songbooks()
     songbooks = {}
     for sd in songbooks_data:
-        songs = [songs[sid] for sid in sd.songs]
-        songbook = SongbookDTO(id=sd.id, name=sd.name, songs=songs)
+        songbook_songs = [songs[sid] for sid in sd.songs]
+        songbook = SongbookDTO(id=sd.id, name=sd.name, songs=songbook_songs)
         songbooks[sd.id] = songbook
     return songbooks
 
@@ -64,6 +64,9 @@ def song_to_dto(song: Song) -> SongDTO:
             for page in song.pages
         ],
         artist=song.artist,
+        key=song.key,
+        bpm=song.bpm,
+        duration=song.duration,
     )
 
 

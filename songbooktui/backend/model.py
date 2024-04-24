@@ -28,6 +28,9 @@ class Song:
     title: str
     pages: list[Page]
     artist: str | None = None
+    key: str | None = None
+    bpm: int | None = None
+    duration: int | None = None
 
 
 @dataclass
