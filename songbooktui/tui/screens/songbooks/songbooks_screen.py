@@ -7,7 +7,7 @@ from textual.containers import Vertical
 from textual.coordinate import Coordinate
 from textual.reactive import reactive
 from textual.screen import Screen
-from textual.widgets import DataTable, Input, ListView, ListItem, Label, RichLog
+from textual.widgets import DataTable, Input, ListView, ListItem, Label, Static
 
 from backend.dto import SongDTO, SongbookDTO
 from backend.model import Settings
@@ -59,11 +59,7 @@ class SongbooksScreen(Screen):
             ).data_bind(value=SongbooksScreen.current_songbook_name)
             txt_name.border_title = "Name"
             yield txt_name
-            # lv_songs = ListView(initial_index=None, id="lv_songs")
-            # yield lv_songs
-            rich_log = RichLog(id="rich_log")
-            rich_log.markup = True
-            yield rich_log
+            yield Static(id="stc_songs", markup=True)
         yield WidgetFactory.actions_bar(
             [WidgetFactory.btn_edit(), WidgetFactory.btn_ok()]
         )
@@ -107,8 +103,7 @@ class SongbooksScreen(Screen):
         await self.populate_songs_table()
 
     async def populate_songs_table(self) -> None:
-        rich_log = self.query_one(RichLog)
-        rich_log.clear()
+        stc_songs = self.query_one(Static)
         table = Table(title="🎶 Songs", box=box.ROUNDED)
         table.add_column("  Title")
         table.add_column("󰙃  Artist")
@@ -125,7 +120,7 @@ class SongbooksScreen(Screen):
                 song.duration,
             )
 
-        rich_log.write(table)
+        stc_songs.update(table)
 
     async def on_data_table_row_selected(
         self, selected_row: DataTable.RowSelected

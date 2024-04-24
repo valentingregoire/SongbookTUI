@@ -72,7 +72,9 @@ class SheetViewer(Screen):
         with Vertical(classes="h-full w-full top-center", id="viewer-container"):
             with ContentSwitcher(initial=self.current_viewer):
                 with VerticalScroll(id="viewer_txt"):
-                    yield Static(self.current_page.content, classes="w-auto")
+                    yield Static(
+                        self.current_page.content, classes="w-auto", markup=True
+                    )
                 with VerticalScroll(id="viewer_md"):
                     md = Markdown(markup=self.current_page.content)
                     yield Static(md)
