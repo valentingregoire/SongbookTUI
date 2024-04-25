@@ -8,6 +8,7 @@ from textual.screen import Screen
 from textual.widgets import (
     ContentSwitcher,
     Static,
+    Label,
 )
 
 from backend.dto import PageDTO, SongbookDTO, SongDTO
@@ -73,9 +74,10 @@ class SheetViewer(Screen):
         with Vertical(classes="h-full w-full top-center", id="viewer-container"):
             with ContentSwitcher(initial=self.current_viewer):
                 with VerticalScroll(id="viewer_txt"):
-                    yield Static(
+                    yield Label(
                         sheet_parser.markup(self.current_page.content),
-                        classes="w-auto",
+                        # self.current_page.content,
+                        classes="w-auto b-test",
                         markup=True,
                     )
                 with VerticalScroll(id="viewer_md"):
