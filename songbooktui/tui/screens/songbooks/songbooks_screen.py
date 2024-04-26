@@ -51,7 +51,7 @@ class SongbooksScreen(Screen):
         table.cursor_type = "row"
         table.border_title = "Songbooks"
         yield table
-        details_container = Vertical(id="details-container", classes="h-1fr")
+        details_container = Vertical(id="songbook-details-container", classes="h-1fr")
         details_container.border_title = "Details"
         with details_container:
             txt_name = Input(
@@ -130,6 +130,9 @@ class SongbooksScreen(Screen):
     ) -> None:
         self.current_songbook_id = int(selected_row.row_key.value)
         await self.populate_songs_table()
+        # self.query_one(
+        #     "#songbook-details-container", Vertical
+        # ).border_title = self.current_songbook.name
         # await self.populate_song_list()
         # self.current_songbook_name = self.songbooks[self.current_songbook_id].name
         # self.current_songbook_name = self.current_songbook.name

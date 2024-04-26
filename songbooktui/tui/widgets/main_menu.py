@@ -6,6 +6,7 @@ from backend.dto import SongbookDTO, SongDTO
 from backend.model import Settings
 from tui.screens.settings.settings import SettingsScreen
 from tui.screens.songbooks.songbooks_screen import SongbooksScreen
+from tui.screens.songs.songs_screen import SongsScreen
 
 
 class MainMenu(Vertical):
@@ -44,6 +45,8 @@ class MainMenu(Vertical):
                     songs=self.songs, songbooks=self.songbooks, settings=self.settings
                 )
             )
+        elif event.button.id == "btn_songs":
+            self.app.push_screen(SongsScreen(self.songs))
         elif event.button.id == "btn_settings":
             self.app.push_screen(
                 SettingsScreen(self.settings, songbooks=self.songbooks)
