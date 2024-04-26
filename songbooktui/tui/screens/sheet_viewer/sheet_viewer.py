@@ -8,10 +8,12 @@ from textual.screen import Screen
 from textual.widgets import (
     ContentSwitcher,
     Static,
+    Label,
 )
 
 from backend.dto import PageDTO, SongbookDTO, SongDTO
 from backend.model import Settings
+from tui import sheet_parser
 from tui.screens.settings.settings import SettingsScreen
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
 from tui.utils import ok
@@ -72,8 +74,11 @@ class SheetViewer(Screen):
         with Vertical(classes="h-full w-full top-center", id="viewer-container"):
             with ContentSwitcher(initial=self.current_viewer):
                 with VerticalScroll(id="viewer_txt"):
-                    yield Static(
-                        self.current_page.content, classes="w-auto", markup=True
+                    yield Label(
+                        sheet_parser.markup(self.current_page.content),
+                        # self.current_page.content,
+                        classes="w-auto",
+                        markup=True,
                     )
                 with VerticalScroll(id="viewer_md"):
                     md = Markdown(markup=self.current_page.content)

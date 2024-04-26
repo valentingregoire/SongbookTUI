@@ -92,7 +92,6 @@ class CenterFloat(HorizontalFloat):
         align: center middle;
         content-align: center middle;
         text-align: center;
-        # background: green;
         width: auto;
         height: 1;
     }

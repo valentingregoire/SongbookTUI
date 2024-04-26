@@ -1,3 +1,17 @@
-#details-container {
+SongbooksScreen {
+    align: center top;
+}
 
+#songbooks-table {
+    border: round $accent;
+    /*width: 1fr;*/
+    /*margin: 0 1;*/
+    padding: 0 1;
+}
+
+#details-container {
+    border: round $accent;
+    width: 1fr;
+    height: auto;
+    padding: 0 1;
 }
