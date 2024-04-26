@@ -77,7 +77,7 @@ class SheetViewer(Screen):
                     yield Label(
                         sheet_parser.markup(self.current_page.content),
                         # self.current_page.content,
-                        classes="w-auto b-test",
+                        classes="w-auto",
                         markup=True,
                     )
                 with VerticalScroll(id="viewer_md"):

@@ -49,8 +49,11 @@ class SongbooksScreen(Screen):
         table = DataTable(id="songbooks-table", classes="w-auto")
         table.add_columns("#", "Name", "Songs")
         table.cursor_type = "row"
+        table.border_title = "Songbooks"
         yield table
-        with Vertical(id="details-container", classes="h-1fr"):
+        details_container = Vertical(id="details-container", classes="h-1fr")
+        details_container.border_title = "Details"
+        with details_container:
             txt_name = Input(
                 id="txt_name",
                 name="name",
