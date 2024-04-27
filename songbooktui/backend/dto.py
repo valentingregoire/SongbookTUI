@@ -27,7 +27,7 @@ class SongDTO:
         return self.id
 
     def __eq__(self, other) -> bool:
-        return self.id == other.id
+        return self.id == other.id if other else False
 
 
 @dataclass(frozen=True)

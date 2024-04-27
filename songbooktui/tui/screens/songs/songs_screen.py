@@ -1,5 +1,6 @@
 from textual.app import ComposeResult
 from textual.containers import Vertical
+from textual.coordinate import Coordinate
 from textual.reactive import reactive
 from textual.screen import Screen
 from textual.widgets import DataTable, Input
@@ -16,6 +17,7 @@ class SongsScreen(Screen):
     def __init__(self, songs: dict[int, SongDTO]) -> None:
         super().__init__()
         self.songs = songs
+        self.current_song_id = list(self.songs.keys())[0]
         # self.current_song_id = list(self.songs.keys())[0]
 
     def compute_current_song(self) -> SongDTO | None:
@@ -23,18 +25,22 @@ class SongsScreen(Screen):
 
     def compose(self) -> ComposeResult:
         table = DataTable(id="songs-table", classes="w-auto")
-        table.add_columns("#", "  Title", "󰙃  Artist", "󰽰 ", "󰟚 ", " ")
+        table.add_columns("  Title", "󰙃  Artist", "󰽰 ", "󰟚 ", " ")
         table.cursor_type = "row"
         table.border_title = "Songs"
         yield table
-
         details_container = Vertical(id="song-details-container", classes="h-1fr")
         details_container.border_title = "Details"
         with details_container:
             txt_id = Input(id="txt_id", name="id", placeholder="ID", disabled=True)
             txt_id.border_title = "ID"
             yield txt_id
-            txt_title = Input(id="txt_title", name="title", placeholder="Title")
+            txt_title = Input(
+                # self.current_song.title,
+                id="txt_title",
+                name="title",
+                placeholder="Title",
+            )
             txt_title.border_title = "  Title"
             yield txt_title
             txt_artist = Input(id="txt_artist", name="artist", placeholder="Artist")
@@ -53,16 +59,39 @@ class SongsScreen(Screen):
             yield txt_duration
 
     async def on_mount(self) -> None:
+        await self.populate_form()
         await self.populate_songs_table()
 
-    async def populate_songs_table(self) -> None:
+    async def populate_form(self) -> None:
+        self.query_one("#txt_id", Input).value = str(self.current_song.id)
+        self.query_one("#txt_title", Input).value = self.current_song.title
+        self.query_one("#txt_artist", Input).value = self.current_song.artist or ""
+        self.query_one("#txt_key", Input).value = self.current_song.key or ""
+        self.query_one("#txt_bpm", Input).value = str(self.current_song.bpm or "")
+        self.query_one("#txt_duration", Input).value = str(
+            self.current_song.duration or ""
+        )
+
+    async def populate_songs_table(self, index: int = 0) -> None:
         table = self.query_one(DataTable)
+        table.clear()
         for song in self.songs.values():
             table.add_row(
-                str(song.id),
+                # str(song.id),
                 song.title,
                 song.artist or "",
                 song.key or "",
                 str(song.bpm or ""),
                 str(song.duration or ""),
+                label=str(song.id),
+                key=str(song.id),
             )
+        # for some reason, the cursor doesn't move on its own after a click
+        table.cursor_coordinate = Coordinate(row=index, column=0)
+
+    async def on_data_table_row_selected(
+        self, selected_row: DataTable.RowSelected
+    ) -> None:
+        self.current_song_id = int(selected_row.row_key.value)
+        await self.populate_form()
+        await self.populate_songs_table(selected_row.cursor_row)
