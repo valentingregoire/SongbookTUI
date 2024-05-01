@@ -23,7 +23,7 @@ class WidgetFactory:
     @staticmethod
     def btn_submit() -> ActionButton:
         return ActionButton(
-            f"[b]{ok("Submit")}",
+            f"[b]{ok('Submit')}",
             action="screen.submit",
             event=Form.PreSubmit(),
             classes="btn-link primary",
