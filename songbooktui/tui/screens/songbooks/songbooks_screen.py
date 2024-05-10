@@ -13,6 +13,7 @@ from backend.dto import SongDTO, SongbookDTO
 from backend.model import Settings
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
 from tui.utils import ok
+from tui.widgets.action_button import ActionButton
 from tui.widgets.widget_factory import WidgetFactory
 
 
@@ -64,7 +65,13 @@ class SongbooksScreen(Screen):
             yield txt_name
             yield Static(id="stc_songs", markup=True)
         yield WidgetFactory.actions_bar(
-            [WidgetFactory.btn_edit(), WidgetFactory.btn_ok()]
+            [
+                WidgetFactory.btn_edit(),
+                ActionButton(
+                    "  Open", action="screen.open", classes="btn-link primary"
+                ),
+                WidgetFactory.btn_ok(),
+            ]
         )
 
     async def on_mount(self) -> None:
@@ -86,6 +93,9 @@ class SongbooksScreen(Screen):
             ),
             fallback,
         )
+
+    async def action_open(self) -> None:
+        self.dismiss(self.current_songbook_id)
 
     async def populate_songbook_table(self) -> None:
         table = self.query_one("#songbooks-table", DataTable)

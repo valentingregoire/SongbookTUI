@@ -6,6 +6,8 @@ from textual.screen import Screen
 from textual.widgets import DataTable, Input
 
 from backend.dto import SongDTO
+from tui.widgets.action_button import ActionButton
+from tui.widgets.widget_factory import WidgetFactory
 
 
 class SongsScreen(Screen):
@@ -57,6 +59,15 @@ class SongsScreen(Screen):
             )
             txt_duration.border_title = "  Duration"
             yield txt_duration
+        yield WidgetFactory.actions_bar(
+            [
+                ActionButton(
+                    " Previous", action="screen.previous", classes="btn-link"
+                ),
+                WidgetFactory.btn_save(),
+                ActionButton("Next ", action="screen.next", classes="btn-link"),
+            ]
+        )
 
     async def on_mount(self) -> None:
         await self.populate_form()

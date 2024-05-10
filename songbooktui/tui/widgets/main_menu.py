@@ -38,17 +38,23 @@ class MainMenu(Vertical):
             yield Button("󰒓  Settings", id="btn_settings")
             yield Button.error("󰗼  Quit", id="btn_quit")
 
-    def on_button_pressed(self, event: Button.Pressed) -> None:
+    async def on_button_pressed(self, event: Button.Pressed) -> None:
+        async def fallback_songbooks_screen(songbook_id: int) -> None:
+            while self.app.screen_stack[-1].id != "sheet_viewer":
+                self.app.pop_screen()
+            self.screen.dismiss(songbook_id)
+
         if event.button.id == "btn_songbooks":
-            self.app.push_screen(
+            await self.app.push_screen(
                 SongbooksScreen(
                     songs=self.songs, songbooks=self.songbooks, settings=self.settings
-                )
+                ),
+                fallback_songbooks_screen,
             )
         elif event.button.id == "btn_songs":
-            self.app.push_screen(SongsScreen(self.songs))
+            await self.app.push_screen(SongsScreen(self.songs))
         elif event.button.id == "btn_settings":
-            self.app.push_screen(
+            await self.app.push_screen(
                 SettingsScreen(self.settings, songbooks=self.songbooks)
             )
         elif event.button.id == "btn_quit":

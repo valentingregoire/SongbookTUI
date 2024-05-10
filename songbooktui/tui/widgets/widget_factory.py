@@ -1,7 +1,7 @@
 from textual.widget import Widget
 
 from tui import utils
-from tui.utils import cancel, ok
+from tui.utils import cancel, ok, FLOPPY
 from tui.widgets.action_button import ActionButton
 from tui.widgets.containers import ActionsBar
 from tui.widgets.form import Form
@@ -18,6 +18,12 @@ class WidgetFactory:
     def btn_ok() -> ActionButton:
         return ActionButton(
             f"[b]{ok()}", action="screen.ok", classes="btn-link success"
+        )
+
+    @staticmethod
+    def btn_save() -> ActionButton:
+        return ActionButton(
+            f"[b]{FLOPPY} Save", action="screen.save", classes="btn-link primary"
         )
 
     @staticmethod
