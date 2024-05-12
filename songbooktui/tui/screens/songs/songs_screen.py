@@ -73,6 +73,20 @@ class SongsScreen(Screen):
         await self.populate_form()
         await self.populate_songs_table()
 
+    async def action_previous(self) -> None:
+        table = self.query_one(DataTable)
+        row_index = table.cursor_row if table.cursor_row >= 0 else len(table.rows) - 1
+        self.current_song_id = self.songs[row_index].id
+        await self.populate_form()
+        await self.populate_songs_table(
+            row_index - 1 if row_index > 0 else len(table.rows) - 1
+        )
+
+    async def action_next(self) -> None:
+        self.current_song_id = (self.current_song_id + 1) % len(self.songs)
+        await self.populate_form()
+        await self.populate_songs_table()
+
     async def populate_form(self) -> None:
         self.query_one("#txt_id", Input).value = str(self.current_song.id)
         self.query_one("#txt_title", Input).value = self.current_song.title
