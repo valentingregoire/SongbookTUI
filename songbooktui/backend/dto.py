@@ -18,6 +18,7 @@ class SongDTO:
     key: str | None = None
     bpm: int | None = None
     duration: int | None = None
+    auto_paginate: bool = False
 
     @property
     def full_title(self) -> str:

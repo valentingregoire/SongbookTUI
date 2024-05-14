@@ -15,6 +15,7 @@ numba = "^0.59.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
+ruff = "^0.4.4"
 
 [tool.poetry.scripts]
 songbook = "songbooktui.scripts:main"

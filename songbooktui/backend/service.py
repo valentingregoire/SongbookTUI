@@ -67,6 +67,7 @@ def song_to_dto(song: Song) -> SongDTO:
         key=song.key,
         bpm=song.bpm,
         duration=song.duration,
+        auto_paginate=song.auto_paginate,
     )
 
 
