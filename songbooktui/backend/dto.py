@@ -13,7 +13,7 @@ class PageDTO:
 class SongDTO:
     id: int
     title: str
-    pages: list[PageDTO]
+    pages: list[PageDTO] | None = None
     artist: str | None = None
     key: str | None = None
     bpm: int | None = None

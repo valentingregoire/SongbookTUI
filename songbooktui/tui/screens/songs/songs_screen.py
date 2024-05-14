@@ -3,9 +3,11 @@ from textual.containers import Vertical, VerticalScroll
 from textual.coordinate import Coordinate
 from textual.reactive import reactive
 from textual.screen import Screen
-from textual.widgets import DataTable, Input
+from textual.widgets import DataTable, Input, Checkbox
 
+from backend import service
 from backend.dto import SongDTO
+from tui.utils import ok
 from tui.widgets.action_button import ActionButton
 from tui.widgets.widget_factory import WidgetFactory
 
@@ -60,6 +62,9 @@ class SongsScreen(Screen):
                 )
                 txt_duration.border_title = "  Duration"
                 yield txt_duration
+                yield Checkbox(
+                    "Auto Paginate", id="chk_auto_paginate", name="auto_paginate"
+                )
             yield WidgetFactory.actions_bar(
                 [
                     ActionButton(
@@ -96,6 +101,29 @@ class SongsScreen(Screen):
         await self.populate_form()
         await self.populate_songs_table(row_index)
 
+    async def action_save(self) -> None:
+        song_id = self.current_song_id
+        title = self.query_one("#txt_title", Input).value
+        artist = self.query_one("#txt_artist", Input).value
+        key = self.query_one("#txt_key", Input).value
+        bpm_str = self.query_one("#txt_bpm", Input).value
+        bpm = int(bpm_str) if bpm_str else None
+        duration_str = self.query_one("#txt_duration", Input).value
+        duration = int(duration_str) if duration_str else None
+        auto_paginate = self.query_one("#chk_auto_paginate", Checkbox).value
+        song = SongDTO(
+            id=song_id,
+            title=title,
+            artist=artist,
+            key=key,
+            bpm=bpm,
+            duration=duration,
+            auto_paginate=auto_paginate,
+        )
+        self.songs[id] = song
+        await service.save_song(song)
+        self.notify(ok(f" Song {title} saved successfully."))
+
     async def populate_form(self) -> None:
         self.query_one("#txt_id", Input).value = str(self.current_song.id)
         self.query_one("#txt_title", Input).value = self.current_song.title
@@ -105,6 +133,9 @@ class SongsScreen(Screen):
         self.query_one("#txt_duration", Input).value = str(
             self.current_song.duration or ""
         )
+        self.query_one(
+            "#chk_auto_paginate", Checkbox
+        ).value = self.current_song.auto_paginate
 
     async def populate_songs_table(self, index: int = 0) -> None:
         table = self.query_one(DataTable)

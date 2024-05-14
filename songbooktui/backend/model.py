@@ -26,7 +26,7 @@ class Song:
 
     id: int
     title: str
-    pages: list[Page]
+    pages: list[Page] | None = None
     artist: str | None = None
     key: str | None = None
     bpm: int | None = None

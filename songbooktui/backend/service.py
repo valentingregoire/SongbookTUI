@@ -33,6 +33,10 @@ async def save_songbook(songbook: SongbookDTO) -> None:
     await dao.write_songbook(songbook_dto_to_songbook(songbook))
 
 
+async def save_song(song: SongDTO) -> None:
+    await dao.write_song(song_dto_to_song(song))
+
+
 async def save_settings(settings: Settings) -> None:
     """Set the settings in the filesystem."""
     default_settings_dict = asdict(Settings())
@@ -63,6 +67,19 @@ def song_to_dto(song: Song) -> SongDTO:
             PageDTO(content=page.content, file_type=page.file_type)
             for page in song.pages
         ],
+        artist=song.artist,
+        key=song.key,
+        bpm=song.bpm,
+        duration=song.duration,
+        auto_paginate=song.auto_paginate,
+    )
+
+
+def song_dto_to_song(song: SongDTO) -> Song:
+    """Convert a SongDTO object to a Song object."""
+    return Song(
+        id=song.id,
+        title=song.title,
         artist=song.artist,
         key=song.key,
         bpm=song.bpm,

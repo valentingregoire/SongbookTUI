@@ -92,6 +92,17 @@ async def write_songbook(songbook: Songbook) -> None:
         json_file.write(json.dumps(data, indent=4))
 
 
+async def write_song(song: Song) -> None:
+    """Write a song to the filesystem."""
+    song_folder = f"{SONGS_LOCATION}/{song.id}"
+    os.makedirs(song_folder, exist_ok=True)
+    info = asdict(song)
+    del info["id"]
+    del info["pages"]
+    with open(f"{song_folder}/{INFO}", "w") as json_file:
+        json_file.write(json.dumps(info, indent=4))
+
+
 async def read_settings() -> Settings:
     """Read the settings from the filesystem."""
     with open(SETTINGS_LOCATION, "r") as settings_file:
