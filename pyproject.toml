@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "songbooktui"
-version = "0.1.0"
+version = "0.1.1"
 description = ""
 authors = ["Valentin Grégoire <valentin.gregoire@gmail.com>"]
 readme = "README.md"
@@ -26,4 +26,3 @@ include = ["songbooktui"]
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-

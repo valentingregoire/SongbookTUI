@@ -72,6 +72,7 @@ class SongsScreen(Screen):
                     ),
                     WidgetFactory.btn_save(),
                     ActionButton("Next ", action="screen.next", classes="btn-link"),
+                    WidgetFactory.btn_ok(),
                 ]
             )
 
