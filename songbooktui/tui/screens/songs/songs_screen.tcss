@@ -1,15 +1,13 @@
-SongbooksScreen {
+SongsScreen {
     align: center top;
 }
 
-#songbooks-table {
+#songs-table {
     border: round $accent;
-    /*width: 1fr;*/
-    /*margin: 0 1;*/
     padding: 0 1;
 }
 
-#songbook-details-container {
+#song-details-container {
     border: round $accent;
     width: 1fr;
     height: auto;

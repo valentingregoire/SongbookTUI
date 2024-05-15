@@ -1,3 +1,7 @@
+LoadingSplash {
+    height: 100%;
+}
+
 Screen {
     layout: vertical;
     align: center middle;

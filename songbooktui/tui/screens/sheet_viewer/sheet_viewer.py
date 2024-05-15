@@ -65,7 +65,7 @@ class SheetViewer(Screen):
         self.songbook = songbook
         self.songbooks = songbooks
         self.settings = settings
-        super().__init__()
+        super().__init__(id="sheet_viewer")
 
     def on_mount(self) -> None:
         self.styles.animate("opacity", value=1, duration=1.3, easing="out_circ")

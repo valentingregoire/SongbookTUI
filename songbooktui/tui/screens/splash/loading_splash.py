@@ -6,7 +6,7 @@ from textual.widgets import ProgressBar, Static
 
 from backend import service
 from backend.dto import SongDTO, SongbookDTO
-from backend.model import Settings
+from backend.model import Settings, Page, FileType
 from tui import utils
 
 
@@ -52,6 +52,16 @@ class LoadingSplash(Screen):
         """Get the songs."""
 
         self.songs = await service.get_songs()
+        # auto paginate
+        screen_height = self.screen.container_size.height - 2
+        for song in self.songs.values():
+            if song.auto_paginate:
+                lines = song.pages[0].content.split("\n")
+                pages = []
+                for i in range(0, len(lines), screen_height):
+                    page_content = "\n".join(lines[i : i + screen_height])
+                    pages.append(Page(content=page_content, file_type=FileType.TEXT))
+                song.pages = pages
         await self.update_progress()
 
     async def get_songbooks(self) -> None:

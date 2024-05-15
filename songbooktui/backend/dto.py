@@ -13,11 +13,12 @@ class PageDTO:
 class SongDTO:
     id: int
     title: str
-    pages: list[PageDTO]
+    pages: list[PageDTO] | None = None
     artist: str | None = None
     key: str | None = None
     bpm: int | None = None
     duration: int | None = None
+    auto_paginate: bool = False
 
     @property
     def full_title(self) -> str:
@@ -27,7 +28,7 @@ class SongDTO:
         return self.id
 
     def __eq__(self, other) -> bool:
-        return self.id == other.id
+        return self.id == other.id if other else False
 
 
 @dataclass(frozen=True)

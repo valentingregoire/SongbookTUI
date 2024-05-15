@@ -15,7 +15,7 @@ class SongbookApp(App):
     BINDINGS = [("q", "exit", "Quit")]
 
     songs: dict[int, SongDTO]
-    songbooks: dict[str, SongbookDTO]
+    songbooks: dict[int, SongbookDTO]
     settings: Settings = Settings()
 
     # def compose(self) -> ComposeResult:
@@ -26,6 +26,17 @@ class SongbookApp(App):
 
     def on_mount(self) -> None:
         """Run when the app is mounted."""
+
+        def fallback(songbook_id: int) -> None:
+            self.push_screen(
+                SheetViewer(
+                    songs=self.songs,
+                    songbook=self.songbooks.get(songbook_id),
+                    songbooks=self.songbooks,
+                    settings=self.settings,
+                ),
+                fallback,
+            )
 
         def set_loaded_data(
             data: tuple[dict[int, SongDTO], dict[int, SongbookDTO], Settings],
@@ -41,7 +52,8 @@ class SongbookApp(App):
                     songbook=songbooks.get(settings.default_songbook),
                     songbooks=songbooks,
                     settings=settings,
-                )
+                ),
+                fallback,
             )
 
         self.push_screen(LoadingSplash(), set_loaded_data)

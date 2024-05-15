@@ -7,12 +7,13 @@ from textual.containers import Vertical
 from textual.coordinate import Coordinate
 from textual.reactive import reactive
 from textual.screen import Screen
-from textual.widgets import DataTable, Input, ListView, ListItem, Label, Static
+from textual.widgets import DataTable, Input, Static
 
 from backend.dto import SongDTO, SongbookDTO
 from backend.model import Settings
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
 from tui.utils import ok
+from tui.widgets.action_button import ActionButton
 from tui.widgets.widget_factory import WidgetFactory
 
 
@@ -47,11 +48,11 @@ class SongbooksScreen(Screen):
 
     def compose(self) -> ComposeResult:
         table = DataTable(id="songbooks-table", classes="w-auto")
-        table.add_columns("#", "Name", "Songs")
+        table.add_columns("Name", "Songs")
         table.cursor_type = "row"
         table.border_title = "Songbooks"
         yield table
-        details_container = Vertical(id="details-container", classes="h-1fr")
+        details_container = Vertical(id="songbook-details-container", classes="h-1fr")
         details_container.border_title = "Details"
         with details_container:
             txt_name = Input(
@@ -64,7 +65,13 @@ class SongbooksScreen(Screen):
             yield txt_name
             yield Static(id="stc_songs", markup=True)
         yield WidgetFactory.actions_bar(
-            [WidgetFactory.btn_edit(), WidgetFactory.btn_ok()]
+            [
+                WidgetFactory.btn_edit(),
+                ActionButton(
+                    "  Open", action="screen.open", classes="btn-link primary"
+                ),
+                WidgetFactory.btn_ok(),
+            ]
         )
 
     async def on_mount(self) -> None:
@@ -87,13 +94,16 @@ class SongbooksScreen(Screen):
             fallback,
         )
 
+    async def action_open(self) -> None:
+        self.dismiss(self.current_songbook_id)
+
     async def populate_songbook_table(self) -> None:
         table = self.query_one("#songbooks-table", DataTable)
         table.clear()
         default_row = 0
         for index, songbook in enumerate(self.songbooks.values()):
             table.add_row(
-                str(songbook.id),
+                # str(songbook.id),
                 songbook.name,
                 str(songbook.size),
                 label=str(songbook.id),
@@ -130,14 +140,3 @@ class SongbooksScreen(Screen):
     ) -> None:
         self.current_songbook_id = int(selected_row.row_key.value)
         await self.populate_songs_table()
-        # await self.populate_song_list()
-        # self.current_songbook_name = self.songbooks[self.current_songbook_id].name
-        # self.current_songbook_name = self.current_songbook.name
-
-    async def populate_song_list(self) -> None:
-        lv_songs = self.query_one("#lv_songs", ListView)
-        list_items = [
-            ListItem(Label(s.full_title)) for s in self.current_songbook.songs
-        ]
-        await lv_songs.clear()
-        await lv_songs.extend(list_items)

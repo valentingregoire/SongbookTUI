@@ -6,7 +6,7 @@ authors = ["Valentin Grégoire <valentin.gregoire@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.11"
 textual = "^0.54.0"
 textual-dev = "^1.5.1"
 mypy = "^1.9.0"
@@ -15,6 +15,10 @@ numba = "^0.59.1"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.1.1"
+ruff = "^0.4.4"
+
+[tool.poetry.scripts]
+songbook = "songbooktui.scripts:main"
 
 [tool.pyright]
 include = ["songbooktui"]
