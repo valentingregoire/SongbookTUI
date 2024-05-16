@@ -72,6 +72,7 @@ class SongsScreen(Screen):
                     ),
                     WidgetFactory.btn_save(),
                     ActionButton("Next ", action="screen.next", classes="btn-link"),
+                    WidgetFactory.btn_ok(),
                 ]
             )
 
@@ -120,7 +121,7 @@ class SongsScreen(Screen):
             duration=duration,
             auto_paginate=auto_paginate,
         )
-        self.songs[id] = song
+        self.songs[song_id] = song
         await service.save_song(song)
         self.notify(ok(f" Song {title} saved successfully."))
 
