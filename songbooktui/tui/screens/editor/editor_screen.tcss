@@ -1,0 +1,4 @@
+EditorScreen {
+    layout: vertical;
+    align: center top;
+}

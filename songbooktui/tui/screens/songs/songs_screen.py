@@ -7,7 +7,8 @@ from textual.widgets import DataTable, Input, Checkbox
 
 from backend import service
 from backend.dto import SongDTO
-from tui.utils import ok
+from tui.screens.editor.editor_screen import EditorScreen
+from tui.utils import ok, PENSIL
 from tui.widgets.action_button import ActionButton
 from tui.widgets.widget_factory import WidgetFactory
 
@@ -71,6 +72,11 @@ class SongsScreen(Screen):
                         " Previous", action="screen.previous", classes="btn-link"
                     ),
                     WidgetFactory.btn_save(),
+                    ActionButton(
+                        f"{PENSIL} Editor",
+                        action="screen.editor",
+                        classes="btn-link secondary",
+                    ),
                     ActionButton("Next ", action="screen.next", classes="btn-link"),
                     WidgetFactory.btn_ok(),
                 ]
@@ -124,6 +130,16 @@ class SongsScreen(Screen):
         self.songs[song_id] = song
         await service.save_song(song)
         self.notify(ok(f" Song {title} saved successfully."))
+
+    async def action_editor(self) -> None:
+        async def fallback(song: SongDTO) -> None:
+            self.songs[song.id] = song
+
+        await self.app.push_screen(EditorScreen(self.current_song), fallback)
+
+    async def action_ok(self) -> None:
+        self.dismiss(self.songs)
+        await self.run_action("screen.refresh_sheet_viewer")
 
     async def populate_form(self) -> None:
         self.query_one("#txt_id", Input).value = str(self.current_song.id)

@@ -14,6 +14,7 @@ class SongDTO:
     id: int
     title: str
     pages: list[PageDTO] | None = None
+    raw_pages: list[PageDTO] | None = None
     artist: str | None = None
     key: str | None = None
     bpm: int | None = None

@@ -12,7 +12,7 @@ from textual.widgets import (
 )
 
 from backend.dto import PageDTO, SongbookDTO, SongDTO
-from backend.model import Settings
+from backend.model import Settings, FileType
 from tui import sheet_parser
 from tui.screens.settings.settings import SettingsScreen
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
@@ -68,6 +68,7 @@ class SheetViewer(Screen):
         super().__init__(id="sheet_viewer")
 
     def on_mount(self) -> None:
+        self.auto_paginate()
         self.styles.animate("opacity", value=1, duration=1.3, easing="out_circ")
 
     def compose(self) -> ComposeResult:
@@ -82,7 +83,7 @@ class SheetViewer(Screen):
                     )
                 with VerticalScroll(id="viewer_md"):
                     md = Markdown(markup=self.current_page.content)
-                    yield Static(md)
+                    yield Static(md, id="stc_md")
         with TopBar():
             with LeftFloat():
                 yield ActionButton("󰍜 ", "screen.toggle_menu", classes="w-auto")
@@ -122,6 +123,18 @@ class SheetViewer(Screen):
             id="menu",
             classes="hidden",
         ).data_bind(disabled=SheetViewer.menu_shown)
+
+    def auto_paginate(self) -> None:
+        """Auto paginate the songs."""
+        screen_height = self.app.size.height - 2
+        for song in self.songs.values():
+            if song.auto_paginate:
+                lines = song.raw_pages[0].content.split("\n")
+                pages = []
+                for i in range(0, len(lines), screen_height):
+                    page_content = "\n".join(lines[i : i + screen_height])
+                    pages.append(PageDTO(content=page_content, file_type=FileType.TEXT))
+                song.pages = pages
 
     def action_toggle_menu(self) -> None:
         self.menu_shown = not self.menu_shown
@@ -178,3 +191,17 @@ class SheetViewer(Screen):
             self.current_page_index += 1
         else:
             self.action_next_song()
+
+    async def action_refresh_sheet_viewer(self) -> None:
+        self.auto_paginate()
+        if self.current_page_index != 0:
+            self.current_page_index = 0
+        else:
+            if self.current_page.file_type == FileType.TEXT:
+                self.query_one(Label).update(
+                    sheet_parser.markup(self.current_page.content)
+                )
+            else:
+                self.query_one("#stc_md", Static).update(
+                    Markdown(markup=self.current_page.content)
+                )

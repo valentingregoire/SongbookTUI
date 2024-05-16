@@ -46,7 +46,14 @@ async def read_song(folder: str) -> Song:
                 pages.append(page)
             # pages.append(page_path)
     # all gathered data into a Song object
-    return Song(id=song_id, pages=pages, **song_data)
+    return Song(id=song_id, pages=pages, raw_pages=pages, **song_data)
+
+
+async def write_page(page: Page, song_id: int, page_number: int) -> None:
+    """Write a page to the filesystem."""
+    song_folder = f"{SONGS_LOCATION}/{song_id}"
+    with open(f"{song_folder}/{page_number}.{page.file_type}", "w") as page_file:
+        page_file.write(page.content)
 
 
 def get_songbook_files() -> list[str]:
