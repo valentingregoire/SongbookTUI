@@ -106,6 +106,7 @@ async def write_song(song: Song) -> None:
     info = asdict(song)
     del info["id"]
     del info["pages"]
+    del info["raw_pages"]
     with open(f"{song_folder}/{INFO}", "w") as json_file:
         json_file.write(json.dumps(info, indent=4))
 
