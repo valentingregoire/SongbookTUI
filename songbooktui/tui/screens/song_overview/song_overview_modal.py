@@ -29,20 +29,17 @@ class SongOverviewModal(ModalScreen):
         super().__init__()
 
     def compose(self) -> ComposeResult:
+        song_list = self.songbook.songs + [
+            song for song in self.songs.values() if song not in self.songbook.songs
+        ]
         yield SelectionList[SongDTO](
             *[
-                # Selection(
-                #     s.full_title,
-                #     i,
-                #     s in self.songbook.songs if self.songbook else False,
-                # )
-                # for i, s in self.songs.items()
                 Selection(
                     song.full_title,
                     song,
                     song in self.songbook.songs if self.songbook else False,
                 )
-                for song in self.songs.values()
+                for song in song_list
             ],
             id="selection-list",
         )

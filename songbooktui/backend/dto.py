@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from backend.model import FileType
 
@@ -41,9 +41,9 @@ class SongbookDTO:
     The songs are the actual song objects. They are loaded after the song_ids are read from the JSON file.
     """
 
-    id: int
-    name: str
-    songs: list[SongDTO]
+    id: int | None = None
+    name: str | None = None
+    songs: list[SongDTO] = field(default_factory=lambda: [])
 
     @property
     def size(self) -> int:

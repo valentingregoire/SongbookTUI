@@ -1,9 +1,10 @@
 from textual.app import ComposeResult
 from textual.containers import Center, Vertical
-from textual.widgets import Button
+from textual.widgets import Button, Static
 
 from backend.dto import SongbookDTO, SongDTO
 from backend.model import Settings
+from tui import utils
 from tui.screens.settings.settings import SettingsScreen
 from tui.screens.songbooks.songbooks_screen import SongbooksScreen
 from tui.screens.songs.songs_screen import SongsScreen
@@ -18,6 +19,7 @@ class MainMenu(Vertical):
 
     def __init__(
         self,
+        title: str,
         songs: dict[int, SongDTO],
         songbooks: dict[int, SongbookDTO],
         settings: Settings,
@@ -26,15 +28,18 @@ class MainMenu(Vertical):
         *args,
     ) -> None:
         super().__init__(id=id, classes=classes, *args)
+        self.title = title
         self.songs = songs
         self.songbooks = songbooks
         self.settings = settings
 
     def compose(self) -> ComposeResult:
         with Center():
-            # yield Static(utils.TITLE)
-            yield Button("󱍙  Songbooks", id="btn_songbooks", variant="primary")
-            yield Button("󰎈  Songs", id="btn_songs")
+            yield Static(
+                f"[b]{utils.SONGBOOK} {self.title}[/b]", classes="center-middle"
+            )
+            yield Button(f"{utils.SONGBOOK} Songbooks", id="btn_songbooks")
+            yield Button(f"{utils.SONG} Songs", id="btn_songs")
             yield Button("󰒓  Settings", id="btn_settings")
             yield Button.error("󰗼  Quit", id="btn_quit")
 

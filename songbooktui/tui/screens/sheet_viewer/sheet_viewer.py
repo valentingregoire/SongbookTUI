@@ -117,6 +117,7 @@ class SheetViewer(Screen):
                 )
                 yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
         yield MainMenu(
+            title=self.songbook.name,
             songs=self.songs,
             songbooks=self.songbooks,
             settings=self.settings,
@@ -133,7 +134,11 @@ class SheetViewer(Screen):
                 pages = []
                 for i in range(0, len(lines), screen_height):
                     page_content = "\n".join(lines[i : i + screen_height])
-                    pages.append(PageDTO(content=page_content, file_type=FileType.TEXT))
+                    pages.append(
+                        PageDTO(
+                            content=page_content, file_type=song.raw_pages[0].file_type
+                        )
+                    )
                 song.pages = pages
 
     def action_toggle_menu(self) -> None:
