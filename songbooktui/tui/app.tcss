@@ -167,6 +167,14 @@ ActionButton:hover {
     background: $primary-lighten-3;
 }
 
+.secondary {
+    background: $secondary;
+}
+
+.secondary:hover {
+    background: $secondary-lighten-3;
+}
+
 .success {
     background: $success;
     color: $background;

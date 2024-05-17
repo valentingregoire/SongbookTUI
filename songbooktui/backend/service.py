@@ -2,7 +2,7 @@ from dataclasses import asdict
 
 from backend import dao
 from backend.dto import SongbookDTO, SongDTO, PageDTO
-from backend.model import Song, Settings, Songbook
+from backend.model import Song, Settings, Songbook, Page
 
 
 async def get_songs() -> dict[int, SongDTO]:
@@ -37,6 +37,11 @@ async def save_song(song: SongDTO) -> None:
     await dao.write_song(song_dto_to_song(song))
 
 
+async def save_page(dto: PageDTO, song_id: int, page_number: int) -> None:
+    page = Page(content=dto.content, file_type=dto.file_type)
+    await dao.write_page(page, song_id, page_number)
+
+
 async def save_settings(settings: Settings) -> None:
     """Set the settings in the filesystem."""
     default_settings_dict = asdict(Settings())
@@ -60,13 +65,14 @@ async def get_settings() -> Settings:
 # DTO Conversion Functions
 def song_to_dto(song: Song) -> SongDTO:
     """Convert a Song object to a SongDTO object."""
+    pages = [
+        PageDTO(content=page.content, file_type=page.file_type) for page in song.pages
+    ]
     return SongDTO(
         id=song.id,
         title=song.title,
-        pages=[
-            PageDTO(content=page.content, file_type=page.file_type)
-            for page in song.pages
-        ],
+        pages=pages,
+        raw_pages=pages,
         artist=song.artist,
         key=song.key,
         bpm=song.bpm,

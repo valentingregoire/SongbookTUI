@@ -1,5 +1,8 @@
 from art import text2art
 
+
+SONGBOOK = "󰁧 "
+SONG = "󰎈 "
 CHECKMARK = " "
 # _CROSSMARK = " "
 CROSSMARK = " "

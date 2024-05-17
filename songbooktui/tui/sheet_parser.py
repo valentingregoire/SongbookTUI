@@ -3,7 +3,7 @@ import re
 
 # Horizontal whitespace (\h)
 # _H = r"[^\S\r\n]"
-_H = r"[\t |]"
+_H = r"[\t |┃]"
 CHORD_REGEX = (
     r"[A-G](?:b|#)?(?:maj|min|m|M|\+|-|dim|aug)?\d*(?:sus)?(?:2|4)?(?:\/[A-G](?:b|#)?)?"
 )
@@ -33,7 +33,7 @@ def _mark_h1(sheet: str) -> str:
     """Mark headers in the sheet music with special characters."""
     # Find all lines that contain only chords.
     return re.sub(
-        r"^\[([\w ]+)]$",
+        r"^\[([\w -]+)]$",
         lambda x: _style_h1(x.group(1)),
         sheet,
         flags=re.MULTILINE,
@@ -44,7 +44,7 @@ def _mark_h2(sheet: str) -> str:
     """Mark headers in the sheet music with special characters."""
     # Find all lines that contain only chords.
     return re.sub(
-        r"^\[\[([\w ]+)]]$",
+        r"^\[\[([\w -]+)]]$",
         lambda x: _style_h2(x.group(1)),
         sheet,
         flags=re.MULTILINE,

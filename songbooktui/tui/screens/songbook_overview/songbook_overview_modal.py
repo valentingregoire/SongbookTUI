@@ -24,7 +24,7 @@ class SongbookOverviewModal(ModalScreen):
     songbook: SongbookDTO
     current_song_index: int
     read_only_mode: reactive[bool] = reactive(True)
-    edit_mode: reactive[bool] = reactive(False)
+    edit_mode: reactive[bool] = reactive(True)
     zebra_stripes: reactive[bool] = reactive(True)
 
     def __init__(
@@ -62,28 +62,23 @@ class SongbookOverviewModal(ModalScreen):
                     classes="left-middle disabled",
                 ).data_bind(disabled=SongbookOverviewModal.read_only_mode):
                     yield Static("[b]Actions", classes="title-bar")
-                    yield ActionButton(
-                        " Up",
-                        action=f"screen.up({self.current_song_index})",
-                    )
-                    yield ActionButton(
-                        " Down",
-                        action=f"screen.down({self.current_song_index})",
-                    )
-                    yield ActionButton(
-                        " Add",
-                        action=f"screen.add({self.current_song_index})",
-                    )
-                    yield ActionButton(
-                        " Delete", action=f"screen.remove({self.current_song_index})"
-                    )
+                    yield ActionButton(" Up", action="screen.up")
+                    yield ActionButton(" Down", action="screen.down")
+                    yield ActionButton(" Add", action="screen.add")
+                    yield ActionButton(" Delete", action="screen.remove")
 
             toggle_container = Horizontal(classes="w-auto")
             toggle_label = Static("[b] Edit")
             toggle = Toggle("screen.edit").data_bind(value=self.edit_mode)
             toggle_container.compose_add_child(toggle_label)
             toggle_container.compose_add_child(toggle)
-            yield WidgetFactory.actions_bar_ok_cancel([toggle_container])
+            yield WidgetFactory.actions_bar(
+                [
+                    toggle_container,
+                    WidgetFactory.btn_cancel(),
+                    WidgetFactory.btn_save(),
+                ]
+            )
 
     async def on_mount(self) -> None:
         await self.populate_table()
@@ -113,7 +108,7 @@ class SongbookOverviewModal(ModalScreen):
         else:
             container_actions.remove_class("disabled")
 
-    async def action_ok(self, save: bool = True) -> None:
+    async def action_save(self, save: bool = True) -> None:
         if save:
             self.songbook = dataclasses.replace(
                 self.songbook, name=self.query_one(Input).value
@@ -126,7 +121,7 @@ class SongbookOverviewModal(ModalScreen):
     def on_data_table_row_selected(self, selected_row: DataTable.RowSelected) -> None:
         self.current_song_index = selected_row.cursor_row
         if self.read_only_mode:
-            self.action_ok(False)
+            self.action_save(False)
 
     async def action_up(self):
         song = self.songbook.songs.pop(self.current_song_index)
@@ -159,10 +154,8 @@ class SongbookOverviewModal(ModalScreen):
             fallback,
         )
 
-    async def action_remove(self, index: int):
-        self.songbook.songs.pop(index)
-        if index == self.current_song_index:
-            self.current_song_index = 0
-        elif index < self.current_song_index:
+    async def action_remove(self):
+        self.songbook.songs.pop(self.current_song_index)
+        if self.current_song_index > 0:
             self.current_song_index -= 1
         await self.populate_table()

@@ -70,6 +70,7 @@ class SongbooksScreen(Screen):
                 ActionButton(
                     "  Open", action="screen.open", classes="btn-link primary"
                 ),
+                # ActionButton(" Add", action="screen.add", classes="btn-link primary"),
                 WidgetFactory.btn_ok(),
             ]
         )
@@ -85,11 +86,27 @@ class SongbooksScreen(Screen):
                 self.songbooks[songbook.id] = dataclasses.replace(songbook)
                 self.notify(ok(f" Songbook {self.current_songbook_name} saved."))
                 # await self.populate_song_list()
-                await self.populate_songs_table()
+                songbook_table = self.query_one(DataTable)
+                cursor = songbook_table.cursor_coordinate
+                await self.populate_songbook_table()
+                songbook_table.cursor_coordinate = cursor
+                # await self.populate_songs_table()
 
         await self.app.push_screen(
             SongbookOverviewModal(
                 songs=self.songs, songbook=self.current_songbook, read_only_mode=False
+            ),
+            fallback,
+        )
+
+    async def action_add(self) -> None:
+        async def fallback(data: SongbookDTO) -> None:
+            self.songbooks[data.id] = data
+            await self.populate_songbook_table()
+
+        await self.app.push_screen(
+            SongbookOverviewModal(
+                songs=self.songs, songbook=SongbookDTO(), read_only_mode=False
             ),
             fallback,
         )
@@ -118,19 +135,21 @@ class SongbooksScreen(Screen):
     async def populate_songs_table(self) -> None:
         stc_songs = self.query_one(Static)
         table = Table(title="🎶 Songs", box=box.ROUNDED)
+        table.add_column("#")
         table.add_column("  Title")
         table.add_column("󰙃  Artist")
         table.add_column("󰽰 ")
         table.add_column("󰟚 ")
         table.add_column(" ")
 
-        for song in self.current_songbook.songs:
+        for i, song in enumerate(self.current_songbook.songs):
             table.add_row(
+                str(i + 1),
                 song.title,
                 song.artist,
                 song.key,
-                song.bpm,
-                song.duration,
+                str(song.bpm or ""),
+                str(song.duration or ""),
             )
 
         stc_songs.update(table)
