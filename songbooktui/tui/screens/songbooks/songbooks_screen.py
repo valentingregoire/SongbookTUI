@@ -3,7 +3,7 @@ import dataclasses
 from rich import box
 from rich.table import Table
 from textual.app import ComposeResult
-from textual.containers import Vertical
+from textual.containers import Vertical, VerticalScroll
 from textual.coordinate import Coordinate
 from textual.reactive import reactive
 from textual.screen import Screen
@@ -47,33 +47,36 @@ class SongbooksScreen(Screen):
         return self.current_songbook.name
 
     def compose(self) -> ComposeResult:
-        table = DataTable(id="songbooks-table", classes="w-auto")
-        table.add_columns("Name", "Songs")
-        table.cursor_type = "row"
-        table.border_title = "Songbooks"
-        yield table
-        details_container = Vertical(id="songbook-details-container", classes="h-1fr")
-        details_container.border_title = "Details"
-        with details_container:
-            txt_name = Input(
-                id="txt_name",
-                name="name",
-                placeholder="Name",
-                disabled=True,
-            ).data_bind(value=SongbooksScreen.current_songbook_name)
-            txt_name.border_title = "Name"
-            yield txt_name
-            yield Static(id="stc_songs", markup=True)
-        yield WidgetFactory.actions_bar(
-            [
-                WidgetFactory.btn_edit(),
-                ActionButton(
-                    "  Open", action="screen.open", classes="btn-link primary"
-                ),
-                # ActionButton(" Add", action="screen.add", classes="btn-link primary"),
-                WidgetFactory.btn_ok(),
-            ]
-        )
+        with VerticalScroll():
+            table = DataTable(id="songbooks-table", classes="w-auto")
+            table.add_columns("Name", "Songs")
+            table.cursor_type = "row"
+            table.border_title = "Songbooks"
+            yield table
+            details_container = Vertical(
+                id="songbook-details-container", classes="h-1fr"
+            )
+            details_container.border_title = "Details"
+            with details_container:
+                txt_name = Input(
+                    id="txt_name",
+                    name="name",
+                    placeholder="Name",
+                    disabled=True,
+                ).data_bind(value=SongbooksScreen.current_songbook_name)
+                txt_name.border_title = "Name"
+                yield txt_name
+                yield Static(id="stc_songs", markup=True)
+            yield WidgetFactory.actions_bar(
+                [
+                    WidgetFactory.btn_edit(),
+                    ActionButton(
+                        "  Open", action="screen.open", classes="btn-link primary"
+                    ),
+                    # ActionButton(" Add", action="screen.add", classes="btn-link primary"),
+                    WidgetFactory.btn_ok(),
+                ]
+            )
 
     async def on_mount(self) -> None:
         await self.populate_songbook_table()

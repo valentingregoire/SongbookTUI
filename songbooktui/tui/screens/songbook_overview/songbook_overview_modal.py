@@ -9,6 +9,7 @@ from textual.widgets import DataTable, Static, Input
 
 from backend import service
 from backend.dto import SongbookDTO, SongDTO
+from tui import utils
 from tui.screens.song_overview.song_overview_modal import SongOverviewModal
 from tui.utils import DEFAULT_BINDINGS
 from tui.widgets.action_button import ActionButton
@@ -76,6 +77,11 @@ class SongbookOverviewModal(ModalScreen):
                 [
                     toggle_container,
                     WidgetFactory.btn_cancel(),
+                    ActionButton(
+                        f"{utils.OPEN_FOLDER} Open",
+                        action="screen.open",
+                        classes="secondary",
+                    ),
                     WidgetFactory.btn_save(),
                 ]
             )
@@ -107,6 +113,9 @@ class SongbookOverviewModal(ModalScreen):
             container_actions.add_class("disabled")
         else:
             container_actions.remove_class("disabled")
+
+    async def action_open(self) -> None:
+        self.dismiss(self.current_song_index)
 
     async def action_save(self, save: bool = True) -> None:
         if save:

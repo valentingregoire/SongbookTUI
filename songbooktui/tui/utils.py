@@ -7,6 +7,7 @@ CHECKMARK = " "
 # _CROSSMARK = " "
 CROSSMARK = " "
 PENSIL = " "
+OPEN_FOLDER = " "
 FLOPPY = "󰉉 "
 
 TITLE = text2art("Songbooks", font="doom")
