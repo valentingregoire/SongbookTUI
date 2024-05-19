@@ -117,20 +117,20 @@ class SongbookOverviewModal(ModalScreen):
     async def action_open(self) -> None:
         self.dismiss(self.current_song_index)
 
-    async def action_save(self, save: bool = True) -> None:
-        if save:
-            self.songbook = dataclasses.replace(
-                self.songbook, name=self.query_one(Input).value
-            )
-            await service.save_songbook(self.songbook)
-            self.dismiss((self.current_song_index, self.songbook))
-        else:
-            self.dismiss(self.current_song_index)
+    async def action_save(self) -> None:
+        self.songbook = dataclasses.replace(
+            self.songbook, name=self.query_one(Input).value
+        )
+        await service.save_songbook(self.songbook)
+        self.dismiss((self.current_song_index, self.songbook))
 
-    def on_data_table_row_selected(self, selected_row: DataTable.RowSelected) -> None:
-        self.current_song_index = selected_row.cursor_row
-        if self.read_only_mode:
-            self.action_save(False)
+    async def on_data_table_row_selected(
+        self, selected_row: DataTable.RowSelected
+    ) -> None:
+        if self.current_song_index == selected_row.cursor_row:
+            await self.action_open()
+        else:
+            self.current_song_index = selected_row.cursor_row
 
     async def action_up(self):
         song = self.songbook.songs.pop(self.current_song_index)
@@ -151,7 +151,6 @@ class SongbookOverviewModal(ModalScreen):
     async def action_add(self) -> None:
         async def fallback(data: list[SongDTO]) -> None:
             self.songbook = dataclasses.replace(self.songbook, songs=data)
-            # self.songbook.songs = data
             await self.populate_table()
 
         await self.app.push_screen(
