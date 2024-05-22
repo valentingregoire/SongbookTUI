@@ -31,7 +31,7 @@ class SongsScreen(Screen):
     def compose(self) -> ComposeResult:
         with VerticalScroll():
             table = DataTable(id="songs-table", classes="w-auto")
-            table.add_columns("  Title", "󰙃  Artist", "󰽰 ", "󰟚 ", " ")
+            table.add_columns("  Title", "󰙃  Artist", "󰽰 ", "󰟚 ", " ", " ")
             table.cursor_type = "row"
             table.border_title = "Songs"
             yield table
@@ -125,6 +125,8 @@ class SongsScreen(Screen):
             key=key,
             bpm=bpm,
             duration=duration,
+            pages=self.songs[song_id].pages,
+            raw_pages=self.songs[song_id].raw_pages,
             auto_paginate=auto_paginate,
         )
         self.songs[song_id] = song
@@ -165,6 +167,7 @@ class SongsScreen(Screen):
                 song.key or "",
                 str(song.bpm or ""),
                 str(song.duration or ""),
+                " " if song.auto_paginate else "",
                 label=str(song.id),
                 key=str(song.id),
             )
