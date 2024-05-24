@@ -1,4 +1,5 @@
 from art import text2art
+import importlib.metadata
 
 
 SONGBOOK = "󰁧 "
@@ -11,6 +12,8 @@ OPEN_FOLDER = " "
 FLOPPY = "󰉉 "
 
 TITLE = text2art("Songbooks", font="doom")
+
+VERSION = importlib.metadata.version("SongbookTUI")
 
 DEFAULT_BINDINGS = [
     ("o", "ok", "Ok"),

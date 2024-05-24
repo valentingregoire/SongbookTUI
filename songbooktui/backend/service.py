@@ -1,4 +1,7 @@
+import subprocess
 from dataclasses import asdict
+
+import httpx
 
 from backend import dao
 from backend.dto import SongbookDTO, SongDTO, PageDTO
@@ -60,6 +63,22 @@ async def get_settings() -> Settings:
     """Get the settings from the filesystem."""
     settings = await dao.read_settings()
     return settings
+
+
+async def update() -> bool:
+    """Update the app to the newest version."""
+    response = httpx.get(
+        "https://github.com/valentingregoire/SongbookTUI/releases/latest"
+    )
+    # returns "0.1.2" for example
+    latest_version = response.next_request.url.path.split("/")[-1][1:]
+    wheel_file_name = f"songbooktui-{latest_version}-py3-none-any.whl"
+    wheel_url = f"https://github.com/valentingregoire/SongbookTUI/releases/download/v{latest_version}/{wheel_file_name}"
+    # wheel = httpx.get(wheel_url)
+    # with open(wheel_file_name, "w") as f:
+    #     f.write(str(wheel.content))
+    result = subprocess.run(["pip", "install", "-U", wheel_url])
+    return result.returncode == 0
 
 
 # DTO Conversion Functions

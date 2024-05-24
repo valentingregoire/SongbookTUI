@@ -2,12 +2,14 @@ from textual.app import ComposeResult
 from textual.containers import Center, Vertical
 from textual.widgets import Button, Static
 
+from backend import service
 from backend.dto import SongbookDTO, SongDTO
 from backend.model import Settings
 from tui import utils
 from tui.screens.settings.settings import SettingsScreen
 from tui.screens.songbooks.songbooks_screen import SongbooksScreen
 from tui.screens.songs.songs_screen import SongsScreen
+from tui.utils import ok, cancel, VERSION
 
 
 class MainMenu(Vertical):
@@ -41,7 +43,9 @@ class MainMenu(Vertical):
             yield Button(f"{utils.SONGBOOK} Songbooks", id="btn_songbooks")
             yield Button(f"{utils.SONG} Songs", id="btn_songs")
             yield Button("󰒓  Settings", id="btn_settings")
+            yield Button("󰚰  Update", id="btn_update")
             yield Button.error("󰗼  Quit", id="btn_quit")
+            yield Static(f"v{VERSION}")
 
     async def on_button_pressed(self, event: Button.Pressed) -> None:
         async def fallback_songbooks_screen(songbook_id: int) -> None:
@@ -62,5 +66,12 @@ class MainMenu(Vertical):
             await self.app.push_screen(
                 SettingsScreen(self.settings, songbooks=self.songbooks)
             )
+        elif event.button.id == "btn_update":
+            success = await service.update()
+            if success:
+                self.app.notify(ok(" Update successful!"))
+                self.app.exit(message="Update successful, restart the app.")
+            else:
+                self.app.notify(cancel(" Update failed!"))
         elif event.button.id == "btn_quit":
             self.app.exit()
