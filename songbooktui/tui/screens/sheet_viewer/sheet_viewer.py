@@ -28,6 +28,10 @@ from tui.widgets.top_bar import SongInfo
 class SheetViewer(Screen):
     CSS_PATH = "sheet_viewer.tcss"
     BINDINGS = [
+        ("l", "next_page", "Next Page"),
+        ("h", "prev_page", "Previous Page"),
+        ("k", "next_song", "Next Song"),
+        ("j", "prev_song", "Previous Song"),
         ("o", "show_songbook_overview", "  Overview"),
         ("m", "toggle_menu", "󰍜 Menu"),
         ("s", "settings", "Settings"),
