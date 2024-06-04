@@ -160,5 +160,8 @@ class SongbooksScreen(Screen):
     async def on_data_table_row_selected(
         self, selected_row: DataTable.RowSelected
     ) -> None:
-        self.current_songbook_id = int(selected_row.row_key.value)
-        await self.populate_songs_table()
+        if self.current_songbook_id == int(selected_row.row_key.value):
+            await self.run_action("open")
+        else:
+            self.current_songbook_id = int(selected_row.row_key.value)
+            await self.populate_songs_table()

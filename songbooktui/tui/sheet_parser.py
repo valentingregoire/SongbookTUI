@@ -8,6 +8,7 @@ CHORD_REGEX = (
     r"[A-G](?:b|#)?(?:maj|min|m|M|\+|-|dim|aug)?\d*(?:sus)?(?:2|4)?(?:\/[A-G](?:b|#)?)?"
 )
 CHORD_LINE_REGEX = rf"^(?:{_H}*{CHORD_REGEX}{_H}*)+(?:x\d?\.*)?$"
+TITLE_REGEX = r"([\w &.,\-']+)"
 
 
 def markup(sheet: str) -> str:
@@ -33,7 +34,7 @@ def _mark_h1(sheet: str) -> str:
     """Mark headers in the sheet music with special characters."""
     # Find all lines that contain only chords.
     return re.sub(
-        r"^\[([\w -]+)]$",
+        rf"^\[{TITLE_REGEX}]$",
         lambda x: _style_h1(x.group(1)),
         sheet,
         flags=re.MULTILINE,
@@ -44,7 +45,7 @@ def _mark_h2(sheet: str) -> str:
     """Mark headers in the sheet music with special characters."""
     # Find all lines that contain only chords.
     return re.sub(
-        r"^\[\[([\w -]+)]]$",
+        rf"^\[\[{TITLE_REGEX}]]$",
         lambda x: _style_h2(x.group(1)),
         sheet,
         flags=re.MULTILINE,
@@ -53,23 +54,17 @@ def _mark_h2(sheet: str) -> str:
 
 def _style_chord(chord: str) -> str:
     """Style a chord with a rich style."""
-    # style = Style(bgcolor="#333333", bold=True)
-    # rendered_chord = style.render(chord)
     rendered_chord = f"[b white on #333333]{chord}[/]"
     return rendered_chord
 
 
 def _style_h1(title: str) -> str:
     """Style a title with a rich style."""
-    # style = Style(color="deep_sky_blue1", bold=True)
-    # rendered_title = style.render(title)
     rendered_title = f"[b deep_sky_blue1]{title}[/]"
     return rendered_title
 
 
 def _style_h2(title: str) -> str:
     """Style a title with a rich style."""
-    # style = Style(color="orange1", italic=True)
-    # rendered_title = style.render(title)
     rendered_title = f"[b i orange1]{title}[/]"
     return rendered_title

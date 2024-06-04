@@ -12,17 +12,15 @@ class SongbookApp(App):
     """The main application class for the Songbook TUI."""
 
     CSS_PATH = "app.tcss"
-    BINDINGS = [("q", "exit", "Quit")]
+    BINDINGS = [
+        ("l", "ok", "OK"),
+        ("h", "cancel", "Cancel"),
+        ("q", "exit", "Quit"),
+    ]
 
     songs: dict[int, SongDTO]
     songbooks: dict[int, SongbookDTO]
     settings: Settings = Settings()
-
-    # def compose(self) -> ComposeResult:
-    #     """Compose the main application."""
-    #     # yield MainMenu(settings=self.settings, id="menu", classes="hidden").data_bind(
-    #     #     disabled=SheetViewer.menu_shown
-    #     # )
 
     def on_mount(self) -> None:
         """Run when the app is mounted."""
