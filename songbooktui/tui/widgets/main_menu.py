@@ -63,8 +63,13 @@ class MainMenu(Vertical):
         elif event.button.id == "btn_songs":
             await self.app.push_screen(SongsScreen(self.songs))
         elif event.button.id == "btn_settings":
+
+            def fallback(data: Settings) -> None:
+                self.settings = data
+                self.notify(ok(" Settings saved."))
+
             await self.app.push_screen(
-                SettingsScreen(self.settings, songbooks=self.songbooks)
+                SettingsScreen(self.settings, songbooks=self.songbooks), fallback
             )
         elif event.button.id == "btn_update":
             success = await service.update()

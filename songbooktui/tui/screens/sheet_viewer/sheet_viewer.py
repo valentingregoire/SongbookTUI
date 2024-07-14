@@ -14,7 +14,6 @@ from textual.widgets import (
 from backend.dto import PageDTO, SongbookDTO, SongDTO
 from backend.model import Settings, FileType
 from tui import sheet_parser
-from tui.screens.settings.settings import SettingsScreen
 from tui.screens.songbook_overview.songbook_overview_modal import SongbookOverviewModal
 from tui.utils import ok
 from tui.widgets.action_button import ActionButton
@@ -91,17 +90,20 @@ class SheetViewer(Screen):
         with TopBar():
             with LeftFloat():
                 yield ActionButton("󰍜 ", "screen.toggle_menu", classes="w-auto")
-                yield ActionButton("  ", "screen.prev_song", classes="p-r-1 m-0")
+                if not self.settings.hide_nav_buttons:
+                    yield ActionButton("  ", "screen.prev_song", classes="p-r-1 m-0")
                 yield Static(self.current_song.full_title, classes="text-bold")
             with RightFloat():
                 yield InlineVerticalProgressBar(
                     self.current_song_index + 1, self.songbook.size
                 )
                 yield SongInfo(self.current_song_index + 1, self.songbook.size)
-                yield ActionButton("  ", "screen.next_song", classes="p-l-1 m-0")
+                if not self.settings.hide_nav_buttons:
+                    yield ActionButton("  ", "screen.next_song", classes="p-l-1 m-0")
         with BottomBar():
             with LeftFloat():
-                yield ActionButton("  ", "screen.prev_page", classes="p-r-1 m-0")
+                if not self.settings.hide_nav_buttons:
+                    yield ActionButton("  ", "screen.prev_page", classes="p-r-1 m-0")
                 next_song_index = (self.current_song_index + 1) % self.songbook.size
                 yield Static(
                     self.songbook.songs[next_song_index].full_title, classes="text-bold"
@@ -119,7 +121,8 @@ class SheetViewer(Screen):
                     self.current_page_index + 1,
                     len(self.current_song.pages),
                 )
-                yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
+                if not self.settings.hide_nav_buttons:
+                    yield ActionButton("  ", "screen.next_page", classes="p-l-1 m-0")
         yield MainMenu(
             title=self.songbook.name,
             songs=self.songs,
@@ -152,13 +155,6 @@ class SheetViewer(Screen):
             menu.remove_class("hidden")
         else:
             menu.add_class("hidden")
-
-    def action_settings(self) -> None:
-        def fallback(data: Settings) -> None:
-            self.settings = data
-            self.notify(ok(" Settings saved."))
-
-        self.app.push_screen(SettingsScreen(self.settings, self.songbooks), fallback)
 
     def action_show_songbook_overview(self) -> None:
         def fallback(data: tuple[int, SongbookDTO] | int) -> None:

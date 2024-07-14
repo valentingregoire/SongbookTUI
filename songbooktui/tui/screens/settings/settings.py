@@ -2,7 +2,7 @@ from dataclasses import asdict
 
 from textual.app import ComposeResult
 from textual.screen import Screen
-from textual.widgets import Pretty, Collapsible, Select, Static
+from textual.widgets import Pretty, Collapsible, Select, Static, Checkbox
 
 from backend import service
 from backend.dto import SongbookDTO
@@ -36,6 +36,11 @@ class SettingsScreen(Screen):
             )
             default_songbook_select.border_title = "Default songbook"
             yield default_songbook_select
+            yield Checkbox(
+                "Hide navigation buttons",
+                self.settings.hide_nav_buttons,
+                name="hide_nav_buttons",
+            )
             yield WidgetFactory.actions_bar_form()
 
         with Collapsible(title="settings.json", collapsed=False):
@@ -47,7 +52,6 @@ class SettingsScreen(Screen):
     def action_cancel(self) -> None:
         self.settings = self.settings_original
         self.app.pop_screen()
-        # self.dismiss(self.settings_original)
 
     def on_form_changed(self, event: Form.Changed) -> None:
         if hasattr(self.settings, event.name):

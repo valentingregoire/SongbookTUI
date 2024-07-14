@@ -51,3 +51,4 @@ class Songbook:
 @dataclass
 class Settings:
     default_songbook: int | None = None
+    hide_nav_buttons: bool = False
