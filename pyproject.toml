@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "songbooktui"
-version = "0.1.10"
+version = "0.1.11"
 description = ""
 authors = ["Valentin Grégoire <valentin.gregoire@gmail.com>"]
 readme = "README.md"
