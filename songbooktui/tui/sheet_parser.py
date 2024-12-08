@@ -8,7 +8,7 @@ CHORD_REGEX = (
     r"[A-G](?:b|#)?(?:maj|min|m|M|\+|-|dim|aug)?\d*(?:sus)?(?:2|4)?(?:\/[A-G](?:b|#)?)?"
 )
 CHORD_LINE_REGEX = rf"^(?:{_H}*{CHORD_REGEX}{_H}*)+(?:x\d?\.*)?$"
-TITLE_REGEX = r"([\w &.,\-']+)"
+TITLE_REGEX = r"([\w &.,\-'+]+)"
 
 
 def markup(sheet: str) -> str:

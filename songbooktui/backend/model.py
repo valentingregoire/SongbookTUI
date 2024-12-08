@@ -52,3 +52,4 @@ class Songbook:
 class Settings:
     default_songbook: int | None = None
     hide_nav_buttons: bool = False
+    pull_result: str | None = None
