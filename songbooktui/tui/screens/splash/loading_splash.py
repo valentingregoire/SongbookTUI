@@ -2,7 +2,7 @@ from backend import service
 from backend.consts import BASE_LOCATION
 from backend.dto import SongbookDTO, SongDTO
 from backend.model import Settings
-from git import Repo
+from git import Repo, GitCommandError
 from textual import work
 from textual.app import ComposeResult
 from textual.containers import Center
@@ -55,11 +55,17 @@ class LoadingSplash(Screen):
         """Pull updates from the repository."""
 
         self.log("Pulling updates from the repository.")
-        repo = Repo(BASE_LOCATION)
-        pull_result = repo.git.pull()
-        self.log(pull_result)
-        self.pull_result = pull_result
-        await self.update_progress()
+        try:
+            repo = Repo(BASE_LOCATION)
+            pull_result = repo.git.pull()
+            self.log(pull_result)
+            self.pull_result = pull_result
+        except GitCommandError as e:
+            self.log("Error pulling updates from the repository.")
+            self.log(e)
+            self.pull_result = "Error pulling updates from the repository."
+        finally:
+            await self.update_progress()
 
     async def get_songs(self) -> None:
         """Get the songs."""
