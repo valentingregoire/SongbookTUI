@@ -2,13 +2,14 @@ from backend import service
 from backend.consts import BASE_LOCATION
 from backend.dto import SongbookDTO, SongDTO
 from backend.model import Settings
-from git import Repo, GitCommandError
+from git import GitCommandError, Repo
 from textual import work
 from textual.app import ComposeResult
 from textual.containers import Center
 from textual.screen import Screen
 from textual.widgets import ProgressBar, Static
 from tui import utils
+from tui.utils import ok, cancel
 
 
 class LoadingSplash(Screen):
@@ -60,10 +61,12 @@ class LoadingSplash(Screen):
             pull_result = repo.git.pull()
             self.log(pull_result)
             self.pull_result = pull_result
+            self.notify(ok(f" {pull_result}."))
         except GitCommandError as e:
             self.log("Error pulling updates from the repository.")
             self.log(e)
             self.pull_result = "Error pulling updates from the repository."
+            self.notify(cancel(f" {self.pull_result}."))
         finally:
             await self.update_progress()
 
