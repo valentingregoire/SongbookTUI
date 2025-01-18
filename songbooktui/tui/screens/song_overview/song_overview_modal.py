@@ -32,7 +32,7 @@ class SongOverviewModal(ModalScreen):
         song_list = self.songbook.songs + [
             song for song in self.songs.values() if song not in self.songbook.songs
         ]
-        yield SelectionList[SongDTO](
+        selection = SelectionList[SongDTO](
             *[
                 Selection(
                     song.full_title,
@@ -43,6 +43,8 @@ class SongOverviewModal(ModalScreen):
             ],
             id="selection-list",
         )
+        selection.styles.height = self.app.size.height - 4
+        yield selection
         with ActionsBar():
             yield ActionButton(cancel(), action="pop_screen", classes="btn-link error")
             yield ActionButton(ok(), action="screen.ok", classes="btn-link success")

@@ -4,9 +4,10 @@ SongOverviewModal {
     height: auto;
     align: center middle;
     content-align: center middle;
+    overflow-y: scroll;
 }
 
 #selection-list {
     width: 1fr;
-    height: auto;
+    overflow-y: auto;
 }
