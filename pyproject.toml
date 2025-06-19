@@ -1,25 +1,27 @@
-[tool.poetry]
-name = "songbooktui"
+[project]
+name = "SongbookTUI"
+description = "A TUI for Songbooks."
 version = "0.1.15"
-description = ""
-authors = ["Valentin Grégoire <valentin.gregoire@gmail.com>"]
+requires-python = ">=3.12"
+authors = [{ name = "Valentin Grégoire" }]
+maintainers = [{ name = "Valentin Grégoire" }]
 readme = "README.md"
 
-[tool.poetry.dependencies]
-python = "^3.11"
-textual = "^0.54.0"
-textual-dev = "^1.5.1"
-mypy = "^1.9.0"
-art = "^6.1"
-numba = "^0.59.1"
-httpx = "^0.27.0"
-gitpython = "^3.1.43"
+dependencies = [
+  "textual>=0.54.0",
+  "textual-dev>=1.5.1",
+  "mypy>=1.9.0",
+  "art>=6.1",
+  "numba>=0.59.1",
+  "httpx>=0.27.0",
+  "gitpython>=3.1.43",
+]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.1.1"
-ruff = "^0.4.4"
+[dependency-groups]
+dev = ["pytest>=8.1.1"]
+lint = ["ruff>=0.4.4"]
 
-[tool.poetry.scripts]
+[project.scripts]
 songbook = "songbooktui.scripts:main"
 
 [tool.pyright]
