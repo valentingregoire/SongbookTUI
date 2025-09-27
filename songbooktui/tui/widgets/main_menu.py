@@ -3,8 +3,10 @@ from textual.containers import Center, Vertical
 from textual.widgets import Button, Static
 
 from backend import service
+from backend.consts import BASE_LOCATION
 from backend.dto import SongbookDTO, SongDTO
 from backend.model import Settings
+from git import GitCommandError, Repo
 from tui import utils
 from tui.screens.settings.settings import SettingsScreen
 from tui.screens.songbooks.songbooks_screen import SongbooksScreen
@@ -18,6 +20,7 @@ class MainMenu(Vertical):
     songs: dict[int, SongDTO]
     songbooks: dict[int, SongbookDTO]
     settings: Settings
+    pull_result: str | None = None
 
     def __init__(
         self,
@@ -43,6 +46,7 @@ class MainMenu(Vertical):
             yield Button(f"{utils.SONGBOOK} Songbooks", id="btn_songbooks")
             yield Button(f"{utils.SONG} Songs", id="btn_songs")
             yield Button("󰒓  Settings", id="btn_settings")
+            yield Button("󰓂 Pull", id="btn_pull")
             yield Button("󰚰  Update", id="btn_update")
             yield Button.error("󰗼  Quit", id="btn_quit")
             yield Static(f"v{VERSION}")
@@ -71,6 +75,8 @@ class MainMenu(Vertical):
             await self.app.push_screen(
                 SettingsScreen(self.settings, songbooks=self.songbooks), fallback
             )
+        elif event.button.id == "btn_pull":
+            await self.pull_updates()
         elif event.button.id == "btn_update":
             success = await service.update()
             if success:
@@ -80,3 +86,21 @@ class MainMenu(Vertical):
                 self.app.notify(cancel(" Update failed!"))
         elif event.button.id == "btn_quit":
             self.app.exit()
+
+    async def pull_updates(self) -> None:
+        """Pull updates from the repository."""
+
+        self.log("Pulling updates from the repository.")
+        try:
+            repo = Repo(BASE_LOCATION)
+            pull_result = repo.git.pull()
+            self.log(pull_result)
+            self.pull_result = pull_result
+            self.notify(ok(f" {pull_result}."))
+        except GitCommandError as e:
+            self.log("Error pulling updates from the repository.")
+            self.log(e)
+            self.pull_result = "Error pulling updates from the repository."
+            self.notify(cancel(f" {self.pull_result}."))
+        finally:
+            self.settings.pull_result = self.pull_result

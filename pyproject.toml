@@ -1,7 +1,7 @@
 [project]
 name = "SongbookTUI"
 description = "A TUI for Songbooks."
-version = "0.1.15"
+version = "0.1.16"
 requires-python = ">=3.12,<3.13"
 authors = [{ name = "Valentin Grégoire" }]
 maintainers = [{ name = "Valentin Grégoire" }]

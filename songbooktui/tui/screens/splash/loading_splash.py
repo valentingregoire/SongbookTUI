@@ -1,15 +1,12 @@
 from backend import service
-from backend.consts import BASE_LOCATION
 from backend.dto import SongbookDTO, SongDTO
 from backend.model import Settings
-from git import GitCommandError, Repo
 from textual import work
 from textual.app import ComposeResult
 from textual.containers import Center
 from textual.screen import Screen
 from textual.widgets import ProgressBar, Static
 from tui import utils
-from tui.utils import ok, cancel
 
 
 class LoadingSplash(Screen):
@@ -20,7 +17,6 @@ class LoadingSplash(Screen):
     songs: dict[int, SongDTO]
     songbooks: dict[int, SongbookDTO]
     settings: Settings
-    pull_result: str | None = None
 
     async def on_mount(self) -> None:
         self.fetch_data()
@@ -35,7 +31,7 @@ class LoadingSplash(Screen):
     async def update_progress(self) -> None:
         progress_bar = self.query_one(ProgressBar)
         progress_bar.advance(1)
-        if progress_bar.progress == 4:
+        if progress_bar.progress == 3:
             progress_bar.styles.animate(
                 "opacity", value=0, duration=1.3, easing="out_quint"
             )
@@ -47,28 +43,9 @@ class LoadingSplash(Screen):
     async def fetch_data(self) -> None:
         """Get the songs."""
 
-        await self.pull_updates()
         await self.get_songs()
         await self.get_songbooks()
         await self.get_settings()
-
-    async def pull_updates(self) -> None:
-        """Pull updates from the repository."""
-
-        self.log("Pulling updates from the repository.")
-        try:
-            repo = Repo(BASE_LOCATION)
-            pull_result = repo.git.pull()
-            self.log(pull_result)
-            self.pull_result = pull_result
-            self.notify(ok(f" {pull_result}."))
-        except GitCommandError as e:
-            self.log("Error pulling updates from the repository.")
-            self.log(e)
-            self.pull_result = "Error pulling updates from the repository."
-            self.notify(cancel(f" {self.pull_result}."))
-        finally:
-            await self.update_progress()
 
     async def get_songs(self) -> None:
         """Get the songs."""
@@ -86,5 +63,4 @@ class LoadingSplash(Screen):
         """Get the settings."""
 
         self.settings = await service.get_settings()
-        self.settings.pull_result = self.pull_result
         await self.update_progress()
